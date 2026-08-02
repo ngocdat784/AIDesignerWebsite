@@ -1,19 +1,17 @@
-import { templates } from "@/data/templates";
+import { templateRepository } from "@/repositories/template.repository";
 
 export const templateService = {
+
   getAll() {
-    return templates;
+    return templateRepository.findAll();
   },
 
   getFeatured() {
-    return templates.filter(
-      (item) => item.isFeatured
-    );
+    return templateRepository.findFeatured();
   },
 
   getBySlug(slug: string) {
-    return templates.find(
-      (item) => item.slug === slug
-    );
+    return templateRepository.findBySlug(slug);
   },
+
 };

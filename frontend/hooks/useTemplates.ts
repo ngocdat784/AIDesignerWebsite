@@ -1,10 +1,13 @@
 import { templateService } from "@/services/template.service";
 
 export function useTemplates() {
-  return {
-    templates: templateService.getAll(),
+  const templates = templateService.getAll();
 
-    featuredTemplates:
-      templateService.getFeatured(),
+  const featuredTemplates =
+    templateService.getFeatured();
+
+  return {
+    templates,
+    featuredTemplates,
   };
 }
