@@ -1,8 +1,16 @@
-import { Button } from "@/components/ui/button";
+import Navbar from "@/components/layout/Navbar";
+import Footer from "@/components/layout/Footer";
+
 export default function Home() {
   return (
-    <main className="flex h-screen items-center justify-center">
-      <Button>AI Designer Website</Button>
-    </main>
+    <>
+      <Navbar />
+
+      <main className="min-h-screen">
+
+      </main>
+
+      <Footer />
+    </>
   );
 }
