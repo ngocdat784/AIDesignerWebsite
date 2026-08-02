@@ -1,0 +1,11 @@
+export interface Order {
+  id: string;
+
+  userId: string;
+
+  total: number;
+
+  createdAt: string;
+
+  items: string[];
+}
