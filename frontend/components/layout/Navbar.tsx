@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Logo from "../common/Logo";
 import { Button } from "../ui/button";
+import ThemeToggle from "../common/ThemeToggle";
 
 export default function Navbar() {
   return (
@@ -17,15 +18,17 @@ export default function Navbar() {
           <Link href="#">Pricing</Link>
         </nav>
 
-        <div className="flex items-center gap-3">
-          <Button variant="ghost">
-            Login
-          </Button>
+       <div className="flex items-center gap-3">
+    <ThemeToggle />
 
-          <Button>
-            Get Started
-          </Button>
-        </div>
+    <Button variant="ghost">
+        Login
+    </Button>
+
+    <Button>
+        Get Started
+    </Button>
+</div>
 
       </div>
     </header>
