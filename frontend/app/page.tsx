@@ -1,13 +1,14 @@
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
+import Hero from "@/components/sections/hero";
 
 export default function Home() {
   return (
     <>
       <Navbar />
 
-      <main className="min-h-screen">
-
+      <main>
+        <Hero />
       </main>
 
       <Footer />
