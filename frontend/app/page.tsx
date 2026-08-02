@@ -1,7 +1,8 @@
-export default function HomePage() {
+import { Button } from "@/components/ui/button";
+export default function Home() {
   return (
-    <main>
-      <h1>AI Designer Website</h1>
+    <main className="flex h-screen items-center justify-center">
+      <Button>AI Designer Website</Button>
     </main>
   );
 }
