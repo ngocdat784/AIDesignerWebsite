@@ -12,13 +12,17 @@ import { paginate } from "@/lib/pagination/paginate";
 
 import { getTotalPages } from "@/lib/pagination/getTotalPages";
 
-import { PAGE_SIZE } from "@/lib/constants/pagination";
+import {
+  DEFAULT_PAGE_SIZE,
+  PageSize,
+} from "@/lib/constants/page-size";
 
 export type MarketplaceQueryKey =
   | "search"
   | "category"
   | "sort"
-  | "page";
+  | "page"
+  | "pageSize";
 
 export function useMarketplace() {
   const router = useRouter();
@@ -27,7 +31,14 @@ export function useMarketplace() {
   const search = params.get("search") ?? "";
   const category = params.get("category") ?? "All";
   const sort = params.get("sort") ?? "latest";
-  const page = Number(params.get("page") ?? "1");
+  const page = Number(
+  params.get("page") ?? "1"
+);
+
+const pageSize =
+  Number(
+    params.get("pageSize")
+  ) || DEFAULT_PAGE_SIZE;
   const allTemplates = templateService.getAll();
 
 const filteredTemplates = filterTemplates(allTemplates, {
@@ -43,22 +54,21 @@ const sortedTemplates = sortTemplates(
 const templates = paginate(
   sortedTemplates,
   page,
-  PAGE_SIZE
+  pageSize
 );
 
 const totalTemplates = filteredTemplates.length;
 
 const totalPages = getTotalPages(
   totalTemplates,
-  PAGE_SIZE
+  pageSize
 );
 const startIndex =
   totalTemplates === 0
     ? 0
-    : (page - 1) * PAGE_SIZE + 1;
-
+    : (page - 1) * pageSize + 1;
 const endIndex = Math.min(
-  page * PAGE_SIZE,
+  page * pageSize,
   totalTemplates
 );
 
@@ -110,6 +120,12 @@ function clearSort() {
 function clearAllFilters() {
   router.push("/marketplace");
 }
+function setPageSize(value: PageSize) {
+  updateQuery(
+    "pageSize",
+    value.toString()
+  );
+}
   return {
   search,
   category,
@@ -122,6 +138,9 @@ function clearAllFilters() {
 
   startIndex,
   endIndex,
+  pageSize,
+
+setPageSize,
 
   setSearch,
   setCategory,
