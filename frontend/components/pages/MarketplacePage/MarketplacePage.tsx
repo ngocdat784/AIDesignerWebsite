@@ -3,6 +3,7 @@ import MarketplaceSidebar from "./MarketplaceSidebar";
 import MarketplaceToolbar from "./MarketplaceToolbar";
 import MarketplaceGrid from "./MarketplaceGrid";
 import MarketplacePagination from "./MarketplacePagination";
+import MarketplaceStats from "./MarketplaceStats";
 
 export default function MarketplacePage() {
   return (
@@ -13,9 +14,11 @@ export default function MarketplacePage() {
         <div className="space-y-8">
           <MarketplaceToolbar />
 
-          <MarketplaceGrid />
+<MarketplaceStats />
 
-          <MarketplacePagination />
+<MarketplaceGrid />
+
+<MarketplacePagination />
         </div>
       </div>
     </Container>
