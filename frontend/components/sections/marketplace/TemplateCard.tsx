@@ -1,8 +1,8 @@
 import Image from "next/image";
 import { Download } from "lucide-react";
 
-import { Template } from "@/types";
-
+import { Template } from "@/types"; 
+import Link from "next/link";
 import AppButton from "@/components/common/AppButton";
 import Rating from "@/components/common/Rating";
 import PriceTag from "@/components/common/PriceTag";
@@ -55,9 +55,11 @@ export default function TemplateCard({
           />
         </div>
 
-        <AppButton className="w-full">
-          Preview
-        </AppButton>
+       <Link href={`/templates/${template.slug}`}>
+  <AppButton className="w-full">
+    Preview
+  </AppButton>
+</Link>
       </div>
     </article>
   );
