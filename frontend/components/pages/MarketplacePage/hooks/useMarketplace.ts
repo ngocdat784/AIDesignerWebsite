@@ -16,12 +16,17 @@ import {
   DEFAULT_PAGE_SIZE,
   PageSize,
 } from "@/lib/constants/page-size";
+import {
+  DEFAULT_VIEW_MODE,
+  ViewMode,
+} from "@/lib/constants/view-mode";
 
 export type MarketplaceQueryKey =
   | "search"
   | "category"
   | "sort"
   | "page"
+  | "view"
   | "pageSize";
 
 export function useMarketplace() {
@@ -39,7 +44,9 @@ const pageSize =
   Number(
     params.get("pageSize")
   ) || DEFAULT_PAGE_SIZE;
+  const view = params.get("view") ?? DEFAULT_VIEW_MODE;
   const allTemplates = templateService.getAll();
+  
 
 const filteredTemplates = filterTemplates(allTemplates, {
   search,
@@ -126,6 +133,9 @@ function setPageSize(value: PageSize) {
     value.toString()
   );
 }
+function setView(value: ViewMode) {
+  updateQuery("view", value);
+}
   return {
   search,
   category,
@@ -139,6 +149,7 @@ function setPageSize(value: PageSize) {
   startIndex,
   endIndex,
   pageSize,
+  view,
 
 setPageSize,
 
@@ -146,6 +157,7 @@ setPageSize,
   setCategory,
   setSort,
   setPage,
+  setView,
 
   clearSearch,
   clearCategory,

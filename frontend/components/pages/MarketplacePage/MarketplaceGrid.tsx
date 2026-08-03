@@ -1,10 +1,12 @@
 "use client";
 
-import TemplateCard from "@/components/sections/marketplace/TemplateCard";
 import { useMarketplace } from "./hooks/useMarketplace";
 
+import MarketplaceGridView from "@/components/sections/marketplace/GridView";
+import MarketplaceListView from "@/components/sections/marketplace/ListView";
+
 export default function MarketplaceGrid() {
-  const { templates } = useMarketplace();
+  const { templates, view } = useMarketplace();
 
   if (templates.length === 0) {
     return (
@@ -16,14 +18,17 @@ export default function MarketplaceGrid() {
     );
   }
 
+  if (view === "list") {
+    return (
+      <MarketplaceListView
+        templates={templates}
+      />
+    );
+  }
+
   return (
-    <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-      {templates.map((template) => (
-        <TemplateCard
-          key={template.id}
-          template={template}
-        />
-      ))}
-    </div>
+    <MarketplaceGridView
+      templates={templates}
+    />
   );
 }

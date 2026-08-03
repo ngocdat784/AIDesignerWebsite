@@ -4,6 +4,7 @@ import MarketplaceSearch from "./MarketplaceSearch";
 import MarketplaceCategory from "./MarketplaceCategory";
 import MarketplaceSort from "./MarketplaceSort";
 import PageSizeSelector from "./PageSizeSelector";
+import ViewModeSwitcher from "./ViewModeSwitcher";
 
 export default function MarketplaceToolbar() {
   return (
@@ -21,7 +22,9 @@ export default function MarketplaceToolbar() {
       <div className="flex flex-col gap-3 md:flex-row md:items-center">
         <PageSizeSelector />
 
-        <MarketplaceSort />
+<MarketplaceSort />
+
+<ViewModeSwitcher />
       </div>
     </div>
   );
