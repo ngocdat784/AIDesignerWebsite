@@ -6,6 +6,9 @@ import GalleryControls from "./gallery/GalleryControls";
 import GalleryMainImage from "./gallery/GalleryMainImage";
 import GalleryThumbnail from "./gallery/GalleryThumbnail";
 import { useGallery } from "./gallery/useGallery";
+import GalleryLightbox
+from "./gallery/GalleryLightbox";
+
 
 export default function TemplateGallery({
   template,
@@ -15,13 +18,21 @@ export default function TemplateGallery({
     current,
     currentImage,
     setCurrent,
+
     next,
     previous,
-  } = useGallery(template);
+
+    lightboxOpen,
+    openLightbox,
+    closeLightbox,
+} = useGallery(template);
 
   return (
     <section className="space-y-5">
-      <GalleryMainImage image={currentImage} />
+      <GalleryMainImage
+    image={currentImage}
+    onClick={openLightbox}
+/>
 
       <GalleryControls
         onNext={next}
@@ -38,6 +49,11 @@ export default function TemplateGallery({
           />
         ))}
       </div>
+      <GalleryLightbox
+    image={currentImage}
+    open={lightboxOpen}
+    onClose={closeLightbox}
+/>
     </section>
   );
 }

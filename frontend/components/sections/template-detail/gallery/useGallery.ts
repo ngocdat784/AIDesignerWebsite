@@ -1,6 +1,10 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import {
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 
 import type { Template } from "@/types";
 
@@ -13,6 +17,8 @@ export function useGallery(template: Template) {
   }, [template]);
 
   const [current, setCurrent] = useState(0);
+  const [lightboxOpen, setLightboxOpen] =
+  useState(false);
 
   function next() {
     setCurrent((value) =>
@@ -29,13 +35,53 @@ export function useGallery(template: Template) {
         : value - 1
     );
   }
+  function openLightbox() {
+  setLightboxOpen(true);
+}
+
+function closeLightbox() {
+  setLightboxOpen(false);
+}
+useEffect(() => {
+  function handleKeyDown(
+    event: KeyboardEvent
+  ) {
+    switch (event.key) {
+      case "ArrowRight":
+        next();
+        break;
+
+      case "ArrowLeft":
+        previous();
+        break;
+
+      case "Escape":
+        closeLightbox();
+        break;
+    }
+  }
+
+  window.addEventListener(
+    "keydown",
+    handleKeyDown
+  );
+
+  return () =>
+    window.removeEventListener(
+      "keydown",
+      handleKeyDown
+    );
+}, [next, previous]);
 
   return {
     images,
     current,
     currentImage: images[current],
+    lightboxOpen,
     setCurrent,
     next,
     previous,
+openLightbox,
+closeLightbox,
   };
 }

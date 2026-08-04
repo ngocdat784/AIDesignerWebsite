@@ -9,23 +9,29 @@ export default function PriceTag({
   discountPrice,
   className = "",
 }: PriceTagProps) {
-  if (discountPrice) {
-    return (
-      <div className={`flex items-center gap-2 ${className}`}>
-        <span className="text-2xl font-bold text-primary">
-          ${discountPrice}
-        </span>
+  const finalPrice = discountPrice ?? price;
 
-        <span className="text-muted-foreground line-through">
-          ${price}
-        </span>
-      </div>
-    );
-  }
+  const discount = discountPrice
+    ? Math.round(((price - discountPrice) / price) * 100)
+    : 0;
 
   return (
-    <span className={`text-2xl font-bold ${className}`}>
-      ${price}
-    </span>
+    <div className={`space-y-2 ${className}`}>
+      <div className="text-4xl font-bold text-primary">
+        ${finalPrice}
+      </div>
+
+      {discountPrice && (
+        <div className="flex items-center gap-3">
+          <span className="text-muted-foreground line-through">
+            ${price}
+          </span>
+
+          <span className="rounded-md bg-green-500 px-2 py-1 text-xs font-semibold text-white">
+            {discount}% OFF
+          </span>
+        </div>
+      )}
+    </div>
   );
 }

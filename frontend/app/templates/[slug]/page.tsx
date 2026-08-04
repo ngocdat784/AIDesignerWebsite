@@ -41,6 +41,7 @@ export default async function TemplateDetailPage({
       <TemplateDescription template={template} />
       <TemplateTechStack template={template} />
       <TemplateIncludedFiles template={template} />
+      <TemplateHeader template={template} />
       <RelatedTemplates />
     </main>
   );
