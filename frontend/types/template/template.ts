@@ -43,8 +43,10 @@ export interface Template {
   // Công nghệ sử dụng
   techStack: string[];
 
-  // File đi kèm
-  includedFiles: string[];
+ includedFiles: {
+  name: string;
+  type: "folder" | "file";
+}[];
 
   // Các tính năng nổi bật
   features: string[];
@@ -79,4 +81,9 @@ export interface Template {
 
   // Lần cập nhật gần nhất
   updatedAt: string;
+  // Template liên quan
+relatedTemplateIds: string[];
+
+// Trạng thái xuất bản
+status: "draft" | "published";
 }

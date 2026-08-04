@@ -1,4 +1,5 @@
 import { templateRepository } from "@/repositories/template.repository";
+import { Template } from "@/types/template/template";
 
 export const templateService = {
 
@@ -13,5 +14,7 @@ export const templateService = {
   getBySlug(slug: string) {
     return templateRepository.findBySlug(slug);
   },
-
+getRelated(template: Template) {
+  return templateRepository.findRelated(template);
+}
 };

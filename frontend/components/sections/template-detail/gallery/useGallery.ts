@@ -6,7 +6,7 @@ import {
   useState,
 } from "react";
 
-import type { Template } from "@/types";
+import type { Template } from "@/types/template/template";
 
 export function useGallery(template: Template) {
   const images = useMemo(() => {

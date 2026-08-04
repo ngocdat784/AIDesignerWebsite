@@ -17,4 +17,11 @@ export const templateRepository = {
   findFeatured(): Template[] {
     return templates.filter((item) => item.isFeatured);
   },
+  findRelated(template: Template): Template[] {
+  return templates.filter(
+    (item) =>
+      item.id !== template.id &&
+      template.relatedTemplateIds.includes(item.id)
+  );
+}
 };
