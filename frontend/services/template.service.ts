@@ -14,7 +14,13 @@ export const templateService = {
   getBySlug(slug: string) {
     return templateRepository.findBySlug(slug);
   },
-getRelated(template: Template) {
-  return templateRepository.findRelated(template);
+getRelated(
+  template: Template,
+  limit = 3
+) {
+  return templateRepository.findRelated(
+    template,
+    limit
+  );
 }
 };

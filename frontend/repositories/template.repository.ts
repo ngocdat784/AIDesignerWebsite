@@ -17,11 +17,24 @@ export const templateRepository = {
   findFeatured(): Template[] {
     return templates.filter((item) => item.isFeatured);
   },
-  findRelated(template: Template): Template[] {
-  return templates.filter(
-    (item) =>
-      item.id !== template.id &&
-      template.relatedTemplateIds.includes(item.id)
-  );
+  findRelated(current: Template, limit = 3): Template[] {
+  return templates
+    .filter((item) => {
+      if (item.id === current.id) {
+        return false;
+      }
+
+      const sameCategory =
+        item.category === current.category;
+
+      const sameTags =
+        item.tags.some((tag) =>
+          current.tags.includes(tag)
+        );
+
+      return sameCategory || sameTags;
+    })
+    .slice(0, limit);
 }
+
 };
