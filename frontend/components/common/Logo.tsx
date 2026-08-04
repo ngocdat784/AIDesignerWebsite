@@ -1,21 +1,83 @@
 import Link from "next/link";
 
-export default function Logo() {
+import { Sparkles } from "lucide-react";
+
+import { cn } from "@/lib/utils";
+
+interface LogoProps {
+  compact?: boolean;
+
+  className?: string;
+}
+
+export default function Logo({
+  compact = false,
+  className,
+}: LogoProps) {
   return (
-    <Link href="/" className="flex items-center gap-2">
-      <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-black text-white font-bold">
-        AI
+    <Link
+      href="/"
+      className={cn(
+        "group inline-flex items-center gap-3 transition-all duration-300",
+        className
+      )}
+    >
+      <div
+        className="
+          flex
+          h-11
+          w-11
+          items-center
+          justify-center
+          rounded-2xl
+          bg-gradient-to-br
+          from-primary
+          via-primary
+          to-violet-600
+          text-primary-foreground
+          shadow-lg
+          transition-all
+          duration-300
+          group-hover:scale-105
+          group-hover:rotate-3
+        "
+      >
+        <Sparkles
+          className="
+            h-5
+            w-5
+            transition-transform
+            duration-300
+            group-hover:rotate-12
+          "
+        />
       </div>
 
-      <div>
-        <p className="text-lg font-bold">
-          AI Designer
-        </p>
+      {!compact && (
+        <div className="leading-tight">
+          <p
+            className="
+              text-lg
+              font-bold
+              tracking-tight
+              transition-colors
+              duration-300
+              group-hover:text-primary
+            "
+          >
+            AI Designer
+          </p>
 
-        <p className="text-xs text-gray-500">
-          Website Builder
-        </p>
-      </div>
+          <p
+            className="
+              text-xs
+              text-muted-foreground
+            "
+          >
+            Premium Marketplace
+          </p>
+        </div>
+      )}
     </Link>
   );
 }
