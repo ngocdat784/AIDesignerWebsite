@@ -1,6 +1,11 @@
-export * from "./animation";
-export * from "./colors";
-export * from "./radius";
-export * from "./shadows";
-export * from "./spacing";
-export * from "./typography";
+export { default as animation } from "./animation";
+export { default as breakpoints } from "./breakpoints";
+export { default as colors } from "./colors";
+export { default as effects } from "./effects";
+export { default as gradients } from "./gradients";
+export { default as radius } from "./radius";
+export { default as shadows } from "./shadows";
+export { default as spacing } from "./spacing";
+export { default as transitions } from "./transitions";
+export { default as typography } from "./typography";
+export { default as zIndex } from "./zIndex";

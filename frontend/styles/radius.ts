@@ -1,7 +1,12 @@
-export const RADIUS = {
-  sm: "6px",
-  md: "10px",
-  lg: "16px",
-  xl: "24px",
+// styles/radius.ts
+
+export const radius = {
+  sm: "0.5rem",
+  md: "0.75rem",
+  lg: "1rem",
+  xl: "1.5rem",
+  "2xl": "2rem",
   full: "9999px",
-} as const;
+};
+
+export default radius;

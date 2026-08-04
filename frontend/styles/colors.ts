@@ -1,27 +1,30 @@
-export const COLORS = {
-  primary: "#4F46E5",
-  primaryHover: "#4338CA",
+// styles/colors.ts
 
-  secondary: "#0F172A",
+export const colors = {
+  primary: "#6366F1",
+  primaryDark: "#4F46E5",
+  primaryLight: "#818CF8",
 
-  accent: "#8B5CF6",
+  secondary: "#06B6D4",
 
-  success: "#10B981",
-
+  success: "#22C55E",
   warning: "#F59E0B",
-
   danger: "#EF4444",
 
+  white: "#FFFFFF",
+  black: "#09090B",
+
   background: "#FFFFFF",
+  surface: "#FAFAFA",
 
-  surface: "#F8FAFC",
-
-  border: "#E2E8F0",
+  border: "#E5E7EB",
 
   text: {
-    primary: "#0F172A",
-    secondary: "#475569",
-    muted: "#94A3B8",
-    white: "#FFFFFF",
+    primary: "#111827",
+    secondary: "#6B7280",
+    muted: "#9CA3AF",
+    inverse: "#FFFFFF",
   },
-} as const;
+};
+
+export default colors;
