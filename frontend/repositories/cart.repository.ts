@@ -32,30 +32,38 @@ export const cartRepository = {
   add(template: Template) {
     const items = loadCart();
 
-    const existing = items.find(
+    const exists = items.some(
       (item) => item.template.id === template.id
     );
 
-    if (existing) {
-      existing.quantity++;
-    } else {
-      items.push({
-        id: crypto.randomUUID(),
-        template,
-        quantity: 1,
-        addedAt: new Date().toISOString(),
-      });
-    }
+    const updatedItems = exists
+      ? items.map((item) =>
+          item.template.id === template.id
+            ? {
+                ...item,
+                quantity: item.quantity + 1,
+              }
+            : item
+        )
+      : [
+          ...items,
+          {
+            id: crypto.randomUUID(),
+            template,
+            quantity: 1,
+            addedAt: new Date().toISOString(),
+          },
+        ];
 
-    saveCart(items);
+    saveCart(updatedItems);
   },
 
   remove(templateId: string) {
-    const items = loadCart().filter(
+    const updatedItems = loadCart().filter(
       (item) => item.template.id !== templateId
     );
 
-    saveCart(items);
+    saveCart(updatedItems);
   },
 
   clear() {
@@ -66,16 +74,28 @@ export const cartRepository = {
     templateId: string,
     quantity: number
   ) {
-    const items = loadCart();
-
-    const item = items.find(
-      (item) => item.template.id === templateId
+    const updatedItems = loadCart().map((item) =>
+      item.template.id === templateId
+        ? {
+            ...item,
+            quantity,
+          }
+        : item
     );
 
-    if (!item) return;
+    saveCart(updatedItems);
+  },
 
-    item.quantity = quantity;
+  isInCart(templateId: string) {
+    return loadCart().some(
+      (item) => item.template.id === templateId
+    );
+  },
 
-    saveCart(items);
+  getItemCount() {
+    return loadCart().reduce(
+      (count, item) => count + item.quantity,
+      0
+    );
   },
 };
