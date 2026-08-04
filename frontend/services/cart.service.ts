@@ -2,9 +2,45 @@ import { cartRepository } from "@/repositories/cart.repository";
 import type { Template } from "@/types/template/template";
 
 export const cartService = {
-  getItems() {
+  // =========================
+  // Query
+  // =========================
+
+  getAll() {
     return cartRepository.findAll();
   },
+
+  getItem(templateId: string) {
+    return cartRepository
+      .findAll()
+      .find(
+        (item) =>
+          item.template.id === templateId
+      );
+  },
+
+  getItemCount() {
+    return cartRepository
+      .findAll()
+      .reduce(
+        (sum, item) =>
+          sum + item.quantity,
+        0
+      );
+  },
+
+  isInCart(templateId: string) {
+    return cartRepository
+      .findAll()
+      .some(
+        (item) =>
+          item.template.id === templateId
+      );
+  },
+
+  // =========================
+  // Commands
+  // =========================
 
   addTemplate(template: Template) {
     cartRepository.add(template);
@@ -27,6 +63,10 @@ export const cartService = {
       quantity
     );
   },
+
+  // =========================
+  // Calculations
+  // =========================
 
   getSubtotal() {
     return cartRepository

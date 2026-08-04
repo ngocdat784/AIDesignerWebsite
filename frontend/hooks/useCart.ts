@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { toast } from "sonner";
 
 import { cartService } from "@/services/cart.service";
 import type { Template } from "@/types/template/template";
@@ -14,23 +15,30 @@ export function useCart() {
 
   function add(template: Template) {
     cartService.addTemplate(template);
+
+    toast.success(`${template.title} added to cart.`);
+
     refresh();
   }
 
   function remove(templateId: string) {
     cartService.removeTemplate(templateId);
+
+    toast.success("Removed from cart.");
+
     refresh();
   }
 
   function clear() {
     cartService.clear();
+
+    toast.success("Cart cleared.");
+
     refresh();
   }
 
   function increase(templateId: string) {
-    const item = cartService
-      .getItems()
-      .find((i) => i.template.id === templateId);
+    const item = cartService.getItem(templateId);
 
     if (!item) return;
 
@@ -43,13 +51,11 @@ export function useCart() {
   }
 
   function decrease(templateId: string) {
-    const item = cartService
-      .getItems()
-      .find((i) => i.template.id === templateId);
+    const item = cartService.getItem(templateId);
 
     if (!item) return;
 
-    if (item.quantity === 1) {
+    if (item.quantity <= 1) {
       remove(templateId);
       return;
     }
@@ -62,28 +68,31 @@ export function useCart() {
     refresh();
   }
 
-  const items = cartService.getItems();
+  const items = cartService.getAll();
 
   return useMemo(
-    () => ({
-      items,
+  () => ({
+    items,
 
-      subtotal: cartService.getSubtotal(),
+    itemCount: cartService.getItemCount(),
 
-      discount: cartService.getDiscount(),
+    subtotal: cartService.getSubtotal(),
 
-      total: cartService.getTotal(),
+    discount: cartService.getDiscount(),
 
-      add,
+    total: cartService.getTotal(),
 
-      remove,
+    add,
 
-      clear,
+    remove,
 
-      increase,
+    clear,
 
-      decrease,
-    }),
-    [items]
-  );
+    increase,
+
+    decrease,
+    isInCart: cartService.isInCart,
+  }),
+  [items]
+);
 }

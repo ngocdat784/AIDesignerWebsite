@@ -1,49 +1,84 @@
 "use client";
 
-import AppButton from "@/components/common/AppButton";
 import { useCart } from "@/hooks/useCart";
+
+import CartCoupon from "./CartCoupon";
+import CartSummaryActions from "./CartSummaryActions";
+import CartSummaryRow from "./CartSummaryRow";
+import CartTaxNotice from "./CartTaxNotice";
 
 export default function CartSummary() {
   const {
     subtotal,
     discount,
     total,
+    items,
   } = useCart();
 
-  return (
-    <aside className="rounded-2xl border p-6 space-y-6 h-fit sticky top-24">
+  const itemCount =
+    items.reduce(
+      (sum, item) => sum + item.quantity,
+      0
+    );
 
-      <h2 className="text-xl font-semibold">
+  const estimatedTax =
+    total * 0.1;
+
+  return (
+    <aside className="sticky top-24 h-fit rounded-2xl border p-6">
+
+      <h2 className="mb-6 text-xl font-semibold">
         Order Summary
       </h2>
 
-      <div className="space-y-3">
+      <div className="space-y-4">
 
-        <div className="flex justify-between">
-          <span>Subtotal</span>
+        <CartSummaryRow
+          label="Items"
+          value={itemCount.toString()}
+        />
 
-          <span>${subtotal}</span>
-        </div>
+        <CartSummaryRow
+          label="Subtotal"
+          value={`$${subtotal.toFixed(2)}`}
+        />
 
-        <div className="flex justify-between">
-          <span>Discount</span>
+        <CartSummaryRow
+          label="Discount"
+          value={`-$${discount.toFixed(2)}`}
+        />
 
-          <span>-${discount}</span>
-        </div>
+        <CartSummaryRow
+          label="You Saved"
+          value={`$${discount.toFixed(2)}`}
+        />
+
+        <CartSummaryRow
+          label="Estimated Tax"
+          value={`$${estimatedTax.toFixed(2)}`}
+        />
 
         <hr />
 
-        <div className="flex justify-between text-xl font-bold">
-          <span>Total</span>
-
-          <span>${total}</span>
-        </div>
+        <CartSummaryRow
+          label="Total"
+          value={`$${(
+            total + estimatedTax
+          ).toFixed(2)}`}
+          bold
+        />
 
       </div>
 
-      <AppButton className="w-full">
-        Proceed to Checkout
-      </AppButton>
+      <div className="my-6">
+        <CartCoupon />
+      </div>
+
+      <CartSummaryActions />
+
+      <div className="mt-6">
+        <CartTaxNotice />
+      </div>
 
     </aside>
   );
