@@ -46,6 +46,22 @@ export interface Template {
   // File đi kèm
   includedFiles: string[];
 
+  // Các tính năng nổi bật
+  features: string[];
+
+  // Hướng dẫn cài đặt
+  installationSteps: string[];
+
+  // Yêu cầu hệ thống
+  requirements: string[];
+
+  // Lịch sử cập nhật
+  changelog: {
+    version: string;
+    date: string;
+    changes: string[];
+  }[];
+
   // Link demo
   demoUrl: string;
 
