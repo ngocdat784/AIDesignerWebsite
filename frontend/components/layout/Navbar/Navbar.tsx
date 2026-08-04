@@ -1,7 +1,7 @@
 import Link from "next/link";
-import Logo from "../common/Logo";
-import { Button } from "../ui/button";
-import ThemeToggle from "../common/ThemeToggle";
+import Logo from "../../common/Logo";
+import { Button } from "../../ui/button";
+import ThemeToggle from "../../common/ThemeToggle";
 
 export default function Navbar() {
   return (
