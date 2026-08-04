@@ -1,11 +1,14 @@
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
 import type { ComponentProps } from "react";
 
-type AppButtonProps = ComponentProps<typeof Button>;
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+
+export interface AppButtonProps
+  extends ComponentProps<typeof Button> {}
 
 export default function AppButton({
   className,
+  children,
   ...props
 }: AppButtonProps) {
   return (
@@ -15,6 +18,8 @@ export default function AppButton({
         className
       )}
       {...props}
-    />
+    >
+      {children}
+    </Button>
   );
 }
