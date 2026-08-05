@@ -1,5 +1,3 @@
-import Link from "next/link";
-
 import { Sparkles } from "lucide-react";
 
 import { cn } from "@/lib/utils";
@@ -15,10 +13,9 @@ export default function Logo({
   className,
 }: LogoProps) {
   return (
-    <Link
-      href="/"
+    <div
       className={cn(
-        "group inline-flex items-center gap-3 transition-all duration-300",
+        "group inline-flex items-center gap-3",
         className
       )}
     >
@@ -78,6 +75,6 @@ export default function Logo({
           </p>
         </div>
       )}
-    </Link>
+    </div>
   );
 }

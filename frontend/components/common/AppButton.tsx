@@ -20,6 +20,9 @@ export default function AppButton({
     <Button
       disabled={disabled || loading}
       className={cn(
+        // Group (cho phép icon dùng group-hover)
+        "group",
+
         // Layout
         "inline-flex items-center justify-center gap-2",
 
