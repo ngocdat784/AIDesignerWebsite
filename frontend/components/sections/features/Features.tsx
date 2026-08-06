@@ -1,30 +1,46 @@
-import Container from "@/components/ui/container";
-import Section from "@/components/ui/section";
-import SectionTitle from "@/components/ui/section-title";
+"use client";
 
-import FeatureCard from "./FeatureCard";
-import { FEATURES } from "./features.data";
+import { cn } from "@/lib/utils";
 
-export default function Features() {
+import FeaturesBackground from "./FeaturesBackground";
+import FeaturesGradient from "./FeaturesGradient";
+import FeaturesGrid from "./FeaturesGrid";
+import FeaturesHeader from "./FeaturesHeader";
+
+interface FeaturesProps {
+  className?: string;
+}
+
+export default function Features({
+  className,
+}: FeaturesProps) {
   return (
-    <Section>
-      <Container>
+    <section
+      className={cn(
+        `
+        relative
+        overflow-hidden
+        py-24
+        lg:py-32
+        `,
+        className
+      )}
+    >
+      {/* Background */}
 
-        <SectionTitle
-          title="Everything You Need"
-          subtitle="Powerful AI tools to design, customize and deploy modern websites."
-        />
+      <FeaturesBackground />
 
-        <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
-          {FEATURES.map((feature) => (
-            <FeatureCard
-              key={feature.title}
-              {...feature}
-            />
-          ))}
-        </div>
+      {/* Gradient */}
 
-      </Container>
-    </Section>
+      <FeaturesGradient />
+
+      {/* Content */}
+
+      <div className="relative mx-auto max-w-7xl px-6">
+        <FeaturesHeader />
+
+        <FeaturesGrid />
+      </div>
+    </section>
   );
 }
