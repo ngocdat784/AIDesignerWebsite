@@ -2,7 +2,7 @@
 
 import { useMarketplace } from "./hooks/useMarketplace";
 
-import MarketplaceGridView from "@/components/sections/marketplace/GridView";
+import MarketplaceGridView from "@/components/sections/marketplace/cards/GridView";
 import MarketplaceListView from "@/components/sections/marketplace/ListView";
 
 export default function MarketplaceGrid() {

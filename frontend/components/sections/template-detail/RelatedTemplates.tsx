@@ -2,7 +2,7 @@
 
 import { templateService } from "@/services/template.service";
 
-import TemplateCard from "@/components/sections/marketplace/TemplateCard";
+import TemplateCard from "@/components/sections/marketplace/cards/TemplateCard";
 
 import type {
   RelatedTemplatesProps,

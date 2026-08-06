@@ -1,7 +1,7 @@
 "use client";
 
 import { useTemplates } from "@/hooks/useTemplates";
-import TemplateCard from "./TemplateCard";
+import TemplateCard from "./cards/TemplateCard";
 import EmptyState from "./EmptyState";
 
 export default function TemplateGrid() {
