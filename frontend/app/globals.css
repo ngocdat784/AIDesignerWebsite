@@ -151,3 +151,28 @@ body {
     @apply font-sans;
   }
 }
+@keyframes hero-particle {
+  0% {
+    transform: translateY(0px) scale(1);
+    opacity: 0;
+  }
+
+  10% {
+    opacity: .35;
+  }
+
+  50% {
+    transform: translateY(-280px) translateX(25px) scale(1.15);
+  }
+
+  100% {
+    transform: translateY(-620px) translateX(-30px) scale(.9);
+    opacity: 0;
+  }
+}
+
+.animate-hero-particle{
+  animation-name: hero-particle;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
