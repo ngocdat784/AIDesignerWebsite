@@ -20,19 +20,20 @@ export default function HeroBadge({
         group
         inline-flex
         items-center
-        gap-2
+        gap-3
         rounded-full
         border
         border-primary/20
         bg-primary/5
-        px-4
-        py-2
-        text-sm
+        px-6
+        py-3
+        text-[15px]
         font-medium
         text-primary
         backdrop-blur-sm
         transition-all
         duration-300
+        hover:-translate-y-0.5
         hover:border-primary/40
         hover:bg-primary/10
         hover:shadow-lg
@@ -44,12 +45,11 @@ export default function HeroBadge({
       {Icon && (
         <Icon
           className="
-            h-4
-            w-4
+            h-5
+            w-5
             transition-transform
             duration-300
             group-hover:rotate-12
-            group-hover:scale-110
           "
         />
       )}

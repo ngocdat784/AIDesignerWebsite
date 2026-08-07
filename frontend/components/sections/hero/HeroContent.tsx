@@ -1,7 +1,6 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-
 import { heroData } from "./hero.data";
 
 interface HeroContentProps {
@@ -14,7 +13,7 @@ export default function HeroContent({
   return (
     <div
       className={cn(
-        "space-y-8",
+        "flex flex-col items-center text-center",
         className
       )}
     >
@@ -22,11 +21,11 @@ export default function HeroContent({
 
       <h1
         className="
-          max-w-5xl
+          max-w-6xl
           text-5xl
           font-extrabold
-          leading-[1.05]
-          tracking-tight
+          tracking-[-0.04em]
+          leading-[1.08]
           md:text-6xl
           xl:text-7xl
         "
@@ -35,7 +34,7 @@ export default function HeroContent({
 
         <span
           className="
-            mt-3
+            
             block
             bg-gradient-to-r
             from-primary
@@ -53,7 +52,8 @@ export default function HeroContent({
 
       <p
         className="
-          max-w-3xl
+          mt-10
+          max-w-2xl
           text-lg
           leading-8
           text-muted-foreground

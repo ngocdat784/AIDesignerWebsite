@@ -36,35 +36,47 @@ export default function Hero({
 
       {/* Content */}
 
-      <div
-        className="
-          relative
-          z-10
-          mx-auto
-          flex
-          min-h-[calc(100vh-72px)]
-          max-w-7xl
-          flex-col
-          items-center
-          justify-center
-          px-6
-          pt-24
-          pb-20
-          text-center
-        "
-      >
-        <HeroBadge />
+   <div
+  className="
+    relative
+    z-10
+    mx-auto
+    flex
+    min-h-[calc(100vh-72px)]
+    max-w-7xl
+    flex-col
+    items-center
+    justify-center
+    px-6
+    pt-28
+    pb-24
+    text-center
+  "
+>
+  <div
+    className="
+      flex
+      w-full
+      max-w-5xl
+      flex-col
+      items-center
+      space-y-8
+      md:space-y-10
+    "
+  >
+    <HeroBadge />
 
-        <HeroContent />
+    <HeroContent />
 
-        <HeroActions />
+    <HeroActions />
 
-        <HeroStats />
+    <HeroStats />
 
-        <HeroTrusted />
+    <HeroTrusted />
+  </div>
 
-        <HeroPreview />
-      </div>
+  <HeroPreview className="mt-20 md:mt-24" />
+</div>
     </section>
   );
 }

@@ -20,94 +20,104 @@ export default function MarketplaceHeader({
   const { header } = marketplaceData;
 
   return (
-    <div
-      className={cn(
-        `
-        mb-16
-        flex
-        flex-col
-        gap-8
-        lg:flex-row
-        lg:items-end
-        lg:justify-between
-        `,
-        className
-      )}
+  <div
+    className={cn(
+      `
+      flex
+      flex-col
+      items-center
+      text-center
+      `,
+      className
+    )}
+  >
+    {/* Badge */}
+
+    {header.badge && (
+      <Badge
+        variant="secondary"
+        className="
+          mb-6
+          inline-flex
+          items-center
+          gap-2
+          rounded-full
+          px-5
+          py-2
+          text-sm
+          font-medium
+        "
+      >
+        <Sparkles className="h-4 w-4" />
+
+        {header.badge}
+      </Badge>
+    )}
+
+    {/* Title */}
+
+    <h2
+      className="
+        max-w-6xl
+        text-5xl
+        font-extrabold
+        tracking-[-0.04em]
+        leading-[1.08]
+        md:text-6xl
+        xl:text-7xl
+      "
     >
-      {/* Left */}
+      {header.title}
 
-      <div className="max-w-3xl">
-        {/* Badge */}
+      {header.highlight && (
+        <span className="block text-primary">
+          {header.highlight}
+        </span>
+      )}
+    </h2>
 
-        {header.badge && (
-          <Badge
-            variant="secondary"
-            className="
-              mb-5
-              inline-flex
-              items-center
-              gap-2
-              rounded-full
-              px-4
-              py-2
-              text-sm
-            "
-          >
-            <Sparkles className="h-4 w-4" />
+    {/* Description */}
 
-            {header.badge}
-          </Badge>
-        )}
+    <p
+      className="
+        mt-10
+        max-w-2xl
+        text-lg
+        leading-8
+        text-muted-foreground
+        md:text-xl
+      "
+    >
+      {header.description}
+    </p>
 
-        {/* Title */}
+    {/* Action */}
 
-        <h2
-          className="
-            text-4xl
-            font-bold
-            tracking-tight
-            md:text-5xl
-          "
-        >
-          {header.title}
-
-          {header.highlight && (
-            <span className="block text-primary">
-              {header.highlight}
-            </span>
-          )}
-        </h2>
-
-        {/* Description */}
-
-        <p
-          className="
-            mt-6
-            max-w-2xl
-            text-lg
-            leading-8
-            text-muted-foreground
-          "
-        >
-          {header.description}
-        </p>
-      </div>
-
-      {/* Action */}
-
-      {header.action && (
+    {header.action && (
+      <div className="mt-10">
         <Link href={header.action.href}>
           <AppButton
             variant="outline"
             className="
-              rounded-xl
-              px-6
+              group
+              h-14
+              min-w-[200px]
+              rounded-2xl
+              px-10
+              text-base
+              font-semibold
+              shadow-md
+              transition-all
+              duration-300
+              hover:-translate-y-1
+              hover:shadow-2xl
             "
           >
             {header.action.text}
           </AppButton>
         </Link>
-      )}
-    </div>
-  );
+      </div>
+    )}
+  </div>
+);
 }

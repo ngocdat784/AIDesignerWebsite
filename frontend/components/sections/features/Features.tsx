@@ -20,26 +20,41 @@ export default function Features({
         `
         relative
         overflow-hidden
-        py-24
-        lg:py-32
+        py-28
+        lg:py-36
         `,
         className
       )}
     >
       {/* Background */}
-
       <FeaturesBackground />
 
       {/* Gradient */}
-
       <FeaturesGradient />
 
       {/* Content */}
+      <div
+        className="
+          relative
+          z-10
+          mx-auto
+          flex
+          max-w-7xl
+          flex-col
+          items-center
+          px-6
+          text-center
+        "
+      >
+        {/* Header */}
+        <div className="mb-20 w-full">
+          <FeaturesHeader />
+        </div>
 
-      <div className="relative mx-auto max-w-7xl px-6">
-        <FeaturesHeader />
-
-        <FeaturesGrid />
+        {/* Grid */}
+        <div className="w-full">
+          <FeaturesGrid />
+        </div>
       </div>
     </section>
   );

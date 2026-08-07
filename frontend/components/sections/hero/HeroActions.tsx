@@ -18,11 +18,13 @@ export default function HeroActions({
     <div
       className={cn(
         `
-        mt-10
+
         flex
         flex-col
-        gap-4
-        sm:flex-row
+        items-center
+        gap-5
+        sm:flex-row sm:items-center
+        sm:justify-center
         `,
         className
       )}
@@ -45,21 +47,26 @@ export default function HeroActions({
               size="lg"
               variant={button.variant ?? "default"}
               className="
-                group
-                rounded-2xl
-                px-8
-                shadow-sm
-                transition-all
-                duration-300
-                hover:-translate-y-1
-                hover:shadow-xl
-              "
+  group
+  h-14
+  min-w-[200px]
+  rounded-2xl
+  px-10
+  text-base
+  font-semibold
+  shadow-md
+  transition-all
+  duration-300
+  hover:-translate-y-1
+  hover:shadow-2xl
+"
             >
               <span>{button.label}</span>
 
               {Icon && (
                 <Icon
                   className="
+                    ml-2
                     h-4
                     w-4
                     transition-transform

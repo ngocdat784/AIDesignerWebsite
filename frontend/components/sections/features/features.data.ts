@@ -11,56 +11,68 @@ import type { FeaturesData } from "./types";
 
 export const featuresData: FeaturesData = {
   header: {
-  badge: "Powerful Features",
+    badge: "Built for Modern Creators",
 
-  title: "Everything You Need",
+    title: "Everything You Need",
 
-  highlight: "to Build Faster",
+    highlight: "to Ship Faster",
 
-  description:
-    "Powerful AI tools to design, customize and deploy modern websites with an intuitive workflow and modern experience.",
-},
+    description:
+      "From AI-powered generation to seamless deployment, every tool is crafted to help you design, collaborate, and launch exceptional websites effortlessly.",
+  },
 
   features: [
     {
       title: "AI Website Generation",
+
       description:
-        "Generate complete websites from natural language prompts in seconds.",
+        "Transform simple ideas into fully responsive websites with intelligent AI assistance.",
+
       icon: Bot,
     },
 
     {
-      title: "Drag & Drop Editor",
+      title: "Visual Editor",
+
       description:
-        "Customize every section visually without touching code.",
+        "Design every page with an intuitive drag-and-drop experience while keeping full creative control.",
+
       icon: MousePointerClick,
     },
 
     {
-      title: "Template Marketplace",
+      title: "Premium Marketplace",
+
       description:
-        "Explore and purchase premium templates from creators.",
+        "Discover professionally crafted templates and launch your next project instantly.",
+
       icon: LayoutTemplate,
     },
 
     {
-      title: "One-click Deployment",
+      title: "Instant Deployment",
+
       description:
-        "Publish your website instantly with a single click.",
+        "Deploy globally in seconds with optimized performance and zero configuration.",
+
       icon: Rocket,
     },
 
     {
-      title: "Team Collaboration",
+      title: "Real-time Collaboration",
+
       description:
-        "Work together seamlessly with designers and developers.",
+        "Collaborate seamlessly with your entire team through a fast, intuitive and shared workspace.",
+
       icon: Users,
     },
 
     {
-      title: "SEO Optimized",
+      title: "Performance First",
+
       description:
-        "Fast loading, responsive and search engine friendly.",
+        "Built with speed, accessibility and SEO best practices to maximize your reach across every device.",
+
       icon: Search,
     },
   ],
