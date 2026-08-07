@@ -1,5 +1,6 @@
-import { Template } from "../template/template";
-import { CartItem } from "./cart-item";
+import type { MarketplaceTemplate } from "@/components/sections/marketplace/types";
+
+import type { CartItem } from "./cart-item";
 
 export interface Cart {
   items: CartItem[];
@@ -10,6 +11,7 @@ export interface Cart {
 
   total: number;
 }
+
 export interface CartContextType {
   items: CartItem[];
 
@@ -21,7 +23,7 @@ export interface CartContextType {
 
   total: number;
 
-  add(template: Template): void;
+  add(template: MarketplaceTemplate): void;
 
   remove(templateId: string): void;
 

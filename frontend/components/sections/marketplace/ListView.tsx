@@ -1,14 +1,14 @@
-import { Template } from "@/types";
+import type { MarketplaceTemplate } from "./types";
 
 import TemplateListCard from "./cards/TemplateListCard";
 
-interface Props {
-  templates: Template[];
+interface MarketplaceListViewProps {
+  templates: MarketplaceTemplate[];
 }
 
 export default function MarketplaceListView({
   templates,
-}: Props) {
+}: MarketplaceListViewProps) {
   return (
     <div className="space-y-6">
       {templates.map((template) => (

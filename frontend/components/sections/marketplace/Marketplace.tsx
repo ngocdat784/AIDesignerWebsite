@@ -1,27 +1,97 @@
-import Section from "@/components/ui/section";
-import Container from "@/components/ui/container";
-import SectionTitle from "@/components/ui/section-title";
+"use client";
 
+import Container from "@/components/ui/container";
+import Section from "@/components/ui/section";
+
+import { useMarketplace } from "./hooks";
+
+import MarketplaceBackground from "./MarketplaceBackground";
+import MarketplaceGradient from "./MarketplaceGradient";
 import MarketplaceHeader from "./MarketplaceHeader";
-import TemplateGrid from "./TemplateGrid";
+import MarketplaceToolbar from "./MarketplaceToolbar";
+import MarketplaceGridView from "./GridView";
+import MarketplaceListView from "./ListView";
+import MarketplacePagination from "./MarketplacePagination";
+import MarketplaceEmpty from "./MarketplaceEmpty";
+//import MarketplaceLoading from "./MarketplaceLoading";
 
 export default function Marketplace() {
+  const {
+  templates,
+
+  search,
+  setSearch,
+
+  tabs,
+  tab,
+  setTab,
+
+  categories,
+  category,
+  setCategory,
+
+  sort,
+  setSort,
+
+  view,
+  setView,
+} = useMarketplace();
+
   return (
-    <Section>
+    <Section
+      id="marketplace"
+      className="relative overflow-hidden"
+    >
+      <MarketplaceBackground />
 
-      <Container>
+      <MarketplaceGradient />
 
+      <Container className="relative z-10">
         <MarketplaceHeader />
 
-        <SectionTitle
-          title="Featured Templates"
-          subtitle="Discover premium templates crafted by professional creators."
-        />
+        <MarketplaceToolbar
+  search={search}
+  onSearchChange={setSearch}
 
-        <TemplateGrid />
+  tabs={tabs}
+  activeTab={tab}
+  onTabChange={setTab}
 
+  categories={categories}
+  activeCategory={category}
+  onCategoryChange={setCategory}
+
+  sort={sort}
+  onSortChange={setSort}
+
+  view={view}
+  onViewChange={setView}
+/>
+
+        {/* Loading */}
+
+        {/*
+        if (loading) {
+          return <MarketplaceLoading />;
+        }
+        */}
+
+        {/* Empty */}
+
+        {templates.length === 0 ? (
+          <MarketplaceEmpty />
+        ) : view === "grid" ? (
+          <MarketplaceGridView
+            templates={templates}
+          />
+        ) : (
+          <MarketplaceListView
+            templates={templates}
+          />
+        )}
+
+        <MarketplacePagination />
       </Container>
-
     </Section>
   );
 }

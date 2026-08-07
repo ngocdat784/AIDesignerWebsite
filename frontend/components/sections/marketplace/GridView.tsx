@@ -1,17 +1,14 @@
-"use client";
-
-import { useMarketplace } from "./hooks";
+import type { MarketplaceTemplate } from "./types";
 
 import TemplateCard from "./cards/TemplateCard";
-import MarketplaceEmpty from "./MarketplaceEmpty";
 
-export default function TemplateGrid() {
-  const { templates } = useMarketplace();
-
- if (templates.length === 0) {
-  return <MarketplaceEmpty />;
+interface MarketplaceGridViewProps {
+  templates: MarketplaceTemplate[];
 }
 
+export default function MarketplaceGridView({
+  templates,
+}: MarketplaceGridViewProps) {
   return (
     <div
       className="

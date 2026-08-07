@@ -9,44 +9,44 @@ import {
   ShoppingCart,
 } from "lucide-react";
 
-import { Template } from "@/types";
-
 import AppButton from "@/components/common/AppButton";
-import Rating from "@/components/common/Rating";
 import PriceTag from "@/components/common/PriceTag";
+import Rating from "@/components/common/Rating";
 
 import { useCart } from "@/hooks/useCart";
 
-interface Props {
-  template: Template;
+import { MarketplaceTemplate } from "../types";
+
+interface TemplateCardProps {
+  template: MarketplaceTemplate;
 }
 
 export default function TemplateCard({
   template,
-}: Props) {
-  const {
-    add,
-    isInCart,
-  } = useCart();
+}: TemplateCardProps) {
+  const { add, isInCart } =
+    useCart();
 
-  const added = isInCart(template.id);
+  const added = isInCart(
+    template.id
+  );
 
   return (
     <article
       className="
         group
         overflow-hidden
-        rounded-2xl
+        rounded-3xl
         border
         bg-card
         transition-all
         duration-300
-        ease-out
         hover:-translate-y-1
         hover:shadow-xl
-        hover:border-primary/30
       "
     >
+      {/* Thumbnail */}
+
       <div className="relative aspect-[16/10] overflow-hidden">
         <Image
           src={template.thumbnail}
@@ -54,63 +54,140 @@ export default function TemplateCard({
           fill
           className="
             object-cover
-            transition-all
+            transition-transform
             duration-500
-            ease-out
             group-hover:scale-105
-            group-hover:brightness-105
           "
         />
+
+        {template.badge && (
+          <div
+            className="
+              absolute
+              left-4
+              top-4
+              rounded-full
+              bg-primary
+              px-3
+              py-1
+              text-xs
+              font-semibold
+              text-primary-foreground
+            "
+          >
+            {template.badge.text}
+          </div>
+        )}
       </div>
 
-      <div className="space-y-4 p-6">
+      {/* Content */}
+
+      <div className="space-y-5 p-6">
+        {/* Title */}
+
         <div>
           <h3 className="text-xl font-semibold">
             {template.title}
           </h3>
 
-          <p className="mt-2 text-muted-foreground">
+          <p
+            className="
+              mt-2
+              line-clamp-2
+              text-muted-foreground
+            "
+          >
             {template.description}
           </p>
         </div>
+
+        {/* Rating */}
 
         <div className="flex items-center justify-between">
           <div className="space-y-2 text-sm">
             <Rating
               value={template.rating}
-              reviewCount={template.reviewCount}
+              reviewCount={
+                template.reviews
+              }
             />
 
-            <div className="flex items-center gap-1 text-muted-foreground">
+            <div
+              className="
+                flex
+                items-center
+                gap-1
+                text-muted-foreground
+              "
+            >
               <Download className="h-4 w-4" />
 
               <span>
-                {template.downloads} downloads
+                {template.downloads.toLocaleString()}{" "}
+                downloads
               </span>
             </div>
           </div>
 
           <PriceTag
             price={template.price}
-            discountPrice={template.discountPrice}
+            discountPrice={
+              template.originalPrice
+            }
           />
         </div>
 
-        <div className="flex items-center gap-3">
-          <Link
-            href={`/templates/${template.slug}`}
-            className="flex-1"
-          >
-            <AppButton
+        {/* Author */}
+
+        <div
+          className="
+            flex
+            items-center
+            justify-between
+            border-t
+            pt-4
+          "
+        >
+          <div>
+            <p className="text-sm font-medium">
+              {template.author.name}
+            </p>
+
+            <p
               className="
-                w-full
-                transition-all
-                duration-300
-                ease-out
-                hover:scale-[1.02]
-                active:scale-[0.98]
+                text-xs
+                text-muted-foreground
               "
             >
+              {template.category}
+            </p>
+          </div>
+
+          {template.author.verified && (
+            <div
+              className="
+                rounded-full
+                bg-primary/10
+                px-3
+                py-1
+                text-xs
+                font-medium
+                text-primary
+              "
+            >
+              Verified
+            </div>
+          )}
+        </div>
+
+        {/* Actions */}
+
+        <div className="flex gap-3">
+          <Link
+             href={`/templates/${template.slug}`}
+    className="flex-1"
+          >
+            <AppButton className="w-full">
               Preview
             </AppButton>
           </Link>
@@ -118,55 +195,22 @@ export default function TemplateCard({
           {added ? (
             <Link href="/cart">
               <AppButton
-                title="View Cart"
-                className="
-                  min-w-[130px]
-                  transition-all
-                  duration-300
-                  ease-out
-                  hover:scale-105
-                  active:scale-95
-                "
+                className="min-w-[130px]"
               >
-                <Check
-                  className="
-                    mr-2
-                    h-4
-                    w-4
-                    transition-transform
-                    duration-300
-                    group-hover:rotate-12
-                  "
-                />
+                <Check className="mr-2 h-4 w-4" />
 
                 View Cart
               </AppButton>
             </Link>
           ) : (
             <AppButton
-              title="Add to Cart"
               variant="outline"
               size="icon"
-              onClick={() => add(template)}
-              className="
-                transition-all
-                duration-300
-                ease-out
-                hover:scale-110
-                hover:border-primary
-                hover:text-primary
-                active:scale-95
-              "
+              onClick={() =>
+                add(template)
+              }
             >
-              <ShoppingCart
-                className="
-                  h-4
-                  w-4
-                  transition-transform
-                  duration-300
-                  group-hover:rotate-6
-                "
-              />
+              <ShoppingCart className="h-4 w-4" />
             </AppButton>
           )}
         </div>

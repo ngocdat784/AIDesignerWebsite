@@ -1,9 +1,9 @@
-import { Template } from "@/types/template/template";
+import type { MarketplaceTemplate } from "@/components/sections/marketplace/types";
 
 export interface CartItem {
   id: string;
 
-  template: Template;
+  template: MarketplaceTemplate;
 
   quantity: number;
 

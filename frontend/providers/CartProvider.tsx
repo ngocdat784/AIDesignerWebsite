@@ -12,11 +12,10 @@ import { toast } from "sonner";
 import { CartContext } from "@/contexts/CartContext";
 import { cartService } from "@/services/cart.service";
 
-import type {
-  CartContextType,
-} from "@/types/cart";
+import type { CartContextType } from "@/types/cart";
 import type { CartItem } from "@/types/cart/cart-item";
-import type { Template } from "@/types/template/template";
+
+import type { MarketplaceTemplate } from "@/components/sections/marketplace/types";
 
 interface Props {
   children: ReactNode;
@@ -25,7 +24,8 @@ interface Props {
 export default function CartProvider({
   children,
 }: Props) {
-  const [items, setItems] = useState<CartItem[]>([]);
+  const [items, setItems] =
+    useState<CartItem[]>([]);
 
   function refresh() {
     setItems(cartService.getAll());
@@ -51,7 +51,9 @@ export default function CartProvider({
     };
   }, []);
 
-  function add(template: Template) {
+  function add(
+    template: MarketplaceTemplate
+  ) {
     cartService.addTemplate(template);
 
     toast.success(
@@ -61,10 +63,16 @@ export default function CartProvider({
     refresh();
   }
 
-  function remove(templateId: string) {
-    cartService.removeTemplate(templateId);
+  function remove(
+    templateId: string
+  ) {
+    cartService.removeTemplate(
+      templateId
+    );
 
-    toast.success("Removed from cart.");
+    toast.success(
+      "Removed from cart."
+    );
 
     refresh();
   }
@@ -72,13 +80,20 @@ export default function CartProvider({
   function clear() {
     cartService.clear();
 
-    toast.success("Cart cleared.");
+    toast.success(
+      "Cart cleared."
+    );
 
     refresh();
   }
 
-  function increase(templateId: string) {
-    const item = cartService.getItem(templateId);
+  function increase(
+    templateId: string
+  ) {
+    const item =
+      cartService.getItem(
+        templateId
+      );
 
     if (!item) return;
 
@@ -90,8 +105,13 @@ export default function CartProvider({
     refresh();
   }
 
-  function decrease(templateId: string) {
-    const item = cartService.getItem(templateId);
+  function decrease(
+    templateId: string
+  ) {
+    const item =
+      cartService.getItem(
+        templateId
+      );
 
     if (!item) return;
 
@@ -108,37 +128,38 @@ export default function CartProvider({
     refresh();
   }
 
-  const value: CartContextType = useMemo(
-    () => ({
-      items,
+  const value: CartContextType =
+    useMemo(
+      () => ({
+        items,
 
-      itemCount:
-        cartService.getItemCount(),
+        itemCount:
+          cartService.getItemCount(),
 
-      subtotal:
-        cartService.getSubtotal(),
+        subtotal:
+          cartService.getSubtotal(),
 
-      discount:
-        cartService.getDiscount(),
+        discount:
+          cartService.getDiscount(),
 
-      total:
-        cartService.getTotal(),
+        total:
+          cartService.getTotal(),
 
-      add,
+        add,
 
-      remove,
+        remove,
 
-      clear,
+        clear,
 
-      increase,
+        increase,
 
-      decrease,
+        decrease,
 
-      isInCart:
-        cartService.isInCart,
-    }),
-    [items]
-  );
+        isInCart:
+          cartService.isInCart,
+      }),
+      [items]
+    );
 
   return (
     <CartContext.Provider

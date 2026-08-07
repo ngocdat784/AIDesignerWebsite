@@ -1,5 +1,6 @@
 import { cartRepository } from "@/repositories/cart.repository";
-import type { Template } from "@/types/template/template";
+
+import type { MarketplaceTemplate } from "@/components/sections/marketplace/types";
 
 export const cartService = {
   // =========================
@@ -42,12 +43,18 @@ export const cartService = {
   // Commands
   // =========================
 
-  addTemplate(template: Template) {
+  addTemplate(
+    template: MarketplaceTemplate
+  ) {
     cartRepository.add(template);
   },
 
-  removeTemplate(templateId: string) {
-    cartRepository.remove(templateId);
+  removeTemplate(
+    templateId: string
+  ) {
+    cartRepository.remove(
+      templateId
+    );
   },
 
   clear() {
@@ -72,11 +79,11 @@ export const cartService = {
     return cartRepository
       .findAll()
       .reduce((sum, item) => {
-        const price =
-          item.template.discountPrice ??
-          item.template.price;
-
-        return sum + price * item.quantity;
+        return (
+          sum +
+          item.template.price *
+            item.quantity
+        );
       }, 0);
   },
 
@@ -84,14 +91,16 @@ export const cartService = {
     return cartRepository
       .findAll()
       .reduce((sum, item) => {
-        if (!item.template.discountPrice) {
+        if (
+          !item.template.originalPrice
+        ) {
           return sum;
         }
 
         return (
           sum +
-          (item.template.price -
-            item.template.discountPrice) *
+          (item.template.originalPrice -
+            item.template.price) *
             item.quantity
         );
       }, 0);
