@@ -12,30 +12,31 @@ export default function HeroStats({
   className,
 }: HeroStatsProps) {
   return (
-   <section
-  className={cn(
-    `
-    
-    flex
-    flex-wrap
-    justify-center
-    items-start
-    gap-10
-    md:gap-16
-    `,
-    className
-  )}
->
+    <section
+      className={cn(
+        `
+        flex
+        flex-wrap
+        items-start
+        justify-center
+        gap-8
+        md:gap-0
+        `,
+        className
+      )}
+    >
       {heroData.stats.map((stat, index) => (
         <div
           key={stat.label}
           className={cn(
             `
             flex
+            min-w-[180px]
             flex-col
             items-center
             justify-center
-            px-6
+            px-8
+            py-2
             transition-all
             duration-300
             hover:-translate-y-1
@@ -46,10 +47,11 @@ export default function HeroStats({
         >
           <h3
             className="
-             text-6xl
-    font-black
-    leading-none
-    tracking-tight
+              text-5xl
+              font-black
+              leading-none
+              tracking-[-0.03em]
+              md:text-6xl
             "
           >
             {stat.value}
@@ -57,12 +59,12 @@ export default function HeroStats({
 
           <p
             className="
-              mt-4
-    text-sm
-    uppercase
-    tracking-[0.18em]
-    text-muted-foreground
-
+              mt-3
+              text-sm
+              font-medium
+              uppercase
+              tracking-[0.18em]
+              text-muted-foreground
             "
           >
             {stat.label}

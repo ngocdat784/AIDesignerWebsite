@@ -27,56 +27,59 @@ export default function Hero({
       )}
     >
       {/* Background */}
-
       <HeroBackground />
 
       <HeroGradient />
 
       <HeroParticles />
 
-      {/* Content */}
+      {/* Hero Content */}
+      <div
+        className="
+          relative
+          z-10
+          mx-auto
+          flex
+          max-w-7xl
+          flex-col
+          items-center
+          px-6
+          pb-20
+          pt-10
+          text-center
+          md:px-8
+          md:pt-14
+          xl:pt-16
+        "
+      >
+        {/* Badge */}
+        <HeroBadge />
 
-   <div
-  className="
-    relative
-    z-10
-    mx-auto
-    flex
-    min-h-[calc(100vh-72px)]
-    max-w-7xl
-    flex-col
-    items-center
-    justify-center
-    px-6
-    pt-28
-    pb-24
-    text-center
-  "
->
-  <div
-    className="
-      flex
-      w-full
-      max-w-5xl
-      flex-col
-      items-center
-      space-y-8
-      md:space-y-10
-    "
-  >
-    <HeroBadge />
+        {/* Heading + Description */}
+        <div className="mt-16">
+          <HeroContent />
+        </div>
 
-    <HeroContent />
+        {/* Actions */}
+        <div className="mt-8">
+          <HeroActions />
+        </div>
 
-    <HeroActions />
+        {/* Stats */}
+        <div className="mt-12">
+          <HeroStats />
+        </div>
 
-    <HeroStats />
+        {/* Trusted */}
+        <div className="mt-8">
+          <HeroTrusted />
+        </div>
 
-    <HeroTrusted />
-  </div>
-
-  <HeroPreview className="mt-20 md:mt-24" />
-</div>
+        {/* Preview */}
+        <div className="mt-8 w-full">
+          <HeroPreview />
+        </div>
+      </div>
     </section>
   );
 }

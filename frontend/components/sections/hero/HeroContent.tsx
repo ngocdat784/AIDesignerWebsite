@@ -13,7 +13,12 @@ export default function HeroContent({
   return (
     <div
       className={cn(
-        "flex flex-col items-center text-center",
+        `
+        flex
+        flex-col
+        items-center
+        text-center
+        `,
         className
       )}
     >
@@ -24,8 +29,8 @@ export default function HeroContent({
           max-w-6xl
           text-5xl
           font-extrabold
-          tracking-[-0.04em]
-          leading-[1.08]
+          leading-[1.02]
+          tracking-[-0.045em]
           md:text-6xl
           xl:text-7xl
         "
@@ -34,7 +39,6 @@ export default function HeroContent({
 
         <span
           className="
-            
             block
             bg-gradient-to-r
             from-primary
@@ -52,8 +56,8 @@ export default function HeroContent({
 
       <p
         className="
-          mt-10
-          max-w-2xl
+          mt-8
+          max-w-3xl
           text-lg
           leading-8
           text-muted-foreground
