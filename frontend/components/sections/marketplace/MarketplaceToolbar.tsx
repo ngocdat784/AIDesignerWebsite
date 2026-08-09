@@ -5,13 +5,15 @@ import { cn } from "@/lib/utils";
 import {
   MARKETPLACE_SORT_OPTIONS,
 } from "./constants";
+
 import MarketplaceFilters from "./MarketplaceFilters";
 import MarketplaceSearch from "./MarketplaceSearch";
 import MarketplaceTabs from "./MarketplaceTabs";
+
 import {
   MarketplaceCategory,
   MarketplaceTab,
-   MarketplaceSort,
+  MarketplaceSort,
   MarketplaceView,
   MarketplaceCategoryId,
   MarketplaceTabId,
@@ -75,53 +77,43 @@ export default function MarketplaceToolbar({
 
   className,
 }: MarketplaceToolbarProps) {
-  return (
-    <div
-      className={cn(
-        `
+ return (
+  <div
+    className={cn(
+      `
         mb-12
         flex
         flex-col
-        gap-8
-        `,
-        className
-      )}
-    >
-      {/* Search */}
+        items-center
+        gap-7
+      `,
+      className
+    )}
+  >
+    {/* Search */}
+    <MarketplaceSearch
+      value={search}
+      onChange={onSearchChange}
+    />
 
-      <MarketplaceSearch
-        value={search}
-        onChange={onSearchChange}
-      />
+    {/* Tabs */}
+    <MarketplaceTabs
+      tabs={tabs}
+      value={activeTab}
+      onChange={onTabChange}
+    />
 
-      {/* Tabs */}
-
-      <MarketplaceTabs
-        tabs={tabs}
-        value={activeTab}
-        onChange={onTabChange}
-      />
-
-      {/* Filters */}
-
-      <MarketplaceFilters
-        categories={categories}
-        category={activeCategory}
-        onCategoryChange={
-          onCategoryChange
-        }
-        sortOptions={
-          MARKETPLACE_SORT_OPTIONS
-        }
-        sort={sort}
-        onSortChange={
-          onSortChange
-        }
-        view={view}
-        onViewChange={
-          onViewChange
-        }
-      />
-    </div>
-  );
+    {/* Filters */}
+    <MarketplaceFilters
+      categories={categories}
+      category={activeCategory}
+      onCategoryChange={onCategoryChange}
+      sortOptions={MARKETPLACE_SORT_OPTIONS}
+      sort={sort}
+      onSortChange={onSortChange}
+      view={view}
+      onViewChange={onViewChange}
+    />
+  </div>
+);
 }

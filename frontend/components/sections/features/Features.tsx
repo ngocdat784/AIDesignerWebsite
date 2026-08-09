@@ -18,10 +18,10 @@ export default function Features({
     <section
       className={cn(
         `
-        relative
-        overflow-hidden
-        py-28
-        lg:py-36
+          relative
+          overflow-hidden
+          py-24
+          lg:py-28
         `,
         className
       )}
@@ -37,22 +37,37 @@ export default function Features({
         className="
           relative
           z-10
-          mx-auto
           flex
-          max-w-7xl
+          w-full
           flex-col
           items-center
           px-6
           text-center
         "
+        style={{
+          maxWidth: "1200px",
+          marginLeft: "auto",
+          marginRight: "auto",
+        }}
       >
         {/* Header */}
-        <div className="mb-20 w-full">
+        <div
+          className="w-full"
+          style={{
+            marginBottom: "64px",
+          }}
+        >
           <FeaturesHeader />
         </div>
 
         {/* Grid */}
-        <div className="w-full">
+        <div
+          className="w-full"
+          style={{
+            marginLeft: "auto",
+            marginRight: "auto",
+          }}
+        >
           <FeaturesGrid />
         </div>
       </div>

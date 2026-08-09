@@ -19,16 +19,16 @@ export default function FooterBrand({
   return (
     <div
       className={cn(
-        "space-y-5",
+        "flex flex-col",
         className
       )}
     >
       {/* Logo */}
-
       <Link
         href="/"
         className="
           inline-flex
+          w-fit
           transition-transform
           duration-300
           hover:scale-[1.02]
@@ -37,22 +37,7 @@ export default function FooterBrand({
         <Logo />
       </Link>
 
-      {/* Brand */}
-
-      <div className="space-y-1">
-        <h3 className="text-lg font-bold tracking-tight">
-          {brand.name}
-        </h3>
-
-        {brand.subtitle && (
-          <p className="text-sm font-medium text-primary">
-            {brand.subtitle}
-          </p>
-        )}
-      </div>
-
       {/* Description */}
-
       <p
         className="
           max-w-sm
@@ -60,16 +45,19 @@ export default function FooterBrand({
           leading-7
           text-muted-foreground
         "
+        style={{
+          marginTop: "18px",
+        }}
       >
         {brand.description}
       </p>
 
       {/* Badge */}
-
       {brand.badge && (
         <div
           className="
             inline-flex
+            w-fit
             items-center
             rounded-full
             border
@@ -81,6 +69,9 @@ export default function FooterBrand({
             font-semibold
             text-primary
           "
+          style={{
+            marginTop: "12px",
+          }}
         >
           {brand.badge}
         </div>

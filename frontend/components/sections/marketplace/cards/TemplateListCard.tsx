@@ -32,190 +32,281 @@ export default function TemplateListCard({
     <article
       className="
         group
+        flex
+        w-full
+        flex-col
         overflow-hidden
-        rounded-3xl
+        rounded-2xl
         border
         bg-card
+        shadow-sm
         transition-all
         duration-300
-        hover:shadow-xl
+        hover:-translate-y-1
+        hover:border-primary/20
+        hover:shadow-lg
+        md:flex-row
       "
     >
-      <div className="flex flex-col md:flex-row">
-        {/* Thumbnail */}
+      {/* Thumbnail */}
 
-        <div
+      <div
+        className="
+          relative
+          h-56
+          w-full
+          shrink-0
+          overflow-hidden
+          bg-muted
+          md:h-auto
+          md:w-[300px]
+        "
+      >
+        <Image
+          src={template.thumbnail}
+          alt={template.title}
+          fill
           className="
-            relative
-            h-64
-            md:h-auto
-            md:w-[360px]
-            shrink-0
-            overflow-hidden
+            object-cover
+            transition-transform
+            duration-500
+            group-hover:scale-105
           "
-        >
-          <Image
-            src={template.thumbnail}
-            alt={template.title}
-            fill
-            className="
-              object-cover
-              transition-transform
-              duration-500
-              group-hover:scale-105
-            "
-          />
+        />
 
-          {template.badge && (
-            <div
+        {template.badge && (
+          <div
+            className="
+              absolute
+              left-4
+              top-4
+              rounded-full
+              bg-primary
+              px-3
+              py-1
+              text-xs
+              font-semibold
+              text-primary-foreground
+              shadow-sm
+            "
+          >
+            {template.badge.text}
+          </div>
+        )}
+      </div>
+
+      {/* Content */}
+
+      <div
+        className="
+          flex
+          min-w-0
+          flex-1
+          flex-col
+          p-6
+        "
+      >
+        {/* Main Content */}
+
+        <div className="flex-1">
+          {/* Title + Price */}
+
+          <div
+            className="
+              flex
+              items-start
+              justify-between
+              gap-4
+            "
+          >
+            <h2
               className="
-                absolute
-                left-5
-                top-5
-                rounded-full
-                bg-primary
-                px-3
-                py-1
-                text-xs
-                font-semibold
-                text-primary-foreground
+                line-clamp-1
+                text-2xl
+                font-bold
+                leading-7
+                tracking-tight
               "
             >
-              {template.badge.text}
-            </div>
-          )}
-        </div>
+              {template.title}
+            </h2>
 
-        {/* Content */}
-
-        <div
-          className="
-            flex
-            flex-1
-            flex-col
-            justify-between
-            p-8
-          "
-        >
-          <div className="space-y-5">
-            {/* Title */}
-
-            <div>
-              <h2 className="text-3xl font-bold">
-                {template.title}
-              </h2>
-
-              <p className="mt-3 text-muted-foreground leading-7">
-                {template.description}
-              </p>
-            </div>
-
-            {/* Rating */}
-
-            <div className="flex flex-wrap items-center gap-6">
-              <Rating
-                value={template.rating}
-                reviewCount={template.reviews}
+            <div className="shrink-0">
+              <PriceTag
+                price={template.price}
+                discountPrice={
+                  template.originalPrice
+                }
               />
-
-              <div
-                className="
-                  flex
-                  items-center
-                  gap-2
-                  text-sm
-                  text-muted-foreground
-                "
-              >
-                <Download className="h-4 w-4" />
-
-                {template.downloads.toLocaleString()} downloads
-              </div>
             </div>
+          </div>
 
-            {/* Author */}
+          {/* Description */}
+
+          <p
+            className="
+              mt-3
+              line-clamp-2
+              max-w-3xl
+              text-sm
+              leading-6
+              text-muted-foreground
+            "
+          >
+            {template.description}
+          </p>
+
+          {/* Rating + Downloads */}
+
+          <div
+            className="
+              mt-4
+              flex
+              flex-wrap
+              items-center
+              gap-x-6
+              gap-y-2
+            "
+          >
+            <Rating
+              value={template.rating}
+              reviewCount={template.reviews}
+            />
 
             <div
               className="
                 flex
                 items-center
-                justify-between
-                border-t
-                pt-5
+                gap-1.5
+                text-sm
+                text-muted-foreground
               "
             >
-              <div>
-                <p className="font-medium">
-                  {template.author.name}
-                </p>
+              <Download className="h-4 w-4" />
 
-                <p className="text-sm text-muted-foreground">
-                  {template.category}
-                </p>
-              </div>
+              <span>
+                {template.downloads.toLocaleString()}
+              </span>
 
-              {template.author.verified && (
-                <span
-                  className="
-                    rounded-full
-                    bg-primary/10
-                    px-3
-                    py-1
-                    text-xs
-                    font-medium
-                    text-primary
-                  "
-                >
-                  Verified
-                </span>
-              )}
+              <span>downloads</span>
             </div>
           </div>
 
-          {/* Bottom */}
+          {/* Author */}
 
           <div
             className="
-              mt-8
+              mt-4
               flex
-              flex-col
-              gap-5
-              lg:flex-row
-              lg:items-center
-              lg:justify-between
+              items-center
+              justify-between
+              border-t
+              pt-4
             "
           >
-            <PriceTag
-              price={template.price}
-              discountPrice={template.originalPrice}
-            />
-
-            <div className="flex gap-3">
-              <Link
-                href={`/templates/${template.slug}`}
+            <div className="min-w-0">
+              <p
+                className="
+                  truncate
+                  text-sm
+                  font-medium
+                "
               >
-                <AppButton variant="outline">
-                  Live Preview
-                </AppButton>
-              </Link>
+                {template.author.name}
+              </p>
 
-              {added ? (
-                <Link href="/cart">
-                  <AppButton>
-                    <Check className="mr-2 h-4 w-4" />
-                    View Cart
-                  </AppButton>
-                </Link>
-              ) : (
-                <AppButton
-                  onClick={() => add(template)}
-                >
-                  <ShoppingCart className="mr-2 h-4 w-4" />
-                  Add to Cart
-                </AppButton>
-              )}
+              <p
+                className="
+                  mt-0.5
+                  truncate
+                  text-xs
+                  text-muted-foreground
+                "
+              >
+                {template.category}
+              </p>
             </div>
+
+            {template.author.verified && (
+              <span
+                className="
+                  ml-3
+                  shrink-0
+                  rounded-full
+                  bg-primary/10
+                  px-2.5
+                  py-1
+                  text-[11px]
+                  font-medium
+                  text-primary
+                "
+              >
+                Verified
+              </span>
+            )}
           </div>
+        </div>
+
+        {/* Actions */}
+
+        <div
+          className="
+            mt-5
+            flex
+            flex-col
+            gap-3
+            sm:flex-row
+            sm:items-center
+            sm:justify-end
+          "
+        >
+          <Link
+            href={`/templates/${template.slug}`}
+            className="sm:w-auto"
+          >
+            <AppButton
+              variant="outline"
+              className="
+                h-10
+                w-full
+                rounded-xl
+                sm:w-auto
+              "
+            >
+              Live Preview
+            </AppButton>
+          </Link>
+
+          {added ? (
+            <Link href="/cart">
+              <AppButton
+                className="
+                  h-10
+                  w-full
+                  rounded-xl
+                  sm:w-auto
+                "
+              >
+                <Check className="mr-2 h-4 w-4" />
+
+                View Cart
+              </AppButton>
+            </Link>
+          ) : (
+            <AppButton
+              className="
+                h-10
+                w-full
+                rounded-xl
+                sm:w-auto
+              "
+              onClick={() => add(template)}
+            >
+              <ShoppingCart className="mr-2 h-4 w-4" />
+
+              Add to Cart
+            </AppButton>
+          )}
         </div>
       </div>
     </article>

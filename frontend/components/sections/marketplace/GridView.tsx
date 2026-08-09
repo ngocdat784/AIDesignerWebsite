@@ -1,5 +1,6 @@
-import type { MarketplaceTemplate } from "./types";
+"use client";
 
+import type { MarketplaceTemplate } from "./types";
 import TemplateCard from "./cards/TemplateCard";
 
 interface MarketplaceGridViewProps {
@@ -13,16 +14,28 @@ export default function MarketplaceGridView({
     <div
       className="
         grid
-        gap-6
+        w-full
+        grid-cols-1
+        gap-x-6
+        gap-y-8
         md:grid-cols-2
         xl:grid-cols-3
       "
+      style={{
+        maxWidth: "1200px",
+        marginLeft: "auto",
+        marginRight: "auto",
+      }}
     >
       {templates.map((template) => (
-        <TemplateCard
+        <div
           key={template.id}
-          template={template}
-        />
+          className="min-w-0 w-full"
+        >
+          <TemplateCard
+            template={template}
+          />
+        </div>
       ))}
     </div>
   );

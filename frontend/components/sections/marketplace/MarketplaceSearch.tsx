@@ -21,50 +21,73 @@ export default function MarketplaceSearch({
   return (
     <div
       className={cn(
-        "relative w-full max-w-md",
+        `
+          relative
+          w-full
+          max-w-xl
+          mx-auto
+        `,
         className
       )}
     >
       {/* Search Icon */}
-
       <Search
         className="
           absolute
-          left-4
+          left-5
           top-1/2
-          h-4
-          w-4
+          h-5
+          w-5
           -translate-y-1/2
           text-muted-foreground
+          transition-colors
         "
       />
 
       {/* Input */}
-
       <AppInput
         value={value}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
           onChange(e.target.value)
         }
         placeholder={placeholder}
-        className="pl-11 pr-11"
+        className="
+          h-14
+          w-full
+          rounded-2xl
+          border
+          border-border/70
+          bg-background/90
+          pl-13
+          pr-12
+          text-base
+          shadow-sm
+          backdrop-blur-sm
+          transition-all
+          duration-300
+          hover:border-primary/30
+          hover:shadow-md
+          focus:border-primary/40
+          focus:ring-2
+          focus:ring-primary/10
+        "
       />
 
       {/* Clear */}
-
       {value && (
         <button
           type="button"
           onClick={() => onChange("")}
           className="
             absolute
-            right-3
+            right-4
             top-1/2
             -translate-y-1/2
             rounded-full
-            p-1
+            p-1.5
             text-muted-foreground
-            transition-colors
+            transition-all
+            duration-200
             hover:bg-muted
             hover:text-foreground
           "

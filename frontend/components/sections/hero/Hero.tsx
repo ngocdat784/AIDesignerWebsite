@@ -27,8 +27,6 @@ export default function Hero({
       )}
     >
       {/* Background */}
-      <HeroBackground />
-
       <HeroGradient />
 
       <HeroParticles />
@@ -38,9 +36,8 @@ export default function Hero({
         className="
           relative
           z-10
-          mx-auto
           flex
-          max-w-7xl
+          w-full
           flex-col
           items-center
           px-6
@@ -51,34 +48,60 @@ export default function Hero({
           md:pt-14
           xl:pt-16
         "
+        style={{
+          maxWidth: "1280px",
+          marginLeft: "auto",
+          marginRight: "auto",
+        }}
       >
-       {/* Badge */}
-<HeroBadge />
+        {/* Badge */}
+        <HeroBadge />
 
-{/* Heading + Description */}
-<div style={{ marginTop: "32px" }}>
-  <HeroContent />
-</div>
+        {/* Heading + Description */}
+        <div
+          style={{
+            marginTop: "32px",
+          }}
+        >
+          <HeroContent />
+        </div>
 
-{/* Actions */}
-<div style={{ marginTop: "32px" }}>
-  <HeroActions />
-</div>
+        {/* Actions */}
+        <div
+          style={{
+            marginTop: "32px",
+          }}
+        >
+          <HeroActions />
+        </div>
 
-{/* Stats */}
-<div style={{ marginTop: "40px" }}>
-  <HeroStats />
-</div>
+        {/* Stats */}
+        <div
+          style={{
+            marginTop: "48px",
+          }}
+        >
+          <HeroStats />
+        </div>
 
-{/* Trusted */}
-<div style={{ marginTop: "32px" }}>
-  <HeroTrusted />
-</div>
+        {/* Trusted */}
+        <div
+          style={{
+            marginTop: "72px",
+          }}
+        >
+          <HeroTrusted />
+        </div>
 
-{/* Preview */}
-<div style={{ marginTop: "32px", width: "100%" }}>
-  <HeroPreview />
-</div>
+        {/* Preview */}
+        <div
+          className="w-full"
+          style={{
+            marginTop: "40px",
+          }}
+        >
+          <HeroPreview />
+        </div>
       </div>
     </section>
   );

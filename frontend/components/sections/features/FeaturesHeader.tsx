@@ -1,8 +1,9 @@
 "use client";
-import { cn } from "@/lib/utils";
+
 import { Sparkles } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
 
 import { featuresData } from "./features.data";
 
@@ -15,77 +16,70 @@ export default function FeaturesHeader({
 }: FeaturesHeaderProps) {
   const { header } = featuresData;
 
- return (
-  <div
-    className={cn(
-      `
-      flex
-      flex-col
-      items-center
-      text-center
-      `,
-      className
-    )}
-  >
-    {/* Badge */}
+  return (
+    <div
+      className={cn(
+        "flex w-full flex-col items-center text-center",
+        className
+      )}
+    >
+      {/* Badge */}
+      {header.badge && (
+        <Badge
+          variant="secondary"
+          className="
+            mb-5
+            inline-flex
+            items-center
+            gap-2
+            rounded-full
+            px-5
+            py-2
+            text-sm
+            font-medium
+          "
+        >
+          <Sparkles className="h-4 w-4" />
 
-    {header.badge && (
-      <Badge
-        variant="secondary"
+          {header.badge}
+        </Badge>
+      )}
+
+      {/* Title */}
+      <h2
         className="
-          mb-6
-          inline-flex
-          items-center
-          gap-2
-          rounded-full
-          px-5
-          py-2
-          text-sm
-          font-medium
+          max-w-5xl
+          text-5xl
+          font-extrabold
+          leading-[1.08]
+          tracking-[-0.04em]
+          md:text-6xl
+          xl:text-7xl
         "
       >
-        <Sparkles className="h-4 w-4" />
+        {header.title}
 
-        {header.badge}
-      </Badge>
-    )}
+        {header.highlight && (
+          <span className="block text-primary">
+            {header.highlight}
+          </span>
+        )}
+      </h2>
 
-    {/* Title */}
-
-    <h2
-      className="
-        max-w-6xl
-        text-5xl
-        font-extrabold
-        tracking-[-0.04em]
-        leading-[1.08]
-        md:text-6xl
-        xl:text-7xl
-      "
-    >
-      {header.title}
-
-      {header.highlight && (
-        <span className="block text-primary">
-          {header.highlight}
-        </span>
-      )}
-    </h2>
-
-    {/* Description */}
-
-    <p
-      className="
-        mt-10
-        max-w-2xl
-        text-lg
-        leading-8
-        text-muted-foreground
-        md:text-xl
-      "
-    >
-      {header.description}
-    </p>
-  </div>
-);
+      {/* Description */}
+      <p
+        className="
+          mt-6
+          max-w-2xl
+          text-base
+          leading-7
+          text-muted-foreground
+          md:text-lg
+          md:leading-8
+        "
+      >
+        {header.description}
+      </p>
+    </div>
+  );
 }

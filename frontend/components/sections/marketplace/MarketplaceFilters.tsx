@@ -56,147 +56,170 @@ export default function MarketplaceFilters({
   onViewChange,
   className,
 }: MarketplaceFiltersProps) {
-  return (
-    <div
-      className={cn(
-        `
+ return (
+  <div
+    className={cn(
+      `
         flex
         flex-wrap
         items-center
-        gap-3
-        `,
-        className
-      )}
+        gap-4
+      `,
+      className
+    )}
+  >
+    {/* Category */}
+    <select
+      value={category}
+      onChange={(e) =>
+        onCategoryChange(
+          e.target.value as MarketplaceCategoryId
+        )
+      }
+      className="
+        h-12
+        min-w-[170px]
+        cursor-pointer
+        rounded-xl
+        border
+        border-border
+        bg-background
+        px-5
+        text-base
+        font-medium
+        shadow-sm
+        outline-none
+        transition-all
+        duration-200
+        hover:border-primary/40
+        hover:shadow-md
+        focus:border-primary
+        focus:ring-2
+        focus:ring-primary/10
+      "
     >
-      {/* Category */}
+      <option value="all">
+        All Categories
+      </option>
 
-      <select
-        value={category}
-        onChange={(e) =>
-          onCategoryChange(
-            e.target.value
-          )
-        }
-        className="
-          h-11
-          rounded-xl
-          border
-          bg-background
-          px-4
-          text-sm
-          outline-none
-          transition-colors
-          focus:border-primary
-        "
-      >
-        <option value="all">
-          All Categories
+      {categories.map((item) => (
+        <option
+          key={item.id}
+          value={item.id}
+        >
+          {item.label}
         </option>
+      ))}
+    </select>
 
-        {categories.map(
-          (item) => (
-            <option
-              key={item.id}
-              value={item.id}
-            >
-              {item.label}
-            </option>
-          )
-        )}
-      </select>
-
-      {/* Sort */}
-
-      <select
-        value={sort}
-        onChange={(e) =>
-          onSortChange(
-            e.target.value as MarketplaceSort
-          )
-        }
-        className="
-          h-11
-          rounded-xl
-          border
-          bg-background
-          px-4
-          text-sm
-          outline-none
-          transition-colors
-          focus:border-primary
-        "
-      >
-        {sortOptions.map(
-          (option) => (
-            <option
-              key={option.value}
-              value={option.value}
-            >
-              {option.label}
-            </option>
-          )
-        )}
-      </select>
-
-      {/* View */}
-
-      <div
-        className="
-          flex
-          overflow-hidden
-          rounded-xl
-          border
-        "
-      >
-        <Button
-          type="button"
-          variant={
-            view === "grid"
-              ? "default"
-              : "ghost"
-          }
-          size="icon"
-          className="rounded-none"
-          onClick={() =>
-            onViewChange(
-              "grid"
-            )
-          }
+    {/* Sort */}
+    <select
+      value={sort}
+      onChange={(e) =>
+        onSortChange(
+          e.target.value as MarketplaceSort
+        )
+      }
+      className="
+        h-12
+        min-w-[160px]
+        cursor-pointer
+        rounded-xl
+        border
+        border-border
+        bg-background
+        px-5
+        text-base
+        font-medium
+        shadow-sm
+        outline-none
+        transition-all
+        duration-200
+        hover:border-primary/40
+        hover:shadow-md
+        focus:border-primary
+        focus:ring-2
+        focus:ring-primary/10
+      "
+    >
+      {sortOptions.map((option) => (
+        <option
+          key={option.value}
+          value={option.value}
         >
-          <Grid3X3 className="h-4 w-4" />
-        </Button>
+          {option.label}
+        </option>
+      ))}
+    </select>
 
-        <Button
-          type="button"
-          variant={
-            view === "list"
-              ? "default"
-              : "ghost"
-          }
-          size="icon"
-          className="rounded-none"
-          onClick={() =>
-            onViewChange(
-              "list"
-            )
-          }
-        >
-          <List className="h-4 w-4" />
-        </Button>
-      </div>
-
-      {/* Reset */}
-
-      <AppButton
-        variant="outline"
-        onClick={() => {
-          onCategoryChange("all");
-          onSortChange("popular");
-          onViewChange("grid");
-        }}
+    {/* View */}
+    <div
+      className="
+        flex
+        h-12
+        overflow-hidden
+        rounded-xl
+        border
+        border-border
+        bg-background
+        shadow-sm
+      "
+    >
+      <Button
+        type="button"
+        variant={view === "grid" ? "default" : "ghost"}
+        size="icon"
+        className="
+          h-12
+          w-12
+          rounded-none
+        "
+        onClick={() => onViewChange("grid")}
+        aria-label="Grid view"
       >
-        Reset
-      </AppButton>
+        <Grid3X3 className="h-5 w-5" />
+      </Button>
+
+      <Button
+        type="button"
+        variant={view === "list" ? "default" : "ghost"}
+        size="icon"
+        className="
+          h-12
+          w-12
+          rounded-none
+        "
+        onClick={() => onViewChange("list")}
+        aria-label="List view"
+      >
+        <List className="h-5 w-5" />
+      </Button>
     </div>
-  );
+
+    {/* Reset */}
+    <AppButton
+  variant="outline"
+  onClick={() => {
+    onCategoryChange("all");
+    onSortChange("popular");
+    onViewChange("grid");
+  }}
+  className="
+    h-12
+    min-w-[110px]
+    rounded-xl
+    px-6
+    text-base
+    font-medium
+    shadow-sm
+    transition-all
+    duration-200
+    hover:-translate-y-0.5
+    hover:shadow-md
+  "
+>
+  Reset
+</AppButton>
+  </div>
+);
 }
