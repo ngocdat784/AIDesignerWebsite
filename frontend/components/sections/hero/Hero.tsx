@@ -52,33 +52,33 @@ export default function Hero({
           xl:pt-16
         "
       >
-        {/* Badge */}
-        <HeroBadge />
+       {/* Badge */}
+<HeroBadge />
 
-        {/* Heading + Description */}
-        <div className="mt-16">
-          <HeroContent />
-        </div>
+{/* Heading + Description */}
+<div style={{ marginTop: "32px" }}>
+  <HeroContent />
+</div>
 
-        {/* Actions */}
-        <div className="mt-8">
-          <HeroActions />
-        </div>
+{/* Actions */}
+<div style={{ marginTop: "32px" }}>
+  <HeroActions />
+</div>
 
-        {/* Stats */}
-        <div className="mt-12">
-          <HeroStats />
-        </div>
+{/* Stats */}
+<div style={{ marginTop: "40px" }}>
+  <HeroStats />
+</div>
 
-        {/* Trusted */}
-        <div className="mt-8">
-          <HeroTrusted />
-        </div>
+{/* Trusted */}
+<div style={{ marginTop: "32px" }}>
+  <HeroTrusted />
+</div>
 
-        {/* Preview */}
-        <div className="mt-8 w-full">
-          <HeroPreview />
-        </div>
+{/* Preview */}
+<div style={{ marginTop: "32px", width: "100%" }}>
+  <HeroPreview />
+</div>
       </div>
     </section>
   );
