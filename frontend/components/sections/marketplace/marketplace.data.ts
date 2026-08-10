@@ -104,6 +104,7 @@ export const marketplaceData: MarketplaceData = {
     thumbnail: "/images/templates/template-1.webp",
     category: "landing",
     tags: ["AI", "SaaS", "Startup"],
+    authorId: "user-1",
     author: {
       name: "John Carter",
       avatar: "/images/avatars/avatar-1.webp",
@@ -129,6 +130,7 @@ export const marketplaceData: MarketplaceData = {
     thumbnail: "/images/templates/template-2.webp",
     category: "portfolio",
     tags: ["Portfolio"],
+    authorId: "user-2",
     author: {
       name: "Sophia",
       avatar: "/images/avatars/avatar-2.webp",
@@ -148,6 +150,7 @@ export const marketplaceData: MarketplaceData = {
     thumbnail: "/images/templates/template-3.webp",
     category: "ecommerce",
     tags: ["Shop"],
+    authorId: "user-3",
     author: {
       name: "Michael",
       avatar: "/images/avatars/avatar-3.webp",
@@ -173,6 +176,7 @@ export const marketplaceData: MarketplaceData = {
     thumbnail: "/images/templates/template-4.webp",
     category: "dashboard",
     tags: ["Dashboard"],
+    authorId: "user-4",
     author: {
       name: "Emma",
       avatar: "/images/avatars/avatar-4.webp",
@@ -193,6 +197,7 @@ export const marketplaceData: MarketplaceData = {
     thumbnail: "/images/templates/template-5.webp",
     category: "agency",
     tags: ["Agency"],
+    authorId: "user-5",
     author: {
       name: "Olivia",
       avatar: "/images/avatars/avatar-5.webp",
@@ -213,6 +218,7 @@ export const marketplaceData: MarketplaceData = {
     thumbnail: "/images/templates/template-6.webp",
     category: "blog",
     tags: ["Blog"],
+    authorId: "user-6",
     author: {
       name: "Lucas",
       avatar: "/images/avatars/avatar-6.webp",
@@ -233,6 +239,7 @@ export const marketplaceData: MarketplaceData = {
     thumbnail: "/images/templates/template-7.webp",
     category: "landing",
     tags: ["Crypto"],
+    authorId: "user-7",
     author: {
       name: "Daniel",
       avatar: "/images/avatars/avatar-7.webp",
@@ -252,6 +259,7 @@ export const marketplaceData: MarketplaceData = {
     thumbnail: "/images/templates/template-8.webp",
     category: "portfolio",
     tags: ["Resume"],
+    authorId: "user-8",
     author: {
       name: "Anna",
       avatar: "/images/avatars/avatar-8.webp",
@@ -271,6 +279,7 @@ export const marketplaceData: MarketplaceData = {
     thumbnail: "/images/templates/template-9.webp",
     category: "landing",
     tags: ["Food"],
+    authorId: "user-9",
     author: {
       name: "James",
       avatar: "/images/avatars/avatar-9.webp",
@@ -290,6 +299,7 @@ export const marketplaceData: MarketplaceData = {
     thumbnail: "/images/templates/template-10.webp",
     category: "landing",
     tags: ["Fitness"],
+    authorId: "user-10",
     author: {
       name: "Sophia",
       avatar: "/images/avatars/avatar-10.webp",
@@ -309,6 +319,7 @@ export const marketplaceData: MarketplaceData = {
     thumbnail: "/images/templates/template-11.webp",
     category: "agency",
     tags: ["Travel"],
+    authorId: "user-11",
     author: {
       name: "Henry",
       avatar: "/images/avatars/avatar-11.webp",
@@ -328,6 +339,7 @@ export const marketplaceData: MarketplaceData = {
     thumbnail: "/images/templates/template-12.webp",
     category: "landing",
     tags: ["Medical"],
+    authorId: "user-12",
     author: {
       name: "Emily",
       avatar: "/images/avatars/avatar-12.webp",

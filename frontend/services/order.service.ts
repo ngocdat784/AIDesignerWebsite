@@ -52,60 +52,34 @@ export const orderService = {
   // → CreateOrderDto
   // =========================
 
-  toCreateOrderDto(
-    checkout: CheckoutData
-  ): CreateOrderDto {
-    return {
-      billing: {
-        firstName:
-          checkout.billing.firstName,
+ toCreateOrderDto(
+  checkout: CheckoutData
+): CreateOrderDto {
+  return {
+    billing: {
+      firstName: checkout.billing.firstName,
+      lastName: checkout.billing.lastName,
+      email: checkout.billing.email,
+      phone: checkout.billing.phone,
+      address: checkout.billing.address,
+      city: checkout.billing.city,
+      country: checkout.billing.country,
+      postalCode: checkout.billing.postalCode,
+    },
 
-        lastName:
-          checkout.billing.lastName,
+    paymentMethod: checkout.payment.method,
 
-        email:
-          checkout.billing.email,
-
-        phone:
-          checkout.billing.phone,
-
-        address:
-          checkout.billing.address,
-
-        city:
-          checkout.billing.city,
-
-        country:
-          checkout.billing.country,
-
-        postalCode:
-          checkout.billing.postalCode,
-      },
-
-      paymentMethod:
-        checkout.payment.method,
-
-      items:
-        checkout.order.items.map(
-          (item) => ({
-            productId:
-              item.template.id,
-
-            productName:
-              item.template.title,
-
-            unitPrice:
-              item.template.price,
-
-            originalPrice:
-              item.template.originalPrice,
-
-            quantity:
-              item.quantity,
-          })
-        ),
-    };
-  },
+    items: checkout.order.items.map(
+      (item) => ({
+        productId: item.template.id,
+        productName: item.template.title,
+        unitPrice: item.template.price,
+        originalPrice: item.template.originalPrice,
+        quantity: item.quantity,
+      })
+    ),
+  };
+},
 
   // =========================
   // Create Order

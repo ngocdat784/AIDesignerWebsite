@@ -37,6 +37,8 @@ export interface MarketplaceTemplate {
 
   tags: string[];
 
+  authorId: string;
+
   author: MarketplaceAuthor;
 
   badge?: MarketplaceBadge;

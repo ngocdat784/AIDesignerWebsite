@@ -1,0 +1,178 @@
+// =========================
+// Generator
+// =========================
+
+generator client {
+  provider = "prisma-client"
+  output   = "../../frontend/generated/prisma"
+}
+
+
+// =========================
+// Database
+// =========================
+
+datasource db {
+  provider = "postgresql"
+}
+
+
+// =========================
+// Enums
+// =========================
+
+enum UserRole {
+  USER
+  CREATOR
+  ADMIN
+}
+
+enum OrderStatus {
+  PENDING
+  PAID
+  PROCESSING
+  COMPLETED
+  CANCELLED
+  FAILED
+}
+
+enum OrderPaymentMethod {
+  card
+  paypal
+  bank
+}
+
+
+// =========================
+// User
+// =========================
+
+model User {
+  id        String   @id
+  name      String
+  avatar    String?
+  email     String   @unique
+  role      UserRole @default(USER)
+
+  templates Template[]
+  orders    Order[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+
+// =========================
+// Template
+// =========================
+
+model Template {
+  id            String   @id
+  slug          String   @unique
+
+  title         String
+  description   String
+
+  thumbnail     String
+  images        String[]
+
+  category      String
+  tags          String[]
+
+  authorId String
+  author   User @relation(fields: [authorId], references: [id], onDelete: Cascade)
+
+  rating        Float    @default(0)
+  reviews       Int      @default(0)
+  downloads     Int      @default(0)
+
+  price         Float
+  originalPrice Float?
+
+  featured Boolean @default(false)
+  newest   Boolean @default(false)
+
+  stock   Int?
+  license String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([authorId])
+  @@index([category])
+}
+
+
+// =========================
+// Order
+// =========================
+
+model Order {
+  id String @id
+
+  userId String
+  user   User @relation(fields: [userId], references: [id], onDelete: Restrict)
+
+  status        OrderStatus        @default(PENDING)
+  paymentMethod OrderPaymentMethod
+
+  subtotal Float
+  discount Float
+  total    Float
+
+  billing OrderBilling?
+  items   OrderItem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([status])
+  @@index([createdAt])
+}
+
+// =========================
+// Order Billing Snapshot
+// =========================
+
+model OrderBilling {
+  id String @id @default(cuid())
+
+  orderId String @unique
+  order   Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  firstName String
+  lastName  String
+  email     String
+  phone     String
+
+  address    String
+  city       String
+  country    String
+  postalCode String
+}
+
+
+// =========================
+// Order Item
+// =========================
+
+model OrderItem {
+  id String @id
+
+  orderId String
+  order   Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  // Product snapshot
+  productId   String
+  productName String
+
+  unitPrice Float
+  quantity  Int
+  subtotal  Float
+
+  createdAt DateTime @default(now())
+
+  @@index([orderId])
+  @@index([productId])
+}

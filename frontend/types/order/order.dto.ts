@@ -1,6 +1,6 @@
 import type {
-  OrderBillingInfo,
   OrderPaymentMethod,
+  OrderBillingInfo,
 } from "./order";
 
 // =========================
@@ -21,6 +21,8 @@ export interface CreateOrderItemDto {
 
 export interface CreateOrderDto {
   billing: OrderBillingInfo;
+
   paymentMethod: OrderPaymentMethod;
+
   items: CreateOrderItemDto[];
 }
