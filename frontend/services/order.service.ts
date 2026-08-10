@@ -2,7 +2,7 @@ import { orderRepository } from "@/repositories/order.repository";
 
 import type { CheckoutData } from "@/types/checkout";
 
-import type { CreateOrderRequest } from "@/types/order/order-request";
+import type { CreateOrderDto } from "@/types/order/order.dto";
 
 import type {
   Order,
@@ -27,7 +27,7 @@ export const orderService = {
   },
 
   // =========================
-  // Checkout → Order
+  // Checkout → Order DTO
   // =========================
 
   createFromCheckout(
@@ -41,20 +41,20 @@ export const orderService = {
       return null;
     }
 
-    const request =
-      this.toCreateOrderRequest(checkout);
+    const dto =
+      this.toCreateOrderDto(checkout);
 
-    return this.create(request, userId);
+    return this.create(dto, userId);
   },
 
   // =========================
   // CheckoutData
-  // → CreateOrderRequest
+  // → CreateOrderDto
   // =========================
 
-  toCreateOrderRequest(
+  toCreateOrderDto(
     checkout: CheckoutData
-  ): CreateOrderRequest {
+  ): CreateOrderDto {
     return {
       billing: {
         firstName:
@@ -82,7 +82,7 @@ export const orderService = {
           checkout.billing.postalCode,
       },
 
-      payment:
+      paymentMethod:
         checkout.payment.method,
 
       items:
@@ -112,7 +112,7 @@ export const orderService = {
   // =========================
 
   create(
-    request: CreateOrderRequest,
+    dto: CreateOrderDto,
     userId: string
   ): Order {
     const now =
@@ -126,7 +126,7 @@ export const orderService = {
     // =========================
 
     const items: OrderItem[] =
-      request.items.map(
+      dto.items.map(
         (item) => ({
           id:
             this.generateOrderItemId(),
@@ -163,19 +163,16 @@ export const orderService = {
       );
 
     /*
-     * Discount hiện tại được
-     * tính từ product snapshot.
+     * Discount được tính từ
+     * product snapshot trong DTO.
      *
      * Khi chuyển sang NestJS +
      * Prisma, backend sẽ tính /
      * xác thực lại discount.
      */
-    const checkoutDiscount =
-      this.calculateDiscount(request);
-
     const discount =
       Math.min(
-        checkoutDiscount,
+        this.calculateDiscount(dto),
         subtotal
       );
 
@@ -194,7 +191,7 @@ export const orderService = {
       status: "PENDING",
 
       paymentMethod:
-        request.payment,
+        dto.paymentMethod,
 
       subtotal,
 
@@ -203,7 +200,7 @@ export const orderService = {
       total,
 
       billing: {
-        ...request.billing,
+        ...dto.billing,
       },
 
       items,
@@ -223,9 +220,9 @@ export const orderService = {
   // =========================
 
   calculateDiscount(
-    request: CreateOrderRequest
+    dto: CreateOrderDto
   ): number {
-    return request.items.reduce(
+    return dto.items.reduce(
       (sum, item) => {
         if (
           item.originalPrice ===
@@ -269,7 +266,9 @@ export const orderService = {
   // Delete
   // =========================
 
-  delete(orderId: string): boolean {
+  delete(
+    orderId: string
+  ): boolean {
     return orderRepository.delete(
       orderId
     );
