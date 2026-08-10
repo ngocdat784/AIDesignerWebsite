@@ -86,7 +86,7 @@ export default function CheckoutProvider({
 
   function updateBilling(
     billing: CheckoutBillingInfo
-  ) {
+  ): void {
     const updated =
       checkoutService.updateBilling(
         billing
@@ -99,8 +99,6 @@ export default function CheckoutProvider({
         "Billing information updated."
       );
     }
-
-    return updated;
   }
 
   // =========================
@@ -109,7 +107,7 @@ export default function CheckoutProvider({
 
   function updatePayment(
     payment: CheckoutPaymentInfo
-  ) {
+  ): void {
     const updated =
       checkoutService.updatePayment(
         payment
@@ -122,8 +120,6 @@ export default function CheckoutProvider({
         "Payment method updated."
       );
     }
-
-    return updated;
   }
 
   // =========================
@@ -198,66 +194,55 @@ export default function CheckoutProvider({
     checkout?.order.items ?? [];
 
   const subtotal =
-    checkout?.order.subtotal ??
-    checkoutService.getSubtotal();
+    checkout?.order.subtotal ?? 0;
 
   const discount =
-    checkout?.order.discount ??
-    checkoutService.getDiscount();
+    checkout?.order.discount ?? 0;
 
   const total =
-    checkout?.order.total ??
-    checkoutService.getTotal();
+    checkout?.order.total ?? 0;
 
   // =========================
   // Context Value
   // =========================
 
-  const value: CheckoutContextType =
-    useMemo(
-      () => ({
-        checkout,
+  const value: CheckoutContextType = useMemo(
+  () => ({
+    checkout,
 
-        items,
+    items,
 
-        billing:
-          checkout?.billing ?? null,
+    billing:
+      checkout?.billing ?? null,
 
-        payment:
-          checkout?.payment ?? null,
+    payment:
+      checkout?.payment ?? null,
 
-        subtotal,
+    subtotal,
+    discount,
+    total,
 
-        discount,
+    initialize,
+    refresh,
 
-        total,
+    updateBilling,
+    updatePayment,
 
-        initialize,
+    validateBilling,
+    validatePayment,
+    validateCheckout,
 
-        refresh,
-
-        updateBilling,
-
-        updatePayment,
-
-        validateBilling,
-
-        validatePayment,
-
-        validateCheckout,
-
-        createOrder,
-
-        clear,
-      }),
-      [
-        checkout,
-        items,
-        subtotal,
-        discount,
-        total,
-      ]
-    );
+    createOrder,
+    clear,
+  }),
+  [
+    checkout,
+    items,
+    subtotal,
+    discount,
+    total,
+  ]
+);
 
   return (
     <CheckoutContext.Provider

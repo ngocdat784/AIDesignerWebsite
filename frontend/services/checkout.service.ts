@@ -18,51 +18,80 @@ export const checkoutService = {
   },
 
   getItems(): CheckoutItem[] {
-    return (
-      checkoutRepository
-        .getCheckout()
-        ?.order.items ?? []
-    );
+    const checkout = checkoutRepository.getCheckout();
+
+    return checkout?.order.items ?? [];
   },
 
   getBilling(): CheckoutBillingInfo | null {
-    return (
-      checkoutRepository
-        .getCheckout()
-        ?.billing ?? null
-    );
+    const checkout = checkoutRepository.getCheckout();
+
+    return checkout?.billing ?? null;
   },
 
   getPayment(): CheckoutPaymentInfo | null {
-    return (
-      checkoutRepository
-        .getCheckout()
-        ?.payment ?? null
-    );
+    const checkout = checkoutRepository.getCheckout();
+
+    return checkout?.payment ?? null;
   },
 
   // =========================
   // Initialization
   // =========================
+  // Cart chỉ được đọc DUY NHẤT tại đây.
+  //
+  // Cart
+  //   ↓
+  // CheckoutData snapshot
+  //
+  // Sau bước này Checkout không phụ thuộc Cart nữa.
 
   initializeFromCart(): CheckoutData | null {
     const cartItems = cartService.getAll();
 
-    if (
-      !cartItems ||
-      cartItems.length === 0
-    ) {
+    if (!cartItems || cartItems.length === 0) {
       return null;
     }
 
     const existingCheckout =
       checkoutRepository.getCheckout();
 
-    const items: CheckoutItem[] =
-      cartItems.map((item) => ({
+    const items: CheckoutItem[] = cartItems.map(
+      (item) => ({
         template: item.template,
         quantity: item.quantity,
-      }));
+      })
+    );
+
+    const subtotal = items.reduce(
+      (sum, item) =>
+        sum +
+        item.template.price *
+          item.quantity,
+      0
+    );
+
+    const discount = items.reduce(
+      (sum, item) => {
+        const originalPrice =
+          item.template.originalPrice;
+
+        if (!originalPrice) {
+          return sum;
+        }
+
+        return (
+          sum +
+          (originalPrice -
+            item.template.price) *
+            item.quantity
+        );
+      },
+      0
+    );
+
+    const total =
+      subtotal - discount;
 
     const checkout: CheckoutData = {
       billing:
@@ -84,9 +113,9 @@ export const checkoutService = {
 
       order: {
         items,
-        subtotal: this.getSubtotal(items),
-        discount: this.getDiscount(),
-        total: this.getTotal(),
+        subtotal,
+        discount,
+        total,
       },
     };
 
@@ -153,13 +182,15 @@ export const checkoutService = {
   // Calculations
   // =========================
 
-  getSubtotal(
-    items?: CheckoutItem[]
-  ): number {
-    const checkoutItems =
-      items ?? this.getItems();
+  getSubtotal(): number {
+    const checkout =
+      checkoutRepository.getCheckout();
 
-    return checkoutItems.reduce(
+    if (!checkout) {
+      return 0;
+    }
+
+    return checkout.order.items.reduce(
       (sum, item) =>
         sum +
         item.template.price *
@@ -169,24 +200,66 @@ export const checkoutService = {
   },
 
   getDiscount(): number {
-    return cartService.getDiscount();
+    const checkout =
+      checkoutRepository.getCheckout();
+
+    if (!checkout) {
+      return 0;
+    }
+
+    return checkout.order.items.reduce(
+      (sum, item) => {
+        const originalPrice =
+          item.template.originalPrice;
+
+        if (!originalPrice) {
+          return sum;
+        }
+
+        return (
+          sum +
+          (originalPrice -
+            item.template.price) *
+            item.quantity
+        );
+      },
+      0
+    );
   },
 
   getTotal(): number {
-    return cartService.getTotal();
+    const subtotal =
+      this.getSubtotal();
+
+    const discount =
+      this.getDiscount();
+
+    return subtotal - discount;
   },
 
+  // =========================
+  // Order Summary
+  // =========================
+
   getOrderSummary() {
-    const items = this.getItems();
+    const checkout =
+      checkoutRepository.getCheckout();
+
+    if (!checkout) {
+      return null;
+    }
 
     return {
-      items,
+      items: checkout.order.items,
+
       subtotal:
-        cartService.getSubtotal(),
+        checkout.order.subtotal,
+
       discount:
-        cartService.getDiscount(),
+        checkout.order.discount,
+
       total:
-        cartService.getTotal(),
+        checkout.order.total,
     };
   },
 
@@ -228,12 +301,16 @@ export const checkoutService = {
   },
 
   validateCheckout(): boolean {
-    const cartItems =
-      cartService.getAll();
+    const checkout =
+      checkoutRepository.getCheckout();
 
+    if (!checkout) {
+      return false;
+    }
+
+    // Không đọc Cart ở đây.
     if (
-      !cartItems ||
-      cartItems.length === 0
+      checkout.order.items.length === 0
     ) {
       return false;
     }
@@ -268,9 +345,16 @@ export const checkoutService = {
     const orderSummary =
       this.getOrderSummary();
 
+    if (!orderSummary) {
+      return null;
+    }
+
     const order: CheckoutData = {
       ...checkout,
-      order: orderSummary,
+
+      order: {
+        ...orderSummary,
+      },
     };
 
     return order;

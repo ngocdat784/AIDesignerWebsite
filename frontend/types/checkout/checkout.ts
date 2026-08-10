@@ -57,11 +57,11 @@ export interface CheckoutContextType {
 
   updateBilling: (
     billing: CheckoutBillingInfo
-  ) => CheckoutData | null;
+  ) => void;
 
   updatePayment: (
     payment: CheckoutPaymentInfo
-  ) => CheckoutData | null;
+  ) => void;
 
   validateBilling: () => boolean;
 
