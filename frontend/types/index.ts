@@ -7,5 +7,5 @@ export * from "./template/metadata";
 export * from "./template/file";
 
 export * from "./category";
-export * from "./order";
+export * from "./order/order";
 export * from "./user";

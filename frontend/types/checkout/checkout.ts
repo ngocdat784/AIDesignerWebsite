@@ -1,9 +1,17 @@
 import type { MarketplaceTemplate } from "@/components/sections/marketplace/types";
 
+// =========================
+// Checkout Item
+// =========================
+
 export interface CheckoutItem {
   template: MarketplaceTemplate;
   quantity: number;
 }
+
+// =========================
+// Billing
+// =========================
 
 export interface CheckoutBillingInfo {
   firstName: string;
@@ -16,9 +24,17 @@ export interface CheckoutBillingInfo {
   postalCode: string;
 }
 
+// =========================
+// Payment
+// =========================
+
 export interface CheckoutPaymentInfo {
   method: "card" | "paypal" | "bank";
 }
+
+// =========================
+// Checkout Order
+// =========================
 
 export interface CheckoutOrder {
   items: CheckoutItem[];
@@ -27,15 +43,20 @@ export interface CheckoutOrder {
   total: number;
 }
 
+// =========================
+// Checkout Data
+// =========================
+
 export interface CheckoutData {
   billing: CheckoutBillingInfo;
   payment: CheckoutPaymentInfo;
   order: CheckoutOrder;
 }
 
-/**
- * Context API exposed to Checkout components.
- */
+// =========================
+// Checkout Context
+// =========================
+
 export interface CheckoutContextType {
   checkout: CheckoutData | null;
 
