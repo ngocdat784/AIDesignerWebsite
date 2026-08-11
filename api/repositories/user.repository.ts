@@ -1,33 +1,39 @@
-import { prisma } from "../lib/prisma";
+import { Injectable } from "@nestjs/common";
+import { DatabaseService } from "../database/database.service";
 
-export const userRepository = {
+@Injectable()
+export class UserRepository {
+  constructor(
+    private readonly database: DatabaseService,
+  ) {}
+
   // =========================
   // Query
   // =========================
 
   async getAll() {
-    return prisma.user.findMany({
+    return this.database.user.findMany({
       orderBy: {
         createdAt: "desc",
       },
     });
-  },
+  }
 
   async getById(id: string) {
-    return prisma.user.findUnique({
+    return this.database.user.findUnique({
       where: {
         id,
       },
     });
-  },
+  }
 
   async getByEmail(email: string) {
-    return prisma.user.findUnique({
+    return this.database.user.findUnique({
       where: {
         email,
       },
     });
-  },
+  }
 
   // =========================
   // Commands
@@ -40,10 +46,10 @@ export const userRepository = {
     email: string;
     role?: "USER" | "CREATOR" | "ADMIN";
   }) {
-    return prisma.user.create({
+    return this.database.user.create({
       data,
     });
-  },
+  }
 
   async update(
     id: string,
@@ -52,21 +58,21 @@ export const userRepository = {
       avatar?: string | null;
       email?: string;
       role?: "USER" | "CREATOR" | "ADMIN";
-    }
+    },
   ) {
-    return prisma.user.update({
+    return this.database.user.update({
       where: {
         id,
       },
       data,
     });
-  },
+  }
 
   async delete(id: string) {
-    return prisma.user.delete({
+    return this.database.user.delete({
       where: {
         id,
       },
     });
-  },
-};
+  }
+}
