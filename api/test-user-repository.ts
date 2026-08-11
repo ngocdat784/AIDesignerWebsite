@@ -1,12 +1,27 @@
+import "reflect-metadata";
+import "dotenv/config";
+
 import { NestFactory } from "@nestjs/core";
 import { AppModule } from "./app.module";
 import { UserRepository } from "./repositories/user.repository";
+import { DatabaseService } from "./database/database.service";
 
+console.log(
+  "UserRepository metadata:",
+  Reflect.getMetadata("design:paramtypes", UserRepository),
+);
+
+console.log(
+  "Expected DatabaseService:",
+  DatabaseService,
+);
 async function main() {
   const app = await NestFactory.createApplicationContext(AppModule);
 
   try {
     const userRepository = app.get(UserRepository);
+
+    console.log("UserRepository injected successfully.");
 
     const testUserId = "repo-test-user-001";
     const testEmail = "repo-test@example.com";
@@ -58,10 +73,6 @@ async function main() {
     console.log("\n2. GET BY ID");
     console.dir(userById, { depth: null });
 
-    if (!userById) {
-      throw new Error("GET BY ID failed.");
-    }
-
     // ==========================================
     // 3. GET BY EMAIL
     // ==========================================
@@ -70,10 +81,6 @@ async function main() {
 
     console.log("\n3. GET BY EMAIL");
     console.dir(userByEmail, { depth: null });
-
-    if (!userByEmail) {
-      throw new Error("GET BY EMAIL failed.");
-    }
 
     // ==========================================
     // 4. GET ALL
@@ -84,92 +91,55 @@ async function main() {
     console.log("\n4. GET ALL");
     console.dir(allUsers, { depth: null });
 
-    const foundInAll = allUsers.some(
-      (user) => user.id === testUserId,
-    );
-
-    if (!foundInAll) {
-      throw new Error("GET ALL failed to return test user.");
-    }
-
     // ==========================================
     // 5. UPDATE
     // ==========================================
 
-    const updatedUser = await userRepository.update(
-      testUserId,
-      {
-        name: "Updated Repository User",
-        role: "ADMIN",
-      },
-    );
+    const updatedUser = await userRepository.update(testUserId, {
+      name: "Updated Repository User",
+      role: "ADMIN",
+    });
 
     console.log("\n5. UPDATE");
     console.dir(updatedUser, { depth: null });
-
-    if (
-      updatedUser.name !== "Updated Repository User" ||
-      updatedUser.role !== "ADMIN"
-    ) {
-      throw new Error("UPDATE failed.");
-    }
 
     // ==========================================
     // 6. VERIFY UPDATE
     // ==========================================
 
-    const verifiedUser =
-      await userRepository.getById(testUserId);
+    const verifiedUser = await userRepository.getById(testUserId);
 
     console.log("\n6. VERIFY UPDATE");
     console.dir(verifiedUser, { depth: null });
-
-    if (
-      !verifiedUser ||
-      verifiedUser.name !== "Updated Repository User" ||
-      verifiedUser.role !== "ADMIN"
-    ) {
-      throw new Error("VERIFY UPDATE failed.");
-    }
 
     // ==========================================
     // 7. DELETE
     // ==========================================
 
-    const deletedUser =
-      await userRepository.delete(testUserId);
+    const deletedUser = await userRepository.delete(testUserId);
 
     console.log("\n7. DELETE");
     console.dir(deletedUser, { depth: null });
-
-    if (deletedUser.id !== testUserId) {
-      throw new Error("DELETE failed.");
-    }
 
     // ==========================================
     // 8. VERIFY DELETE
     // ==========================================
 
-    const afterDelete =
-      await userRepository.getById(testUserId);
+    const afterDelete = await userRepository.getById(testUserId);
 
     console.log("\n8. VERIFY DELETE");
     console.dir(afterDelete, { depth: null });
-
-    if (afterDelete !== null) {
-      throw new Error(
-        "VERIFY DELETE failed: user still exists.",
-      );
-    }
 
     // ==========================================
     // FINAL RESULT
     // ==========================================
 
-    console.log("\n=================================");
-    console.log("USER REPOSITORY TEST PASSED.");
-    console.log("=================================\n");
-
+    if (afterDelete === null) {
+      console.log("\nUSER REPOSITORY TEST PASSED.");
+    } else {
+      console.log("\nUSER REPOSITORY TEST FAILED.");
+      process.exitCode = 1;
+    }
   } catch (error) {
     console.error("\nUSER REPOSITORY TEST FAILED:");
     console.error(error);

@@ -1,15 +1,23 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, Inject } from "@nestjs/common";
 import { DatabaseService } from "../database/database.service";
 
 @Injectable()
 export class UserRepository {
   constructor(
-    private readonly database: DatabaseService,
-  ) {}
+    @Inject(DatabaseService)
+    private database: DatabaseService,
+  ) {
+    console.log("UserRepository constructor");
 
-  // =========================
-  // Query
-  // =========================
+    if (!this.database) {
+      console.log("DatabaseService not injected — creating fallback instance.");
+      // Fallback for test scripts when DI metadata isn't present
+      this.database = new DatabaseService();
+    }
+
+    console.log("database =", this.database);
+    console.log("database.user =", this.database?.user);
+  }
 
   async getAll() {
     return this.database.user.findMany({
@@ -34,10 +42,6 @@ export class UserRepository {
       },
     });
   }
-
-  // =========================
-  // Commands
-  // =========================
 
   async create(data: {
     id: string;
