@@ -1,12 +1,33 @@
-import { prisma } from "../lib/prisma";
+import { Injectable, Inject } from "@nestjs/common";
+import { DatabaseService } from "../database/database.service";
 
-export const templateRepository = {
+@Injectable()
+export class TemplateRepository {
+  constructor(
+    @Inject(DatabaseService)
+    private database: DatabaseService,
+  ) {
+    console.log("TemplateRepository constructor");
+
+    if (!this.database) {
+      console.log(
+        "DatabaseService not injected — creating fallback instance.",
+      );
+
+      // Fallback cho test script khi DI metadata không có
+      this.database = new DatabaseService();
+    }
+
+    console.log("database =", this.database);
+    console.log("database.template =", this.database?.template);
+  }
+
   // =========================
   // Query
   // =========================
 
   async getAll() {
-    return prisma.template.findMany({
+    return this.database.template.findMany({
       orderBy: {
         createdAt: "desc",
       },
@@ -14,10 +35,10 @@ export const templateRepository = {
         author: true,
       },
     });
-  },
+  }
 
   async getById(id: string) {
-    return prisma.template.findUnique({
+    return this.database.template.findUnique({
       where: {
         id,
       },
@@ -25,10 +46,10 @@ export const templateRepository = {
         author: true,
       },
     });
-  },
+  }
 
   async getBySlug(slug: string) {
-    return prisma.template.findUnique({
+    return this.database.template.findUnique({
       where: {
         slug,
       },
@@ -36,10 +57,10 @@ export const templateRepository = {
         author: true,
       },
     });
-  },
+  }
 
   async getByAuthorId(authorId: string) {
-    return prisma.template.findMany({
+    return this.database.template.findMany({
       where: {
         authorId,
       },
@@ -50,10 +71,10 @@ export const templateRepository = {
         author: true,
       },
     });
-  },
+  }
 
   async getByCategory(category: string) {
-    return prisma.template.findMany({
+    return this.database.template.findMany({
       where: {
         category,
       },
@@ -64,7 +85,7 @@ export const templateRepository = {
         author: true,
       },
     });
-  },
+  }
 
   // =========================
   // Commands
@@ -95,13 +116,13 @@ export const templateRepository = {
     stock?: number;
     license?: string;
   }) {
-    return prisma.template.create({
+    return this.database.template.create({
       data,
       include: {
         author: true,
       },
     });
-  },
+  }
 
   async update(
     id: string,
@@ -125,9 +146,9 @@ export const templateRepository = {
 
       stock?: number | null;
       license?: string | null;
-    }
+    },
   ) {
-    return prisma.template.update({
+    return this.database.template.update({
       where: {
         id,
       },
@@ -136,13 +157,17 @@ export const templateRepository = {
         author: true,
       },
     });
-  },
+  }
+
+  // =========================
+  // Delete
+  // =========================
 
   async delete(id: string) {
-    return prisma.template.delete({
+    return this.database.template.delete({
       where: {
         id,
       },
     });
-  },
-};
+  }
+}
