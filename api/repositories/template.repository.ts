@@ -10,7 +10,6 @@ export const templateRepository = {
       orderBy: {
         createdAt: "desc",
       },
-
       include: {
         author: true,
       },
@@ -22,7 +21,6 @@ export const templateRepository = {
       where: {
         id,
       },
-
       include: {
         author: true,
       },
@@ -34,7 +32,6 @@ export const templateRepository = {
       where: {
         slug,
       },
-
       include: {
         author: true,
       },
@@ -46,9 +43,11 @@ export const templateRepository = {
       where: {
         authorId,
       },
-
       orderBy: {
         createdAt: "desc",
+      },
+      include: {
+        author: true,
       },
     });
   },
@@ -58,11 +57,9 @@ export const templateRepository = {
       where: {
         category,
       },
-
       orderBy: {
         createdAt: "desc",
       },
-
       include: {
         author: true,
       },
@@ -100,6 +97,9 @@ export const templateRepository = {
   }) {
     return prisma.template.create({
       data,
+      include: {
+        author: true,
+      },
     });
   },
 
@@ -132,6 +132,9 @@ export const templateRepository = {
         id,
       },
       data,
+      include: {
+        author: true,
+      },
     });
   },
 
