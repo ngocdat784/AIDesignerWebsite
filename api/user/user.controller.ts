@@ -7,6 +7,7 @@ import {
   Param,
   Body,
   Inject,
+  ValidationPipe,
 } from "@nestjs/common";
 
 import { UserService } from "./user.service";
@@ -58,8 +59,14 @@ export class UserController {
 
   @Post()
   async create(
-    @Body() dto: CreateUserDto,
+    @Body(new ValidationPipe({ whitelist: true, transform: true }))
+    dto: CreateUserDto,
   ) {
+    console.log(
+      "CreateUserDto received:",
+      dto,
+      dto?.constructor?.name,
+    );
     return this.userService.create(dto);
   }
 

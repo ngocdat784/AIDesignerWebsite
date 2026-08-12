@@ -1,4 +1,4 @@
-import { Injectable, Inject } from "@nestjs/common";
+import { Injectable, Inject, NotFoundException } from "@nestjs/common";
 import { UserRepository } from "../repositories/user.repository";
 
 @Injectable()
@@ -13,11 +13,27 @@ export class UserService {
   }
 
   async getById(id: string) {
-    return this.userRepository.getById(id);
+    const user = await this.userRepository.getById(id);
+
+    if (!user) {
+      throw new NotFoundException(
+        `User with id ${id} not found`,
+      );
+    }
+
+    return user;
   }
 
   async getByEmail(email: string) {
-    return this.userRepository.getByEmail(email);
+    const user = await this.userRepository.getByEmail(email);
+
+    if (!user) {
+      throw new NotFoundException(
+        `User with email ${email} not found`,
+      );
+    }
+
+    return user;
   }
 
   async create(data: {

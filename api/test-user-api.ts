@@ -3,17 +3,42 @@ const BASE_URL = "http://localhost:3000";
 const testUserId = "api-test-user-001";
 const testEmail = "api-test@example.com";
 
+interface ApiResponse<T = unknown> {
+  success: boolean;
+  data: T;
+  message?: string;
+}
+
+interface ApiErrorResponse {
+  success: false;
+  statusCode: number;
+  message: string | string[];
+  error?: string;
+  path?: string;
+  timestamp?: string;
+}
+
+interface User {
+  id: string;
+  name: string;
+  avatar: string | null;
+  email: string;
+  role: "USER" | "CREATOR" | "ADMIN";
+  createdAt: string;
+  updatedAt: string;
+}
+
 async function request(
   method: string,
   path: string,
   body?: unknown,
-) {
+): Promise<unknown> {
   const response = await fetch(`${BASE_URL}${path}`, {
     method,
     headers: {
       "Content-Type": "application/json",
     },
-    body: body ? JSON.stringify(body) : undefined,
+    body: body !== undefined ? JSON.stringify(body) : undefined,
   });
 
   const text = await response.text();
@@ -39,6 +64,45 @@ async function request(
   return data;
 }
 
+function getData<T>(response: unknown): T {
+  if (
+    !response ||
+    typeof response !== "object" ||
+    !("success" in response) ||
+    !("data" in response)
+  ) {
+    throw new Error("Invalid API response format.");
+  }
+
+  const apiResponse = response as ApiResponse<T>;
+
+  if (apiResponse.success !== true) {
+    throw new Error("API response success flag is false.");
+  }
+
+  return apiResponse.data;
+}
+
+function verifyApiResponse(response: unknown) {
+  if (
+    !response ||
+    typeof response !== "object" ||
+    !("success" in response)
+  ) {
+    throw new Error("Response does not follow ApiResponse format.");
+  }
+
+  const apiResponse = response as ApiResponse;
+
+  if (apiResponse.success !== true) {
+    throw new Error("Expected success=true.");
+  }
+
+  if (!("data" in apiResponse)) {
+    throw new Error("ApiResponse is missing data.");
+  }
+}
+
 async function main() {
   console.log("\n=== USER API TEST ===\n");
 
@@ -62,7 +126,7 @@ async function main() {
     // 1. CREATE
     // ==========================================
 
-    const createdUser = await request(
+    const createResponse = await request(
       "POST",
       "/users",
       {
@@ -73,10 +137,12 @@ async function main() {
       },
     );
 
+    verifyApiResponse(createResponse);
+
+    const createdUser = getData<User>(createResponse);
+
     if (
       !createdUser ||
-      typeof createdUser !== "object" ||
-      !("id" in createdUser) ||
       createdUser.id !== testUserId
     ) {
       throw new Error("CREATE returned invalid user.");
@@ -88,18 +154,22 @@ async function main() {
     // 2. GET BY ID
     // ==========================================
 
-    const userById = await request(
+    const getByIdResponse = await request(
       "GET",
       `/users/${testUserId}`,
     );
 
+    verifyApiResponse(getByIdResponse);
+
+    const userById = getData<User>(getByIdResponse);
+
     if (
       !userById ||
-      typeof userById !== "object" ||
-      !("id" in userById) ||
       userById.id !== testUserId
     ) {
-      throw new Error("GET BY ID returned invalid user.");
+      throw new Error(
+        "GET BY ID returned invalid user.",
+      );
     }
 
     console.log("GET BY ID verified.");
@@ -108,18 +178,23 @@ async function main() {
     // 3. GET BY EMAIL
     // ==========================================
 
-    const userByEmail = await request(
+    const getByEmailResponse = await request(
       "GET",
       `/users/email/${encodeURIComponent(testEmail)}`,
     );
 
+    verifyApiResponse(getByEmailResponse);
+
+    const userByEmail =
+      getData<User>(getByEmailResponse);
+
     if (
       !userByEmail ||
-      typeof userByEmail !== "object" ||
-      !("email" in userByEmail) ||
       userByEmail.email !== testEmail
     ) {
-      throw new Error("GET BY EMAIL returned invalid user.");
+      throw new Error(
+        "GET BY EMAIL returned invalid user.",
+      );
     }
 
     console.log("GET BY EMAIL verified.");
@@ -128,17 +203,24 @@ async function main() {
     // 4. GET ALL
     // ==========================================
 
-    const allUsers = await request(
+    const getAllResponse = await request(
       "GET",
       "/users",
     );
 
+    verifyApiResponse(getAllResponse);
+
+    const allUsers =
+      getData<User[]>(getAllResponse);
+
     if (!Array.isArray(allUsers)) {
-      throw new Error("GET ALL did not return an array.");
+      throw new Error(
+        "GET ALL did not return an array.",
+      );
     }
 
     const foundUser = allUsers.find(
-      (user: any) => user.id === testUserId,
+      (user) => user.id === testUserId,
     );
 
     if (!foundUser) {
@@ -153,7 +235,7 @@ async function main() {
     // 5. UPDATE
     // ==========================================
 
-    const updatedUser = await request(
+    const updateResponse = await request(
       "PATCH",
       `/users/${testUserId}`,
       {
@@ -162,15 +244,20 @@ async function main() {
       },
     );
 
+    verifyApiResponse(updateResponse);
+
+    const updatedUser =
+      getData<User>(updateResponse);
+
     if (
       !updatedUser ||
-      typeof updatedUser !== "object" ||
-      !("name" in updatedUser) ||
-      !("role" in updatedUser) ||
-      updatedUser.name !== "Updated API Test User" ||
+      updatedUser.name !==
+        "Updated API Test User" ||
       updatedUser.role !== "CREATOR"
     ) {
-      throw new Error("UPDATE returned invalid data.");
+      throw new Error(
+        "UPDATE returned invalid data.",
+      );
     }
 
     console.log("UPDATE verified.");
@@ -179,17 +266,20 @@ async function main() {
     // 6. VERIFY UPDATE
     // ==========================================
 
-    const verifiedUser = await request(
+    const verifyUpdateResponse = await request(
       "GET",
       `/users/${testUserId}`,
     );
 
+    verifyApiResponse(verifyUpdateResponse);
+
+    const verifiedUser =
+      getData<User>(verifyUpdateResponse);
+
     if (
       !verifiedUser ||
-      typeof verifiedUser !== "object" ||
-      !("name" in verifiedUser) ||
-      !("role" in verifiedUser) ||
-      verifiedUser.name !== "Updated API Test User" ||
+      verifiedUser.name !==
+        "Updated API Test User" ||
       verifiedUser.role !== "CREATOR"
     ) {
       throw new Error(
@@ -200,18 +290,106 @@ async function main() {
     console.log("VERIFY UPDATE verified.");
 
     // ==========================================
-    // 7. DELETE
+    // 7. VALIDATION ERROR
     // ==========================================
 
-    const deletedUser = await request(
+    console.log(
+      "\nTesting validation error...",
+    );
+
+    const validationResponse = await fetch(
+      `${BASE_URL}/users`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          id: "",
+          name: "",
+          email: "invalid-email",
+          role: "INVALID_ROLE",
+        }),
+      },
+    );
+
+    const validationText =
+      await validationResponse.text();
+
+    let validationData: unknown;
+
+    try {
+      validationData = validationText
+        ? JSON.parse(validationText)
+        : null;
+    } catch {
+      validationData = validationText;
+    }
+
+    console.log("\nPOST /users [VALIDATION ERROR]");
+    console.log(
+      `Status: ${validationResponse.status}`,
+    );
+    console.dir(validationData, {
+      depth: null,
+    });
+
+    if (validationResponse.status !== 400) {
+      throw new Error(
+        `Expected validation status 400, got ${validationResponse.status}`,
+      );
+    }
+
+    if (
+      !validationData ||
+      typeof validationData !== "object"
+    ) {
+      throw new Error(
+        "Validation error response is invalid.",
+      );
+    }
+
+    const validationError =
+      validationData as ApiErrorResponse;
+
+    if (validationError.success !== false) {
+      throw new Error(
+        "Validation error must have success=false.",
+      );
+    }
+
+    if (validationError.statusCode !== 400) {
+      throw new Error(
+        "Validation error must have statusCode=400.",
+      );
+    }
+
+    if (!validationError.message) {
+      throw new Error(
+        "Validation error is missing message.",
+      );
+    }
+
+    console.log(
+      "VALIDATION ERROR verified.",
+    );
+
+    // ==========================================
+    // 8. DELETE
+    // ==========================================
+
+    const deleteResponse = await request(
       "DELETE",
       `/users/${testUserId}`,
     );
 
+    verifyApiResponse(deleteResponse);
+
+    const deletedUser =
+      getData<User>(deleteResponse);
+
     if (
       !deletedUser ||
-      typeof deletedUser !== "object" ||
-      !("id" in deletedUser) ||
       deletedUser.id !== testUserId
     ) {
       throw new Error(
@@ -222,19 +400,23 @@ async function main() {
     console.log("DELETE verified.");
 
     // ==========================================
-    // 8. VERIFY DELETE
+    // 9. VERIFY DELETE
     // ==========================================
 
-    const response = await fetch(
-      `${BASE_URL}/users/${testUserId}`,
-    );
+    const verifyDeleteResponse =
+      await fetch(
+        `${BASE_URL}/users/${testUserId}`,
+      );
 
     console.log(
       `\nGET /users/${testUserId}`,
     );
-    console.log(`Status: ${response.status}`);
+    console.log(
+      `Status: ${verifyDeleteResponse.status}`,
+    );
 
-    const deletedText = await response.text();
+    const deletedText =
+      await verifyDeleteResponse.text();
 
     let deletedData: unknown;
 
@@ -250,19 +432,49 @@ async function main() {
       depth: null,
     });
 
-    if (response.status !== 200) {
+    /*
+     * Tùy implementation của HttpExceptionFilter,
+     * GET một user không tồn tại thường sẽ trả 404.
+     */
+    if (verifyDeleteResponse.status !== 404) {
       throw new Error(
-        "VERIFY DELETE returned unexpected HTTP status.",
+        "VERIFY DELETE expected HTTP 404.",
       );
     }
 
-    if (deletedData !== null) {
+    if (
+      !deletedData ||
+      typeof deletedData !== "object"
+    ) {
       throw new Error(
-        "VERIFY DELETE failed: user still exists.",
+        "VERIFY DELETE returned invalid error response.",
       );
     }
 
-    console.log("VERIFY DELETE verified.");
+    const deleteError =
+      deletedData as ApiErrorResponse;
+
+    if (deleteError.success !== false) {
+      throw new Error(
+        "VERIFY DELETE error must have success=false.",
+      );
+    }
+
+    if (deleteError.statusCode !== 404) {
+      throw new Error(
+        "VERIFY DELETE error must have statusCode=404.",
+      );
+    }
+
+    if (!deleteError.message) {
+      throw new Error(
+        "VERIFY DELETE error is missing message.",
+      );
+    }
+
+    console.log(
+      "VERIFY DELETE verified.",
+    );
 
     // ==========================================
     // FINAL RESULT
