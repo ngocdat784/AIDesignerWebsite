@@ -11,7 +11,11 @@ import {
 
 import { OrderService } from "./order.service";
 
-import { CreateOrderDto } from "./dto/create-order.dto";
+import {
+  CreateOrderDto,
+  OrderStatus,
+} from "./dto/create-order.dto";
+
 import { UpdateOrderDto } from "./dto/update-order.dto";
 
 @Controller("orders")
@@ -44,14 +48,7 @@ export class OrderController {
   // GET /orders/status/:status
   @Get("status/:status")
   async getByStatus(
-    @Param("status")
-    status:
-      | "PENDING"
-      | "PAID"
-      | "PROCESSING"
-      | "COMPLETED"
-      | "CANCELLED"
-      | "FAILED",
+    @Param("status") status: OrderStatus,
   ) {
     return this.orderService.getByStatus(status);
   }
