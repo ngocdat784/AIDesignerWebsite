@@ -11,6 +11,9 @@ import {
 
 import { OrderService } from "./order.service";
 
+import { CreateOrderDto } from "./dto/create-order.dto";
+import { UpdateOrderDto } from "./dto/update-order.dto";
+
 @Controller("orders")
 export class OrderController {
   constructor(
@@ -41,7 +44,8 @@ export class OrderController {
   // GET /orders/status/:status
   @Get("status/:status")
   async getByStatus(
-    @Param("status") status:
+    @Param("status")
+    status:
       | "PENDING"
       | "PAID"
       | "PROCESSING"
@@ -67,50 +71,9 @@ export class OrderController {
   // POST /orders
   @Post()
   async create(
-    @Body()
-    data: {
-      id: string;
-      userId: string;
-
-      status?:
-        | "PENDING"
-        | "PAID"
-        | "PROCESSING"
-        | "COMPLETED"
-        | "CANCELLED"
-        | "FAILED";
-
-      paymentMethod:
-        | "card"
-        | "paypal"
-        | "bank";
-
-      subtotal: number;
-      discount: number;
-      total: number;
-
-      billing: {
-        firstName: string;
-        lastName: string;
-        email: string;
-        phone: string;
-        address: string;
-        city: string;
-        country: string;
-        postalCode: string;
-      };
-
-      items: {
-        id: string;
-        productId: string;
-        productName: string;
-        unitPrice: number;
-        quantity: number;
-        subtotal: number;
-      }[];
-    },
+    @Body() dto: CreateOrderDto,
   ) {
-    return this.orderService.create(data);
+    return this.orderService.create(dto);
   }
 
   // =========================
@@ -121,28 +84,9 @@ export class OrderController {
   @Patch(":id")
   async update(
     @Param("id") id: string,
-
-    @Body()
-    data: {
-      status?:
-        | "PENDING"
-        | "PAID"
-        | "PROCESSING"
-        | "COMPLETED"
-        | "CANCELLED"
-        | "FAILED";
-
-      paymentMethod?:
-        | "card"
-        | "paypal"
-        | "bank";
-
-      subtotal?: number;
-      discount?: number;
-      total?: number;
-    },
+    @Body() dto: UpdateOrderDto,
   ) {
-    return this.orderService.update(id, data);
+    return this.orderService.update(id, dto);
   }
 
   // =========================

@@ -11,6 +11,9 @@ import {
 
 import { TemplateService } from "./template.service";
 
+import { CreateTemplateDto } from "./dto/create-template.dto";
+import { UpdateTemplateDto } from "./dto/update-template.dto";
+
 @Controller("templates")
 export class TemplateController {
   constructor(
@@ -69,34 +72,9 @@ export class TemplateController {
   // POST /templates
   @Post()
   async create(
-    @Body()
-    data: {
-      id: string;
-      slug: string;
-      title: string;
-      description: string;
-      thumbnail: string;
-      images?: string[];
-      category: string;
-      tags?: string[];
-
-      authorId: string;
-
-      rating?: number;
-      reviews?: number;
-      downloads?: number;
-
-      price: number;
-      originalPrice?: number;
-
-      featured?: boolean;
-      newest?: boolean;
-
-      stock?: number;
-      license?: string;
-    },
+    @Body() dto: CreateTemplateDto,
   ) {
-    return this.templateService.create(data);
+    return this.templateService.create(dto);
   }
 
   // =========================
@@ -107,30 +85,9 @@ export class TemplateController {
   @Patch(":id")
   async update(
     @Param("id") id: string,
-    @Body()
-    data: {
-      title?: string;
-      description?: string;
-      thumbnail?: string;
-      images?: string[];
-      category?: string;
-      tags?: string[];
-
-      rating?: number;
-      reviews?: number;
-      downloads?: number;
-
-      price?: number;
-      originalPrice?: number | null;
-
-      featured?: boolean;
-      newest?: boolean;
-
-      stock?: number | null;
-      license?: string | null;
-    },
+    @Body() dto: UpdateTemplateDto,
   ) {
-    return this.templateService.update(id, data);
+    return this.templateService.update(id, dto);
   }
 
   // =========================

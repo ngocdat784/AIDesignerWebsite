@@ -11,6 +11,9 @@ import {
 
 import { UserService } from "./user.service";
 
+import { CreateUserDto } from "./dto/create-user.dto";
+import { UpdateUserDto } from "./dto/update-user.dto";
+
 @Controller("users")
 export class UserController {
   constructor(
@@ -55,16 +58,9 @@ export class UserController {
 
   @Post()
   async create(
-    @Body()
-    data: {
-      id: string;
-      name: string;
-      avatar?: string;
-      email: string;
-      role?: "USER" | "CREATOR" | "ADMIN";
-    },
+    @Body() dto: CreateUserDto,
   ) {
-    return this.userService.create(data);
+    return this.userService.create(dto);
   }
 
   // =========================
@@ -74,15 +70,9 @@ export class UserController {
   @Patch(":id")
   async update(
     @Param("id") id: string,
-    @Body()
-    data: {
-      name?: string;
-      avatar?: string | null;
-      email?: string;
-      role?: "USER" | "CREATOR" | "ADMIN";
-    },
+    @Body() dto: UpdateUserDto,
   ) {
-    return this.userService.update(id, data);
+    return this.userService.update(id, dto);
   }
 
   // =========================
