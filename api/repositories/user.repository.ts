@@ -1,8 +1,9 @@
 import { Injectable, Inject } from "@nestjs/common";
 import { DatabaseService } from "../database/database.service";
+import { UserRepositoryInterface } from "../user/interfaces/user.repository.interface";
 
 @Injectable()
-export class UserRepository {
+export class UserRepository implements UserRepositoryInterface {
   constructor(
     @Inject(DatabaseService)
     private database: DatabaseService,

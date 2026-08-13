@@ -1,8 +1,9 @@
 import { Injectable, Inject, NotFoundException } from "@nestjs/common";
 import { UserRepository } from "../repositories/user.repository";
+import { UserServiceInterface } from "./interfaces/user.service.interface";
 
 @Injectable()
-export class UserService {
+export class UserService implements UserServiceInterface {
   constructor(
     @Inject(UserRepository)
     private readonly userRepository: UserRepository,
