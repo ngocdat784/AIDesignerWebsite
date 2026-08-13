@@ -5,13 +5,17 @@ import {
   UnauthorizedException,
 } from "@nestjs/common";
 
+import { JwtService } from "@nestjs/jwt";
 import * as bcrypt from "bcrypt";
 
 import { RegisterDto } from "./dto/register.dto";
 import { LoginDto } from "./dto/login.dto";
 
 import { AuthServiceInterface } from "./interfaces/auth.service.interface";
-import { AuthServiceResponse } from "./interfaces/auth.service-response.interface";
+import {
+  AuthServiceResponse,
+  LoginResponse,
+} from "./interfaces/auth.service-response.interface";
 import { AuthRepositoryInterface } from "./interfaces/auth.repository.interface";
 
 @Injectable()
@@ -19,6 +23,9 @@ export class AuthService implements AuthServiceInterface {
   constructor(
     @Inject("AuthRepositoryInterface")
     private readonly authRepository: AuthRepositoryInterface,
+
+    @Inject(JwtService)
+    private readonly jwtService: JwtService,
   ) {}
 
   // =========================
@@ -35,7 +42,10 @@ export class AuthService implements AuthServiceInterface {
       throw new ConflictException("Email already exists.");
     }
 
-    const passwordHash = await bcrypt.hash(dto.password, 10);
+    const passwordHash = await bcrypt.hash(
+      dto.password,
+      10,
+    );
 
     const user = await this.authRepository.create({
       id: crypto.randomUUID(),
@@ -62,7 +72,7 @@ export class AuthService implements AuthServiceInterface {
 
   async login(
     dto: LoginDto,
-  ): Promise<AuthServiceResponse> {
+  ): Promise<LoginResponse> {
     const user =
       await this.authRepository.getByEmail(dto.email);
 
@@ -83,14 +93,31 @@ export class AuthService implements AuthServiceInterface {
       );
     }
 
+    // =========================
+    // Generate JWT
+    // =========================
+
+    if (!this.jwtService || typeof this.jwtService.signAsync !== "function") {
+      throw new Error("JwtService is not registered in AuthModule.");
+    }
+
+    const accessToken =
+      await this.jwtService.signAsync({
+        sub: user.id,
+        email: user.email,
+        role: user.role,
+      });
+
     return {
-      id: user.id,
-      name: user.name,
-      avatar: user.avatar,
-      email: user.email,
-      role: user.role,
-      createdAt: user.createdAt,
-      updatedAt: user.updatedAt,
+      accessToken,
+
+      user: {
+        id: user.id,
+        name: user.name,
+        avatar: user.avatar,
+        email: user.email,
+        role: user.role,
+      },
     };
   }
 }
