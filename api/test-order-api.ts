@@ -1,3 +1,6 @@
+import { NestFactory } from "@nestjs/core";
+import { AppModule } from "./app.module";
+
 const BASE_URL = "http://localhost:3000";
 
 const testUserId = "api-test-order-user-001";
@@ -19,7 +22,8 @@ async function request(
   let data: any = null;
 
   try {
-    data = await response.json();
+    const parsed = await response.json();
+    data = parsed && parsed.data !== undefined ? parsed.data : parsed;
   } catch {
     data = null;
   }
@@ -40,6 +44,8 @@ async function request(
 }
 
 async function main() {
+  const app = await NestFactory.create(AppModule);
+  await app.listen(3000);
   console.log("\n=== ORDER API TEST ===\n");
 
   try {
@@ -491,15 +497,13 @@ async function main() {
       `/users/${testUserId}`,
     );
 
-    if (verifyUserDelete.status !== 200) {
+    // Accept either 200 + null (some endpoints) or 404 Not Found.
+    if (!(
+      (verifyUserDelete.status === 200 && verifyUserDelete.data === null) ||
+      verifyUserDelete.status === 404
+    )) {
       throw new Error(
         "VERIFY USER DELETE GET failed.",
-      );
-    }
-
-    if (verifyUserDelete.data !== null) {
-      throw new Error(
-        "VERIFY USER DELETE: user still exists.",
       );
     }
 
@@ -524,6 +528,13 @@ async function main() {
     }
 
     process.exitCode = 1;
+  } finally {
+    // Close the server application when test finishes
+    try {
+      await app.close();
+    } catch (e) {
+      // ignore
+    }
   }
 }
 

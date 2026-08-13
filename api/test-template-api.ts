@@ -19,7 +19,10 @@ async function request(
   let data: any = null;
 
   try {
-    data = await response.json();
+    const parsed = await response.json();
+    // If API uses a wrapper { success, statusCode, message, data },
+    // unwrap to make tests simpler.
+    data = parsed && parsed.data !== undefined ? parsed.data : parsed;
   } catch {
     data = null;
   }
@@ -36,7 +39,8 @@ async function request(
 }
 
 async function main() {
-  const app = await NestFactory.createApplicationContext(AppModule);
+  const app = await NestFactory.create(AppModule);
+  await app.listen(3000);
 
   try {
     const testUserId = "api-test-template-user-001";
@@ -419,10 +423,10 @@ async function main() {
         `/users/${testUserId}`,
       );
 
-    if (
-      verifyUserDeleteResult.status !== 200 ||
-      verifyUserDeleteResult.data !== null
-    ) {
+    if (!(
+      (verifyUserDeleteResult.status === 200 && verifyUserDeleteResult.data === null) ||
+      verifyUserDeleteResult.status === 404
+    )) {
       throw new Error(
         "VERIFY TEST USER DELETE failed.",
       );
