@@ -1,4 +1,5 @@
 import { Injectable, Inject } from "@nestjs/common";
+
 import { DatabaseService } from "../database/database.service";
 import { UserRepositoryInterface } from "../user/interfaces/user.repository.interface";
 
@@ -6,19 +7,12 @@ import { UserRepositoryInterface } from "../user/interfaces/user.repository.inte
 export class UserRepository implements UserRepositoryInterface {
   constructor(
     @Inject(DatabaseService)
-    private database: DatabaseService,
-  ) {
-    console.log("UserRepository constructor");
+    private readonly database: DatabaseService,
+  ) {}
 
-    if (!this.database) {
-      console.log("DatabaseService not injected — creating fallback instance.");
-      // Fallback for test scripts when DI metadata isn't present
-      this.database = new DatabaseService();
-    }
-
-    console.log("database =", this.database);
-    console.log("database.user =", this.database?.user);
-  }
+  // =========================
+  // Query
+  // =========================
 
   async getAll() {
     return this.database.user.findMany({
@@ -44,6 +38,10 @@ export class UserRepository implements UserRepositoryInterface {
     });
   }
 
+  // =========================
+  // Create
+  // =========================
+
   async create(data: {
     id: string;
     name: string;
@@ -55,6 +53,10 @@ export class UserRepository implements UserRepositoryInterface {
       data,
     });
   }
+
+  // =========================
+  // Update
+  // =========================
 
   async update(
     id: string,
@@ -72,6 +74,10 @@ export class UserRepository implements UserRepositoryInterface {
       data,
     });
   }
+
+  // =========================
+  // Delete
+  // =========================
 
   async delete(id: string) {
     return this.database.user.delete({

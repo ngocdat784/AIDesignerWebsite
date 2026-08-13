@@ -3,6 +3,8 @@ import { Module } from "@nestjs/common";
 import { DatabaseModule } from "../database/database.module";
 import { TemplateRepository } from "../repositories/template.repository";
 
+import { TEMPLATE_REPOSITORY } from "../common/constants/repository.tokens";
+
 import { TemplateService } from "./template.service";
 import { TemplateController } from "./template.controller";
 
@@ -10,15 +12,21 @@ import { TemplateController } from "./template.controller";
   imports: [
     DatabaseModule,
   ],
+
   controllers: [
     TemplateController,
   ],
+
   providers: [
-    TemplateRepository,
     TemplateService,
+
+    {
+      provide: TEMPLATE_REPOSITORY,
+      useClass: TemplateRepository,
+    },
   ],
+
   exports: [
-    TemplateRepository,
     TemplateService,
   ],
 })

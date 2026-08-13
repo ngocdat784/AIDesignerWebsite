@@ -4,15 +4,22 @@ import { UserController } from "./user.controller";
 import { UserService } from "./user.service";
 import { UserRepository } from "../repositories/user.repository";
 
+import { USER_REPOSITORY } from "../common/constants/repository.tokens";
+
 @Module({
   controllers: [UserController],
+
   providers: [
     UserService,
-    UserRepository,
+
+    {
+      provide: USER_REPOSITORY,
+      useClass: UserRepository,
+    },
   ],
+
   exports: [
     UserService,
-    UserRepository,
   ],
 })
 export class UserModule {}

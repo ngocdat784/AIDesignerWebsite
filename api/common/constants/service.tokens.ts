@@ -1,0 +1,5 @@
+export const USER_SERVICE = "USER_SERVICE";
+
+export const TEMPLATE_SERVICE = "TEMPLATE_SERVICE";
+
+export const ORDER_SERVICE = "ORDER_SERVICE";

@@ -1,12 +1,13 @@
 import { Injectable, Inject } from "@nestjs/common";
-import { OrderRepository } from "../repositories/order.repository";
 import { OrderServiceInterface } from "./interfaces/order.service.interface";
+import { ORDER_REPOSITORY } from "../common/constants/repository.tokens";
+import { OrderRepositoryInterface } from "./interfaces/order.repository.interface";
 
 @Injectable()
 export class OrderService implements OrderServiceInterface {
   constructor(
-    @Inject(OrderRepository)
-    private readonly orderRepository: OrderRepository,
+    @Inject(ORDER_REPOSITORY)
+    private readonly orderRepository: OrderRepositoryInterface,
   ) {
     console.log("OrderService injected successfully.");
   }

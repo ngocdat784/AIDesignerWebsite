@@ -1,12 +1,13 @@
 import { Injectable, Inject, NotFoundException } from "@nestjs/common";
-import { UserRepository } from "../repositories/user.repository";
 import { UserServiceInterface } from "./interfaces/user.service.interface";
+import { USER_REPOSITORY } from "../common/constants/repository.tokens";
+import { UserRepositoryInterface } from "./interfaces/user.repository.interface";
 
 @Injectable()
 export class UserService implements UserServiceInterface {
   constructor(
-    @Inject(UserRepository)
-    private readonly userRepository: UserRepository,
+    @Inject(USER_REPOSITORY)
+    private readonly userRepository: UserRepositoryInterface,
   ) {}
 
   async getAll() {

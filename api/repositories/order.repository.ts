@@ -1,4 +1,5 @@
 import { Injectable, Inject } from "@nestjs/common";
+
 import { DatabaseService } from "../database/database.service";
 import { OrderRepositoryInterface } from "../order/interfaces/order.repository.interface";
 
@@ -6,22 +7,8 @@ import { OrderRepositoryInterface } from "../order/interfaces/order.repository.i
 export class OrderRepository implements OrderRepositoryInterface {
   constructor(
     @Inject(DatabaseService)
-    private database: DatabaseService,
-  ) {
-    console.log("OrderRepository constructor");
-
-    if (!this.database) {
-      console.log(
-        "DatabaseService not injected — creating fallback instance.",
-      );
-
-      // Fallback cho test script khi DI metadata không được resolve
-      this.database = new DatabaseService();
-    }
-
-    console.log("database =", this.database);
-    console.log("database.order =", this.database?.order);
-  }
+    private readonly database: DatabaseService,
+  ) {}
 
   // =========================
   // Query

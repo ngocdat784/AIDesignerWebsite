@@ -1,12 +1,13 @@
 import { Injectable, Inject } from "@nestjs/common";
-import { TemplateRepository } from "../repositories/template.repository";
 import { TemplateServiceInterface } from "./interfaces/template.service.interface";
+import { TEMPLATE_REPOSITORY } from "../common/constants/repository.tokens";
+import { TemplateRepositoryInterface } from "./interfaces/template.repository.interface";
 
 @Injectable()
 export class TemplateService implements TemplateServiceInterface {
   constructor(
-    @Inject(TemplateRepository)
-    private readonly templateRepository: TemplateRepository,
+    @Inject(TEMPLATE_REPOSITORY)
+    private readonly templateRepository: TemplateRepositoryInterface,
   ) {
     console.log("TemplateService injected successfully.");
   }

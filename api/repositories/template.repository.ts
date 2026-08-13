@@ -1,4 +1,5 @@
 import { Injectable, Inject } from "@nestjs/common";
+
 import { DatabaseService } from "../database/database.service";
 import { TemplateRepositoryInterface } from "../template/interfaces/template.repository.interface";
 
@@ -6,22 +7,8 @@ import { TemplateRepositoryInterface } from "../template/interfaces/template.rep
 export class TemplateRepository implements TemplateRepositoryInterface {
   constructor(
     @Inject(DatabaseService)
-    private database: DatabaseService,
-  ) {
-    console.log("TemplateRepository constructor");
-
-    if (!this.database) {
-      console.log(
-        "DatabaseService not injected — creating fallback instance.",
-      );
-
-      // Fallback cho test script khi DI metadata không có
-      this.database = new DatabaseService();
-    }
-
-    console.log("database =", this.database);
-    console.log("database.template =", this.database?.template);
-  }
+    private readonly database: DatabaseService,
+  ) {}
 
   // =========================
   // Query
@@ -89,7 +76,7 @@ export class TemplateRepository implements TemplateRepositoryInterface {
   }
 
   // =========================
-  // Commands
+  // Create
   // =========================
 
   async create(data: {
@@ -124,6 +111,10 @@ export class TemplateRepository implements TemplateRepositoryInterface {
       },
     });
   }
+
+  // =========================
+  // Update
+  // =========================
 
   async update(
     id: string,
