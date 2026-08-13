@@ -10,6 +10,7 @@ async function main() {
       id: "test-user-001",
       name: "Test User",
       email: "test@example.com",
+      passwordHash: "hashed-password",
       role: "USER",
     },
   });

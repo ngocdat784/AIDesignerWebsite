@@ -52,24 +52,25 @@ export class UserRepository implements UserRepositoryInterface {
   }
 
   // =========================
-  // Create
-  // =========================
+// Create
+// =========================
 
-  async create(data: {
-    id: string;
-    name: string;
-    avatar?: string;
-    email: string;
-    role?: "USER" | "CREATOR" | "ADMIN";
-  }) {
-    try {
-      return await this.database.user.create({
-        data,
-      });
-    } catch (error) {
-      handlePrismaException(error);
-    }
+async create(data: {
+  id: string;
+  name: string;
+  avatar?: string | null;
+  email: string;
+  passwordHash: string;
+  role?: "USER" | "CREATOR" | "ADMIN";
+}) {
+  try {
+    return await this.database.user.create({
+      data,
+    });
+  } catch (error) {
+    handlePrismaException(error);
   }
+}
 
   // =========================
   // Update
@@ -81,6 +82,7 @@ export class UserRepository implements UserRepositoryInterface {
       name?: string;
       avatar?: string | null;
       email?: string;
+      passwordHash?: string;
       role?: "USER" | "CREATOR" | "ADMIN";
     },
   ) {

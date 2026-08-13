@@ -13,8 +13,9 @@ export interface UserRepositoryInterface {
     data: {
       id: string;
       name: string;
-      avatar?: string;
+      avatar?: string | null;
       email: string;
+      passwordHash: string;
       role?: "USER" | "CREATOR" | "ADMIN";
     },
   ): Promise<any>;
@@ -25,6 +26,7 @@ export interface UserRepositoryInterface {
       name?: string;
       avatar?: string | null;
       email?: string;
+      passwordHash?: string;
       role?: "USER" | "CREATOR" | "ADMIN";
     },
   ): Promise<any>;

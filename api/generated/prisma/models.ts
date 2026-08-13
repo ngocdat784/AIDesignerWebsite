@@ -8,9 +8,9 @@
  *
  * 🟢 You can import this file directly.
  */
-export type * from './models/User.ts'
-export type * from './models/Template.ts'
-export type * from './models/Order.ts'
-export type * from './models/OrderBilling.ts'
-export type * from './models/OrderItem.ts'
-export type * from './commonInputTypes.ts'
+export type * from './models/User.js'
+export type * from './models/Template.js'
+export type * from './models/Order.js'
+export type * from './models/OrderBilling.js'
+export type * from './models/OrderItem.js'
+export type * from './commonInputTypes.js'

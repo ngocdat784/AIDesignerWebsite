@@ -28,6 +28,10 @@ export class CreateUserDto {
   @IsEmail()
   email!: string;
 
+  @IsString()
+  @IsNotEmpty()
+  passwordHash!: string;
+
   @IsOptional()
   @IsEnum(UserRole)
   role?: UserRole;
