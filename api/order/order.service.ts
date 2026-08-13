@@ -1,16 +1,27 @@
-import { Injectable, Inject } from "@nestjs/common";
+import {
+  Injectable,
+  Inject,
+  NotFoundException,
+} from "@nestjs/common";
+
 import { OrderServiceInterface } from "./interfaces/order.service.interface";
-import { ORDER_REPOSITORY } from "../common/constants/repository.tokens";
 import { OrderRepositoryInterface } from "./interfaces/order.repository.interface";
+
+import {
+  CreateOrderDto,
+  OrderStatus,
+} from "./dto/create-order.dto";
+
+import { UpdateOrderDto } from "./dto/update-order.dto";
+
+import { ORDER_REPOSITORY } from "../common/constants/repository.tokens";
 
 @Injectable()
 export class OrderService implements OrderServiceInterface {
   constructor(
     @Inject(ORDER_REPOSITORY)
     private readonly orderRepository: OrderRepositoryInterface,
-  ) {
-    console.log("OrderService injected successfully.");
-  }
+  ) {}
 
   // =========================
   // Query
@@ -21,22 +32,22 @@ export class OrderService implements OrderServiceInterface {
   }
 
   async getById(id: string) {
-    return this.orderRepository.getById(id);
+    const order = await this.orderRepository.getById(id);
+
+    if (!order) {
+      throw new NotFoundException(
+        `Order with id ${id} not found.`,
+      );
+    }
+
+    return order;
   }
 
   async getByUserId(userId: string) {
     return this.orderRepository.getByUserId(userId);
   }
 
-  async getByStatus(
-    status:
-      | "PENDING"
-      | "PAID"
-      | "PROCESSING"
-      | "COMPLETED"
-      | "CANCELLED"
-      | "FAILED",
-  ) {
+  async getByStatus(status: OrderStatus) {
     return this.orderRepository.getByStatus(status);
   }
 
@@ -44,48 +55,33 @@ export class OrderService implements OrderServiceInterface {
   // Create
   // =========================
 
-  async create(data: {
-    id: string;
-    userId: string;
+  async create(dto: CreateOrderDto) {
+    /*
+     * Không bắt Prisma exception ở đây.
+     *
+     * ID Order bị trùng:
+     *
+     * P2002
+     *   ↓
+     * OrderRepository
+     *   ↓
+     * handlePrismaException()
+     *   ↓
+     * ConflictException
+     *
+     *
+     * User không tồn tại:
+     *
+     * P2003
+     *   ↓
+     * OrderRepository
+     *   ↓
+     * handlePrismaException()
+     *   ↓
+     * BadRequestException
+     */
 
-    status?:
-      | "PENDING"
-      | "PAID"
-      | "PROCESSING"
-      | "COMPLETED"
-      | "CANCELLED"
-      | "FAILED";
-
-    paymentMethod:
-      | "card"
-      | "paypal"
-      | "bank";
-
-    subtotal: number;
-    discount: number;
-    total: number;
-
-    billing: {
-      firstName: string;
-      lastName: string;
-      email: string;
-      phone: string;
-      address: string;
-      city: string;
-      country: string;
-      postalCode: string;
-    };
-
-    items: {
-      id: string;
-      productId: string;
-      productName: string;
-      unitPrice: number;
-      quantity: number;
-      subtotal: number;
-    }[];
-  }) {
-    return this.orderRepository.create(data);
+    return this.orderRepository.create(dto);
   }
 
   // =========================
@@ -94,26 +90,14 @@ export class OrderService implements OrderServiceInterface {
 
   async update(
     id: string,
-    data: {
-      status?:
-        | "PENDING"
-        | "PAID"
-        | "PROCESSING"
-        | "COMPLETED"
-        | "CANCELLED"
-        | "FAILED";
-
-      paymentMethod?:
-        | "card"
-        | "paypal"
-        | "bank";
-
-      subtotal?: number;
-      discount?: number;
-      total?: number;
-    },
+    dto: UpdateOrderDto,
   ) {
-    return this.orderRepository.update(id, data);
+    /*
+     * Kiểm tra Order tồn tại trước khi update.
+     */
+    await this.getById(id);
+
+    return this.orderRepository.update(id, dto);
   }
 
   // =========================
@@ -121,6 +105,11 @@ export class OrderService implements OrderServiceInterface {
   // =========================
 
   async delete(id: string) {
+    /*
+     * Kiểm tra Order tồn tại trước khi delete.
+     */
+    await this.getById(id);
+
     return this.orderRepository.delete(id);
   }
 }

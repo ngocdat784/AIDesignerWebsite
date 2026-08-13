@@ -2,9 +2,12 @@ import { Injectable, Inject } from "@nestjs/common";
 
 import { DatabaseService } from "../database/database.service";
 import { OrderRepositoryInterface } from "../order/interfaces/order.repository.interface";
+import { handlePrismaException } from "../common/exceptions/prisma.exception";
 
 @Injectable()
-export class OrderRepository implements OrderRepositoryInterface {
+export class OrderRepository
+  implements OrderRepositoryInterface
+{
   constructor(
     @Inject(DatabaseService)
     private readonly database: DatabaseService,
@@ -15,48 +18,60 @@ export class OrderRepository implements OrderRepositoryInterface {
   // =========================
 
   async getAll() {
-    return this.database.order.findMany({
-      orderBy: {
-        createdAt: "desc",
-      },
+    try {
+      return await this.database.order.findMany({
+        orderBy: {
+          createdAt: "desc",
+        },
 
-      include: {
-        user: true,
-        billing: true,
-        items: true,
-      },
-    });
+        include: {
+          user: true,
+          billing: true,
+          items: true,
+        },
+      });
+    } catch (error) {
+      handlePrismaException(error);
+    }
   }
 
   async getById(id: string) {
-    return this.database.order.findUnique({
-      where: {
-        id,
-      },
+    try {
+      return await this.database.order.findUnique({
+        where: {
+          id,
+        },
 
-      include: {
-        user: true,
-        billing: true,
-        items: true,
-      },
-    });
+        include: {
+          user: true,
+          billing: true,
+          items: true,
+        },
+      });
+    } catch (error) {
+      handlePrismaException(error);
+    }
   }
 
   async getByUserId(userId: string) {
-    return this.database.order.findMany({
-      where: {
-        userId,
-      },
+    try {
+      return await this.database.order.findMany({
+        where: {
+          userId,
+        },
 
-      orderBy: {
-        createdAt: "desc",
-      },
+        orderBy: {
+          createdAt: "desc",
+        },
 
-      include: {
-        billing: true,
-        items: true,
-      },
-    });
+        include: {
+          billing: true,
+          items: true,
+        },
+      });
+    } catch (error) {
+      handlePrismaException(error);
+    }
   }
 
   async getByStatus(
@@ -68,20 +83,24 @@ export class OrderRepository implements OrderRepositoryInterface {
       | "CANCELLED"
       | "FAILED",
   ) {
-    return this.database.order.findMany({
-      where: {
-        status,
-      },
+    try {
+      return await this.database.order.findMany({
+        where: {
+          status,
+        },
 
-      orderBy: {
-        createdAt: "desc",
-      },
+        orderBy: {
+          createdAt: "desc",
+        },
 
-      include: {
-        billing: true,
-        items: true,
-      },
-    });
+        include: {
+          billing: true,
+          items: true,
+        },
+      });
+    } catch (error) {
+      handlePrismaException(error);
+    }
   }
 
   // =========================
@@ -126,34 +145,38 @@ export class OrderRepository implements OrderRepositoryInterface {
       subtotal: number;
     }[];
   }) {
-    return this.database.order.create({
-      data: {
-        id: data.id,
-        userId: data.userId,
+    try {
+      return await this.database.order.create({
+        data: {
+          id: data.id,
+          userId: data.userId,
 
-        status: data.status ?? "PENDING",
+          status: data.status ?? "PENDING",
 
-        paymentMethod: data.paymentMethod,
+          paymentMethod: data.paymentMethod,
 
-        subtotal: data.subtotal,
-        discount: data.discount,
-        total: data.total,
+          subtotal: data.subtotal,
+          discount: data.discount,
+          total: data.total,
 
-        billing: {
-          create: data.billing,
+          billing: {
+            create: data.billing,
+          },
+
+          items: {
+            create: data.items,
+          },
         },
 
-        items: {
-          create: data.items,
+        include: {
+          billing: true,
+          items: true,
+          user: true,
         },
-      },
-
-      include: {
-        billing: true,
-        items: true,
-        user: true,
-      },
-    });
+      });
+    } catch (error) {
+      handlePrismaException(error);
+    }
   }
 
   // =========================
@@ -178,19 +201,23 @@ export class OrderRepository implements OrderRepositoryInterface {
       total?: number;
     },
   ) {
-    return this.database.order.update({
-      where: {
-        id,
-      },
+    try {
+      return await this.database.order.update({
+        where: {
+          id,
+        },
 
-      data,
+        data,
 
-      include: {
-        billing: true,
-        items: true,
-        user: true,
-      },
-    });
+        include: {
+          billing: true,
+          items: true,
+          user: true,
+        },
+      });
+    } catch (error) {
+      handlePrismaException(error);
+    }
   }
 
   // =========================
@@ -198,10 +225,14 @@ export class OrderRepository implements OrderRepositoryInterface {
   // =========================
 
   async delete(id: string) {
-    return this.database.order.delete({
-      where: {
-        id,
-      },
-    });
+    try {
+      return await this.database.order.delete({
+        where: {
+          id,
+        },
+      });
+    } catch (error) {
+      handlePrismaException(error);
+    }
   }
 }

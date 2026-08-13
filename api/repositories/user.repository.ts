@@ -2,6 +2,7 @@ import { Injectable, Inject } from "@nestjs/common";
 
 import { DatabaseService } from "../database/database.service";
 import { UserRepositoryInterface } from "../user/interfaces/user.repository.interface";
+import { handlePrismaException } from "../common/exceptions/prisma.exception";
 
 @Injectable()
 export class UserRepository implements UserRepositoryInterface {
@@ -15,27 +16,39 @@ export class UserRepository implements UserRepositoryInterface {
   // =========================
 
   async getAll() {
-    return this.database.user.findMany({
-      orderBy: {
-        createdAt: "desc",
-      },
-    });
+    try {
+      return await this.database.user.findMany({
+        orderBy: {
+          createdAt: "desc",
+        },
+      });
+    } catch (error) {
+      handlePrismaException(error);
+    }
   }
 
   async getById(id: string) {
-    return this.database.user.findUnique({
-      where: {
-        id,
-      },
-    });
+    try {
+      return await this.database.user.findUnique({
+        where: {
+          id,
+        },
+      });
+    } catch (error) {
+      handlePrismaException(error);
+    }
   }
 
   async getByEmail(email: string) {
-    return this.database.user.findUnique({
-      where: {
-        email,
-      },
-    });
+    try {
+      return await this.database.user.findUnique({
+        where: {
+          email,
+        },
+      });
+    } catch (error) {
+      handlePrismaException(error);
+    }
   }
 
   // =========================
@@ -49,9 +62,13 @@ export class UserRepository implements UserRepositoryInterface {
     email: string;
     role?: "USER" | "CREATOR" | "ADMIN";
   }) {
-    return this.database.user.create({
-      data,
-    });
+    try {
+      return await this.database.user.create({
+        data,
+      });
+    } catch (error) {
+      handlePrismaException(error);
+    }
   }
 
   // =========================
@@ -67,12 +84,16 @@ export class UserRepository implements UserRepositoryInterface {
       role?: "USER" | "CREATOR" | "ADMIN";
     },
   ) {
-    return this.database.user.update({
-      where: {
-        id,
-      },
-      data,
-    });
+    try {
+      return await this.database.user.update({
+        where: {
+          id,
+        },
+        data,
+      });
+    } catch (error) {
+      handlePrismaException(error);
+    }
   }
 
   // =========================
@@ -80,10 +101,14 @@ export class UserRepository implements UserRepositoryInterface {
   // =========================
 
   async delete(id: string) {
-    return this.database.user.delete({
-      where: {
-        id,
-      },
-    });
+    try {
+      return await this.database.user.delete({
+        where: {
+          id,
+        },
+      });
+    } catch (error) {
+      handlePrismaException(error);
+    }
   }
 }

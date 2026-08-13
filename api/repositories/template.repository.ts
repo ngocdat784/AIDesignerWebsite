@@ -2,9 +2,12 @@ import { Injectable, Inject } from "@nestjs/common";
 
 import { DatabaseService } from "../database/database.service";
 import { TemplateRepositoryInterface } from "../template/interfaces/template.repository.interface";
+import { handlePrismaException } from "../common/exceptions/prisma.exception";
 
 @Injectable()
-export class TemplateRepository implements TemplateRepositoryInterface {
+export class TemplateRepository
+  implements TemplateRepositoryInterface
+{
   constructor(
     @Inject(DatabaseService)
     private readonly database: DatabaseService,
@@ -15,64 +18,84 @@ export class TemplateRepository implements TemplateRepositoryInterface {
   // =========================
 
   async getAll() {
-    return this.database.template.findMany({
-      orderBy: {
-        createdAt: "desc",
-      },
-      include: {
-        author: true,
-      },
-    });
+    try {
+      return await this.database.template.findMany({
+        orderBy: {
+          createdAt: "desc",
+        },
+        include: {
+          author: true,
+        },
+      });
+    } catch (error) {
+      handlePrismaException(error);
+    }
   }
 
   async getById(id: string) {
-    return this.database.template.findUnique({
-      where: {
-        id,
-      },
-      include: {
-        author: true,
-      },
-    });
+    try {
+      return await this.database.template.findUnique({
+        where: {
+          id,
+        },
+        include: {
+          author: true,
+        },
+      });
+    } catch (error) {
+      handlePrismaException(error);
+    }
   }
 
   async getBySlug(slug: string) {
-    return this.database.template.findUnique({
-      where: {
-        slug,
-      },
-      include: {
-        author: true,
-      },
-    });
+    try {
+      return await this.database.template.findUnique({
+        where: {
+          slug,
+        },
+        include: {
+          author: true,
+        },
+      });
+    } catch (error) {
+      handlePrismaException(error);
+    }
   }
 
   async getByAuthorId(authorId: string) {
-    return this.database.template.findMany({
-      where: {
-        authorId,
-      },
-      orderBy: {
-        createdAt: "desc",
-      },
-      include: {
-        author: true,
-      },
-    });
+    try {
+      return await this.database.template.findMany({
+        where: {
+          authorId,
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+        include: {
+          author: true,
+        },
+      });
+    } catch (error) {
+      handlePrismaException(error);
+    }
   }
 
   async getByCategory(category: string) {
-    return this.database.template.findMany({
-      where: {
-        category,
-      },
-      orderBy: {
-        createdAt: "desc",
-      },
-      include: {
-        author: true,
-      },
-    });
+    try {
+      return await this.database.template.findMany({
+        where: {
+          category,
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+        include: {
+          author: true,
+        },
+      });
+    } catch (error) {
+      handlePrismaException(error);
+    }
   }
 
   // =========================
@@ -104,12 +127,16 @@ export class TemplateRepository implements TemplateRepositoryInterface {
     stock?: number;
     license?: string;
   }) {
-    return this.database.template.create({
-      data,
-      include: {
-        author: true,
-      },
-    });
+    try {
+      return await this.database.template.create({
+        data,
+        include: {
+          author: true,
+        },
+      });
+    } catch (error) {
+      handlePrismaException(error);
+    }
   }
 
   // =========================
@@ -140,15 +167,19 @@ export class TemplateRepository implements TemplateRepositoryInterface {
       license?: string | null;
     },
   ) {
-    return this.database.template.update({
-      where: {
-        id,
-      },
-      data,
-      include: {
-        author: true,
-      },
-    });
+    try {
+      return await this.database.template.update({
+        where: {
+          id,
+        },
+        data,
+        include: {
+          author: true,
+        },
+      });
+    } catch (error) {
+      handlePrismaException(error);
+    }
   }
 
   // =========================
@@ -156,10 +187,14 @@ export class TemplateRepository implements TemplateRepositoryInterface {
   // =========================
 
   async delete(id: string) {
-    return this.database.template.delete({
-      where: {
-        id,
-      },
-    });
+    try {
+      return await this.database.template.delete({
+        where: {
+          id,
+        },
+      });
+    } catch (error) {
+      handlePrismaException(error);
+    }
   }
 }

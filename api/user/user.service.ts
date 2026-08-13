@@ -1,7 +1,16 @@
-import { Injectable, Inject, NotFoundException } from "@nestjs/common";
+import {
+  Injectable,
+  Inject,
+  NotFoundException,
+} from "@nestjs/common";
+
 import { UserServiceInterface } from "./interfaces/user.service.interface";
-import { USER_REPOSITORY } from "../common/constants/repository.tokens";
 import { UserRepositoryInterface } from "./interfaces/user.repository.interface";
+
+import { CreateUserDto } from "./dto/create-user.dto";
+import { UpdateUserDto } from "./dto/update-user.dto";
+
+import { USER_REPOSITORY } from "../common/constants/repository.tokens";
 
 @Injectable()
 export class UserService implements UserServiceInterface {
@@ -9,6 +18,10 @@ export class UserService implements UserServiceInterface {
     @Inject(USER_REPOSITORY)
     private readonly userRepository: UserRepositoryInterface,
   ) {}
+
+  // =========================
+  // Query
+  // =========================
 
   async getAll() {
     return this.userRepository.getAll();
@@ -19,7 +32,7 @@ export class UserService implements UserServiceInterface {
 
     if (!user) {
       throw new NotFoundException(
-        `User with id ${id} not found`,
+        `User with id ${id} not found.`,
       );
     }
 
@@ -27,40 +40,80 @@ export class UserService implements UserServiceInterface {
   }
 
   async getByEmail(email: string) {
-    const user = await this.userRepository.getByEmail(email);
+    const user =
+      await this.userRepository.getByEmail(email);
 
     if (!user) {
       throw new NotFoundException(
-        `User with email ${email} not found`,
+        `User with email ${email} not found.`,
       );
     }
 
     return user;
   }
 
-  async create(data: {
-    id: string;
-    name: string;
-    avatar?: string;
-    email: string;
-    role?: "USER" | "CREATOR" | "ADMIN";
-  }) {
-    return this.userRepository.create(data);
+  // =========================
+  // Create
+  // =========================
+
+  async create(dto: CreateUserDto) {
+    /*
+     * Không xử lý P2002 ở đây.
+     *
+     * Nếu id/email đã tồn tại:
+     *
+     * Prisma P2002
+     *      ↓
+     * UserRepository
+     *      ↓
+     * handlePrismaException()
+     *      ↓
+     * ConflictException
+     */
+    return this.userRepository.create(dto);
   }
+
+  // =========================
+  // Update
+  // =========================
 
   async update(
     id: string,
-    data: {
-      name?: string;
-      avatar?: string | null;
-      email?: string;
-      role?: "USER" | "CREATOR" | "ADMIN";
-    },
+    dto: UpdateUserDto,
   ) {
-    return this.userRepository.update(id, data);
+    /*
+     * Kiểm tra User trước khi update.
+     *
+     * Nếu không tồn tại:
+     * → NotFoundException
+     */
+    await this.getById(id);
+
+    /*
+     * Nếu email mới bị trùng:
+     *
+     * Prisma P2002
+     *      ↓
+     * Repository
+     *      ↓
+     * ConflictException
+     */
+    return this.userRepository.update(id, dto);
   }
 
+  // =========================
+  // Delete
+  // =========================
+
   async delete(id: string) {
+    /*
+     * Kiểm tra User trước khi delete.
+     *
+     * Nếu không tồn tại:
+     * → NotFoundException
+     */
+    await this.getById(id);
+
     return this.userRepository.delete(id);
   }
 }
