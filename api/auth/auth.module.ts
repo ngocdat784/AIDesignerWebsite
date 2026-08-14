@@ -11,7 +11,7 @@ import { AuthService } from "./auth.service";
 
 import { AuthRepository } from "../repositories/auth.repository";
 import { DatabaseModule } from "../database/database.module";
-
+import { RoleGuard } from "./guards/role.guard";
 import { JwtStrategy } from "./strategies/jwt.strategy";
 
 @Module({
@@ -52,7 +52,7 @@ import { JwtStrategy } from "./strategies/jwt.strategy";
   providers: [
     AuthService,
     AuthRepository,
-
+    RoleGuard,
     // JWT Strategy
     JwtStrategy,
 

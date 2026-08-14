@@ -14,7 +14,10 @@ import { AuthServiceInterface } from "./interfaces/auth.service.interface";
 import { CurrentUserPayload } from "./interfaces/current-user.interface";
 
 import { JwtAuthGuard } from "./guards/jwt-auth.guard";
+import { RoleGuard } from "./guards/role.guard";
+
 import { CurrentUser } from "./decorators/current-user.decorator";
+import { Roles } from "./decorators/roles.decorator";
 
 @Controller("auth")
 export class AuthController {
@@ -51,5 +54,69 @@ export class AuthController {
     @CurrentUser() user: CurrentUserPayload,
   ) {
     return user;
+  }
+
+  // =========================
+  // USER Test
+  // =========================
+
+  @UseGuards(JwtAuthGuard, RoleGuard)
+  @Roles("USER")
+  @Get("user-test")
+  async userTest(
+    @CurrentUser() user: CurrentUserPayload,
+  ) {
+    return {
+      message: "User access granted.",
+      user,
+    };
+  }
+
+  // =========================
+  // CREATOR Test
+  // =========================
+
+  @UseGuards(JwtAuthGuard, RoleGuard)
+  @Roles("CREATOR")
+  @Get("creator-test")
+  async creatorTest(
+    @CurrentUser() user: CurrentUserPayload,
+  ) {
+    return {
+      message: "Creator access granted.",
+      user,
+    };
+  }
+
+  // =========================
+  // ADMIN Test
+  // =========================
+
+  @UseGuards(JwtAuthGuard, RoleGuard)
+  @Roles("ADMIN")
+  @Get("admin-test")
+  async adminTest(
+    @CurrentUser() user: CurrentUserPayload,
+  ) {
+    return {
+      message: "Admin access granted.",
+      user,
+    };
+  }
+
+  // =========================
+  // CREATOR + ADMIN Test
+  // =========================
+
+  @UseGuards(JwtAuthGuard, RoleGuard)
+  @Roles("CREATOR", "ADMIN")
+  @Get("creator-admin-test")
+  async creatorAdminTest(
+    @CurrentUser() user: CurrentUserPayload,
+  ) {
+    return {
+      message: "Creator/Admin access granted.",
+      user,
+    };
   }
 }
