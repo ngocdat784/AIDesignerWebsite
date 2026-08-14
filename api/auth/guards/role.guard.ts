@@ -2,6 +2,7 @@ import {
   CanActivate,
   ExecutionContext,
   ForbiddenException,
+  Inject,
   Injectable,
 } from "@nestjs/common";
 
@@ -13,6 +14,7 @@ import { CurrentUserPayload } from "../interfaces/current-user.interface";
 @Injectable()
 export class RoleGuard implements CanActivate {
   constructor(
+    @Inject(Reflector)
     private readonly reflector: Reflector,
   ) {}
 
@@ -27,8 +29,11 @@ export class RoleGuard implements CanActivate {
         context.getClass(),
       ]);
 
-    // Endpoint không yêu cầu role
-    if (!requiredRoles || requiredRoles.length === 0) {
+    // Không yêu cầu role
+    if (
+      !requiredRoles ||
+      requiredRoles.length === 0
+    ) {
       return true;
     }
 
@@ -36,14 +41,16 @@ export class RoleGuard implements CanActivate {
       context.switchToHttp().getRequest();
 
     const user =
-      request.user as CurrentUserPayload;
+      request.user as CurrentUserPayload | undefined;
 
+    // Không có user
     if (!user) {
       throw new ForbiddenException(
         "User information not found.",
       );
     }
 
+    // Không đủ quyền
     if (!requiredRoles.includes(user.role)) {
       throw new ForbiddenException(
         "You do not have permission to access this resource.",

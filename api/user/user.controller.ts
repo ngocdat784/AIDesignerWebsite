@@ -1,13 +1,14 @@
 import {
+  Body,
   Controller,
   Get,
   Post,
   Patch,
   Delete,
   Param,
-  Body,
   Inject,
   ValidationPipe,
+  UseGuards,
 } from "@nestjs/common";
 
 import { UserService } from "./user.service";
@@ -15,7 +16,14 @@ import { UserService } from "./user.service";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { UpdateUserDto } from "./dto/update-user.dto";
 
+import { JwtAuthGuard } from "../auth/guards/jwt-auth.guard";
+import { RoleGuard } from "../auth/guards/role.guard";
+
+import { Roles } from "../auth/decorators/roles.decorator";
+
 @Controller("users")
+@UseGuards(JwtAuthGuard, RoleGuard)
+@Roles("ADMIN")
 export class UserController {
   constructor(
     @Inject(UserService)
@@ -23,7 +31,8 @@ export class UserController {
   ) {}
 
   // =========================
-  // GET ALL
+  // GET ALL USERS
+  // ADMIN ONLY
   // =========================
 
   @Get()
@@ -32,7 +41,8 @@ export class UserController {
   }
 
   // =========================
-  // GET BY EMAIL
+  // GET USER BY EMAIL
+  // ADMIN ONLY
   // =========================
 
   @Get("email/:email")
@@ -43,7 +53,8 @@ export class UserController {
   }
 
   // =========================
-  // GET BY ID
+  // GET USER BY ID
+  // ADMIN ONLY
   // =========================
 
   @Get(":id")
@@ -54,24 +65,26 @@ export class UserController {
   }
 
   // =========================
-  // CREATE
+  // CREATE USER
+  // ADMIN ONLY
   // =========================
 
   @Post()
   async create(
-    @Body(new ValidationPipe({ whitelist: true, transform: true }))
+    @Body(
+      new ValidationPipe({
+        whitelist: true,
+        transform: true,
+      }),
+    )
     dto: CreateUserDto,
   ) {
-    console.log(
-      "CreateUserDto received:",
-      dto,
-      dto?.constructor?.name,
-    );
     return this.userService.create(dto);
   }
 
   // =========================
-  // UPDATE
+  // UPDATE USER
+  // ADMIN ONLY
   // =========================
 
   @Patch(":id")
@@ -83,7 +96,8 @@ export class UserController {
   }
 
   // =========================
-  // DELETE
+  // DELETE USER
+  // ADMIN ONLY
   // =========================
 
   @Delete(":id")

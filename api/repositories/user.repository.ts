@@ -21,6 +21,15 @@ export class UserRepository implements UserRepositoryInterface {
         orderBy: {
           createdAt: "desc",
         },
+        select: {
+          id: true,
+          name: true,
+          avatar: true,
+          email: true,
+          role: true,
+          createdAt: true,
+          updatedAt: true,
+        },
       });
     } catch (error) {
       handlePrismaException(error);
@@ -32,6 +41,15 @@ export class UserRepository implements UserRepositoryInterface {
       return await this.database.user.findUnique({
         where: {
           id,
+        },
+        select: {
+          id: true,
+          name: true,
+          avatar: true,
+          email: true,
+          role: true,
+          createdAt: true,
+          updatedAt: true,
         },
       });
     } catch (error) {
@@ -45,6 +63,15 @@ export class UserRepository implements UserRepositoryInterface {
         where: {
           email,
         },
+        select: {
+          id: true,
+          name: true,
+          avatar: true,
+          email: true,
+          role: true,
+          createdAt: true,
+          updatedAt: true,
+        },
       });
     } catch (error) {
       handlePrismaException(error);
@@ -52,25 +79,34 @@ export class UserRepository implements UserRepositoryInterface {
   }
 
   // =========================
-// Create
-// =========================
+  // Create
+  // =========================
 
-async create(data: {
-  id: string;
-  name: string;
-  avatar?: string | null;
-  email: string;
-  passwordHash: string;
-  role?: "USER" | "CREATOR" | "ADMIN";
-}) {
-  try {
-    return await this.database.user.create({
-      data,
-    });
-  } catch (error) {
-    handlePrismaException(error);
+  async create(data: {
+    id: string;
+    name: string;
+    avatar?: string | null;
+    email: string;
+    passwordHash: string;
+    role?: "USER" | "CREATOR" | "ADMIN";
+  }) {
+    try {
+      return await this.database.user.create({
+        data,
+        select: {
+          id: true,
+          name: true,
+          avatar: true,
+          email: true,
+          role: true,
+          createdAt: true,
+          updatedAt: true,
+        },
+      });
+    } catch (error) {
+      handlePrismaException(error);
+    }
   }
-}
 
   // =========================
   // Update
@@ -92,6 +128,15 @@ async create(data: {
           id,
         },
         data,
+        select: {
+          id: true,
+          name: true,
+          avatar: true,
+          email: true,
+          role: true,
+          createdAt: true,
+          updatedAt: true,
+        },
       });
     } catch (error) {
       handlePrismaException(error);
@@ -107,6 +152,15 @@ async create(data: {
       return await this.database.user.delete({
         where: {
           id,
+        },
+        select: {
+          id: true,
+          name: true,
+          avatar: true,
+          email: true,
+          role: true,
+          createdAt: true,
+          updatedAt: true,
         },
       });
     } catch (error) {

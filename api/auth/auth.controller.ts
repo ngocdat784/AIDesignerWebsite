@@ -61,7 +61,7 @@ export class AuthController {
   // =========================
 
   @UseGuards(JwtAuthGuard, RoleGuard)
-  @Roles("USER")
+  @Roles("USER", "CREATOR", "ADMIN")
   @Get("user-test")
   async userTest(
     @CurrentUser() user: CurrentUserPayload,
@@ -77,7 +77,7 @@ export class AuthController {
   // =========================
 
   @UseGuards(JwtAuthGuard, RoleGuard)
-  @Roles("CREATOR")
+  @Roles("CREATOR", "ADMIN")
   @Get("creator-test")
   async creatorTest(
     @CurrentUser() user: CurrentUserPayload,
