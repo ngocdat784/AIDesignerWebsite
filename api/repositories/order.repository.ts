@@ -25,7 +25,17 @@ export class OrderRepository
         },
 
         include: {
-          user: true,
+          user: {
+            select: {
+              id: true,
+              name: true,
+              avatar: true,
+              email: true,
+              role: true,
+              createdAt: true,
+              updatedAt: true,
+            },
+          },
           billing: true,
           items: true,
         },
@@ -43,7 +53,17 @@ export class OrderRepository
         },
 
         include: {
-          user: true,
+          user: {
+            select: {
+              id: true,
+              name: true,
+              avatar: true,
+              email: true,
+              role: true,
+              createdAt: true,
+              updatedAt: true,
+            },
+          },
           billing: true,
           items: true,
         },
@@ -171,7 +191,17 @@ export class OrderRepository
         include: {
           billing: true,
           items: true,
-          user: true,
+          user: {
+            select: {
+              id: true,
+              name: true,
+              avatar: true,
+              email: true,
+              role: true,
+              createdAt: true,
+              updatedAt: true,
+            },
+          },
         },
       });
     } catch (error) {
@@ -212,7 +242,17 @@ export class OrderRepository
         include: {
           billing: true,
           items: true,
-          user: true,
+          user: {
+            select: {
+              id: true,
+              name: true,
+              avatar: true,
+              email: true,
+              role: true,
+              createdAt: true,
+              updatedAt: true,
+            },
+          },
         },
       });
     } catch (error) {
