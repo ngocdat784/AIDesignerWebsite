@@ -1,18 +1,28 @@
+import { CurrentUserPayload } from "../../auth/interfaces/current-user.interface";
+
 export interface OrderServiceInterface {
   // =========================
   // Query
   // =========================
 
+  // Chỉ ADMIN được gọi getAll()
   getAll(): Promise<any[]>;
 
+  // USER: chỉ xem order của mình
+  // ADMIN: xem bất kỳ order
   getById(
     id: string,
+    user: CurrentUserPayload,
   ): Promise<any | null>;
 
+  // USER: chỉ xem order của mình
+  // ADMIN: xem order của user bất kỳ
   getByUserId(
     userId: string,
+    user: CurrentUserPayload,
   ): Promise<any[]>;
 
+  // Chỉ ADMIN
   getByStatus(
     status:
       | "PENDING"
@@ -27,6 +37,7 @@ export interface OrderServiceInterface {
   // Create
   // =========================
 
+  // USER tạo order cho chính mình
   create(
     data: {
       id: string;
@@ -69,12 +80,14 @@ export interface OrderServiceInterface {
         subtotal: number;
       }[];
     },
+    user: CurrentUserPayload,
   ): Promise<any>;
 
   // =========================
   // Update
   // =========================
 
+  // Chỉ ADMIN
   update(
     id: string,
     data: {
@@ -101,6 +114,7 @@ export interface OrderServiceInterface {
   // Delete
   // =========================
 
+  // Chỉ ADMIN
   delete(
     id: string,
   ): Promise<any>;

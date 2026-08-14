@@ -1,4 +1,5 @@
 import {
+  ForbiddenException,
   Injectable,
   Inject,
   NotFoundException,
@@ -14,6 +15,8 @@ import {
 
 import { UpdateOrderDto } from "./dto/update-order.dto";
 
+import { CurrentUserPayload } from "../auth/interfaces/current-user.interface";
+
 import { ORDER_REPOSITORY } from "../common/constants/repository.tokens";
 
 @Injectable()
@@ -27,12 +30,22 @@ export class OrderService implements OrderServiceInterface {
   // Query
   // =========================
 
+  // ADMIN: xem tất cả Order
   async getAll() {
     return this.orderRepository.getAll();
   }
 
-  async getById(id: string) {
-    const order = await this.orderRepository.getById(id);
+  // USER:
+  //   chỉ được xem Order của chính mình
+  //
+  // ADMIN:
+  //   được xem mọi Order
+  async getById(
+    id: string,
+    user: CurrentUserPayload,
+  ) {
+    const order =
+      await this.orderRepository.getById(id);
 
     if (!order) {
       throw new NotFoundException(
@@ -40,13 +53,65 @@ export class OrderService implements OrderServiceInterface {
       );
     }
 
-    return order;
+    // ADMIN có toàn quyền
+    if (user.role === "ADMIN") {
+      return order;
+    }
+
+    // USER chỉ được xem Order của mình
+    if (
+      user.role === "USER" &&
+      order.userId !== user.id
+    ) {
+      throw new ForbiddenException(
+        "You can only access your own orders.",
+      );
+    }
+
+    /*
+     * CREATOR không nên tới được đây
+     * vì Controller đã chặn bằng RoleGuard.
+     *
+     * Nhưng vẫn giữ kiểm tra ở Service
+     * để bảo vệ business logic.
+     */
+    throw new ForbiddenException(
+      "You do not have permission to access this order.",
+    );
   }
 
-  async getByUserId(userId: string) {
-    return this.orderRepository.getByUserId(userId);
+  // USER:
+  //   chỉ được xem Order của chính mình.
+  //
+  // ADMIN:
+  //   được xem Order của bất kỳ user nào.
+  async getByUserId(
+    userId: string,
+    user: CurrentUserPayload,
+  ) {
+    // USER không được xem Order của user khác
+    if (
+      user.role === "USER" &&
+      userId !== user.id
+    ) {
+      throw new ForbiddenException(
+        "You can only access your own orders.",
+      );
+    }
+
+    // ADMIN được xem bất kỳ userId
+    if (user.role === "ADMIN") {
+      return this.orderRepository.getByUserId(
+        userId,
+      );
+    }
+
+    throw new ForbiddenException(
+      "You do not have permission to access orders.",
+    );
   }
 
+  // ADMIN
   async getByStatus(status: OrderStatus) {
     return this.orderRepository.getByStatus(status);
   }
@@ -55,11 +120,30 @@ export class OrderService implements OrderServiceInterface {
   // Create
   // =========================
 
-  async create(dto: CreateOrderDto) {
+  // USER tạo Order cho chính mình
+  async create(
+    dto: CreateOrderDto,
+    user: CurrentUserPayload,
+  ) {
     /*
-     * Không bắt Prisma exception ở đây.
+     * Không tin userId do client gửi lên.
      *
-     * ID Order bị trùng:
+     * JWT
+     *   ↓
+     * CurrentUserPayload
+     *   ↓
+     * user.id
+     *   ↓
+     * Order.userId
+     */
+
+    const data = {
+      ...dto,
+      userId: user.id,
+    };
+
+    /*
+     * Không bắt Prisma exception ở Service.
      *
      * P2002
      *   ↓
@@ -70,8 +154,6 @@ export class OrderService implements OrderServiceInterface {
      * ConflictException
      *
      *
-     * User không tồn tại:
-     *
      * P2003
      *   ↓
      * OrderRepository
@@ -81,13 +163,14 @@ export class OrderService implements OrderServiceInterface {
      * BadRequestException
      */
 
-    return this.orderRepository.create(dto);
+    return this.orderRepository.create(data);
   }
 
   // =========================
   // Update
   // =========================
 
+  // Chỉ ADMIN
   async update(
     id: string,
     dto: UpdateOrderDto,
@@ -95,21 +178,47 @@ export class OrderService implements OrderServiceInterface {
     /*
      * Kiểm tra Order tồn tại trước khi update.
      */
-    await this.getById(id);
+    await this.getOrderForAdmin(id);
 
-    return this.orderRepository.update(id, dto);
+    return this.orderRepository.update(
+      id,
+      dto,
+    );
   }
 
   // =========================
   // Delete
   // =========================
 
+  // Chỉ ADMIN
   async delete(id: string) {
     /*
      * Kiểm tra Order tồn tại trước khi delete.
      */
-    await this.getById(id);
+    await this.getOrderForAdmin(id);
 
     return this.orderRepository.delete(id);
+  }
+
+  // =========================
+  // Internal
+  // =========================
+
+  /**
+   * Kiểm tra Order tồn tại.
+   *
+   * Dùng cho các thao tác chỉ ADMIN được phép thực hiện.
+   */
+  private async getOrderForAdmin(id: string) {
+    const order =
+      await this.orderRepository.getById(id);
+
+    if (!order) {
+      throw new NotFoundException(
+        `Order with id ${id} not found.`,
+      );
+    }
+
+    return order;
   }
 }
