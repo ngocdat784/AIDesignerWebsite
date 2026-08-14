@@ -1,6 +1,10 @@
 import { Module } from "@nestjs/common";
 import { JwtModule } from "@nestjs/jwt";
-import { ConfigModule, ConfigService } from "@nestjs/config";
+import { PassportModule } from "@nestjs/passport";
+import {
+  ConfigModule,
+  ConfigService,
+} from "@nestjs/config";
 
 import { AuthController } from "./auth.controller";
 import { AuthService } from "./auth.service";
@@ -8,9 +12,14 @@ import { AuthService } from "./auth.service";
 import { AuthRepository } from "../repositories/auth.repository";
 import { DatabaseModule } from "../database/database.module";
 
+import { JwtStrategy } from "./strategies/jwt.strategy";
+
 @Module({
   imports: [
     DatabaseModule,
+
+    // Passport + Config + JWT
+    PassportModule.register({ defaultStrategy: "jwt" }),
     ConfigModule,
 
     JwtModule.registerAsync({
@@ -18,10 +27,13 @@ import { DatabaseModule } from "../database/database.module";
       inject: [ConfigService],
 
       useFactory: (configService: ConfigService) => {
-        const secret = configService.get<string>("JWT_SECRET");
+        const secret =
+          configService.get<string>("JWT_SECRET");
 
         if (!secret) {
-          throw new Error("JWT_SECRET is not configured.");
+          throw new Error(
+            "JWT_SECRET is not configured.",
+          );
         }
 
         return {
@@ -41,11 +53,16 @@ import { DatabaseModule } from "../database/database.module";
     AuthService,
     AuthRepository,
 
+    // JWT Strategy
+    JwtStrategy,
+
+    // Auth Repository Interface
     {
       provide: "AuthRepositoryInterface",
       useExisting: AuthRepository,
     },
 
+    // Auth Service Interface
     {
       provide: "AuthServiceInterface",
       useExisting: AuthService,
@@ -55,16 +72,20 @@ import { DatabaseModule } from "../database/database.module";
   exports: [
     AuthService,
 
+    // Auth Repository Interface
     {
       provide: "AuthRepositoryInterface",
       useExisting: AuthRepository,
     },
 
+    // Auth Service Interface
     {
       provide: "AuthServiceInterface",
       useExisting: AuthService,
     },
 
+    // Export JwtModule để các module khác
+    // có thể sử dụng JwtService khi cần
     JwtModule,
   ],
 })
