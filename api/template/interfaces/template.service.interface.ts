@@ -1,84 +1,47 @@
+import { CreateTemplateDto } from "../dto/create-template.dto";
+import { UpdateTemplateDto } from "../dto/update-template.dto";
+import { CurrentUserPayload } from "../../auth/interfaces/current-user.interface";
+
 export interface TemplateServiceInterface {
   // =========================
   // Query
   // =========================
 
-  getAll(): Promise<any[]>;
+  getAll(): Promise<any>;
 
-  getById(
-    id: string,
-  ): Promise<any | null>;
+  getById(id: string): Promise<any>;
 
-  getBySlug(
-    slug: string,
-  ): Promise<any | null>;
+  getBySlug(slug: string): Promise<any>;
 
-  getByAuthorId(
-    authorId: string,
-  ): Promise<any[]>;
+  getByAuthorId(authorId: string): Promise<any>;
 
-  getByCategory(
-    category: string,
-  ): Promise<any[]>;
+  getByCategory(category: string): Promise<any>;
 
   // =========================
-  // Commands
+  // Create
   // =========================
 
   create(
-    data: {
-      id: string;
-      slug: string;
-      title: string;
-      description: string;
-      thumbnail: string;
-      images?: string[];
-      category: string;
-      tags?: string[];
-
-      authorId: string;
-
-      rating?: number;
-      reviews?: number;
-      downloads?: number;
-
-      price: number;
-      originalPrice?: number;
-
-      featured?: boolean;
-      newest?: boolean;
-
-      stock?: number;
-      license?: string;
-    },
+    dto: CreateTemplateDto,
+    user: CurrentUserPayload,
   ): Promise<any>;
+
+  // =========================
+  // Update
+  // =========================
 
   update(
     id: string,
-    data: {
-      title?: string;
-      description?: string;
-      thumbnail?: string;
-      images?: string[];
-      category?: string;
-      tags?: string[];
-
-      rating?: number;
-      reviews?: number;
-      downloads?: number;
-
-      price?: number;
-      originalPrice?: number | null;
-
-      featured?: boolean;
-      newest?: boolean;
-
-      stock?: number | null;
-      license?: string | null;
-    },
+    dto: UpdateTemplateDto,
+    user: CurrentUserPayload,
   ): Promise<any>;
+
+  // =========================
+  // Delete
+  // =========================
 
   delete(
     id: string,
+    user: CurrentUserPayload,
   ): Promise<any>;
 }

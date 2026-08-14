@@ -1,4 +1,5 @@
 import {
+  ForbiddenException,
   Injectable,
   Inject,
   NotFoundException,
@@ -9,6 +10,8 @@ import { TemplateRepositoryInterface } from "./interfaces/template.repository.in
 
 import { CreateTemplateDto } from "./dto/create-template.dto";
 import { UpdateTemplateDto } from "./dto/update-template.dto";
+
+import { CurrentUserPayload } from "../auth/interfaces/current-user.interface";
 
 import { TEMPLATE_REPOSITORY } from "../common/constants/repository.tokens";
 
@@ -65,21 +68,22 @@ export class TemplateService implements TemplateServiceInterface {
   // Create
   // =========================
 
-  async create(dto: CreateTemplateDto) {
+  async create(
+    dto: CreateTemplateDto,
+    user: CurrentUserPayload,
+  ) {
     /*
-     * Không xử lý P2002 ở Service.
+     * Chỉ CREATOR và ADMIN được đi tới đây
+     * nhờ RoleGuard.
      *
-     * Nếu id hoặc slug bị trùng:
-     *
-     * Prisma P2002
-     *      ↓
-     * TemplateRepository
-     *      ↓
-     * handlePrismaException()
-     *      ↓
-     * ConflictException
+     * Author của template phải là user hiện tại.
      */
-    return this.templateRepository.create(dto);
+    const data = {
+      ...dto,
+      authorId: user.id,
+    };
+
+    return this.templateRepository.create(data);
   }
 
   // =========================
@@ -89,16 +93,30 @@ export class TemplateService implements TemplateServiceInterface {
   async update(
     id: string,
     dto: UpdateTemplateDto,
+    user: CurrentUserPayload,
   ) {
-    /*
-     * Kiểm tra template tồn tại trước.
-     */
-    await this.getById(id);
+    const template = await this.getById(id);
 
     /*
-     * Các lỗi Prisma tiếp tục được xử lý
-     * tập trung tại Repository.
+     * ADMIN có toàn quyền.
      */
+    if (user.role === "ADMIN") {
+      return this.templateRepository.update(id, dto);
+    }
+
+    /*
+     * CREATOR chỉ được sửa template
+     * do chính mình tạo.
+     */
+    if (
+      user.role === "CREATOR" &&
+      template.authorId !== user.id
+    ) {
+      throw new ForbiddenException(
+        "You can only update your own templates.",
+      );
+    }
+
     return this.templateRepository.update(id, dto);
   }
 
@@ -106,11 +124,31 @@ export class TemplateService implements TemplateServiceInterface {
   // Delete
   // =========================
 
-  async delete(id: string) {
+  async delete(
+    id: string,
+    user: CurrentUserPayload,
+  ) {
+    const template = await this.getById(id);
+
     /*
-     * Kiểm tra template tồn tại trước khi xóa.
+     * ADMIN có toàn quyền xóa.
      */
-    await this.getById(id);
+    if (user.role === "ADMIN") {
+      return this.templateRepository.delete(id);
+    }
+
+    /*
+     * CREATOR chỉ được xóa template
+     * do chính mình tạo.
+     */
+    if (
+      user.role === "CREATOR" &&
+      template.authorId !== user.id
+    ) {
+      throw new ForbiddenException(
+        "You can only delete your own templates.",
+      );
+    }
 
     return this.templateRepository.delete(id);
   }
