@@ -7,6 +7,7 @@ import { Toaster } from "sonner";
 
 import ThemeProvider from "@/components/providers/ThemeProvider";
 
+import AuthProvider from "../providers/AuthProvider";
 import CartProvider from "../providers/CartProvider";
 import CheckoutProvider from "../providers/CheckoutProvider";
 
@@ -38,11 +39,13 @@ export default function RootLayout({
     >
       <body className="min-h-full">
         <ThemeProvider>
-          <CartProvider>
-            <CheckoutProvider>
-              {children}
-            </CheckoutProvider>
-          </CartProvider>
+          <AuthProvider>
+            <CartProvider>
+              <CheckoutProvider>
+                {children}
+              </CheckoutProvider>
+            </CartProvider>
+          </AuthProvider>
 
           <Toaster
             richColors

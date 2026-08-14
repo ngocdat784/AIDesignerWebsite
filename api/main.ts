@@ -19,6 +19,19 @@ async function bootstrap() {
 
 
   // =========================
+  // CORS
+  // =========================
+
+  app.enableCors({
+    origin: [
+      "http://localhost:3001",
+      "http://localhost:3000",
+    ],
+    credentials: true,
+  });
+
+
+  // =========================
   // Global Validation
   // =========================
 
@@ -52,11 +65,14 @@ async function bootstrap() {
   // Start Server
   // =========================
 
-  await app.listen(3000);
+  const port =
+    Number(process.env.PORT) || 3000;
+
+  await app.listen(port);
 
 
   console.log(
-    "NestJS API running at http://localhost:3000",
+    `NestJS API running at http://localhost:${port}`,
   );
 }
 
