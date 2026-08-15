@@ -1,25 +1,37 @@
 "use client";
 
-import { useRouter, useSearchParams } from "next/navigation";
+import {
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
+
+import {
+  useRouter,
+  useSearchParams,
+} from "next/navigation";
+
 import type { SortOption } from "@/lib/sorting/template.sort";
+
 import { templateService } from "@/services/template.service";
 
 import { filterTemplates } from "@/lib/filters/template.filter";
-
 import { sortTemplates } from "@/lib/sorting/template.sort";
 
 import { paginate } from "@/lib/pagination/paginate";
-
 import { getTotalPages } from "@/lib/pagination/getTotalPages";
 
 import {
   DEFAULT_PAGE_SIZE,
   PageSize,
 } from "@/lib/constants/page-size";
+
 import {
   DEFAULT_VIEW_MODE,
   ViewMode,
 } from "@/lib/constants/view-mode";
+
+import type { Template } from "@/types/template/template";
 
 export type MarketplaceQueryKey =
   | "search"
@@ -33,59 +45,167 @@ export function useMarketplace() {
   const router = useRouter();
   const params = useSearchParams();
 
+  // =========================
+  // Query params
+  // =========================
+
   const search = params.get("search") ?? "";
-  const category = params.get("category") ?? "All";
-  const sort = params.get("sort") ?? "latest";
+
+  const category =
+    params.get("category") ?? "All";
+
+  const sort =
+    params.get("sort") ?? "latest";
+
   const page = Number(
-  params.get("page") ?? "1"
-);
+    params.get("page") ?? "1",
+  );
 
-const pageSize =
-  Number(
-    params.get("pageSize")
-  ) || DEFAULT_PAGE_SIZE;
-  const view = params.get("view") ?? DEFAULT_VIEW_MODE;
-  const allTemplates = templateService.getAll();
-  
+  const pageSize =
+    Number(params.get("pageSize")) ||
+    DEFAULT_PAGE_SIZE;
 
-const filteredTemplates = filterTemplates(allTemplates, {
-  search,
-  category,
-});
+  const view =
+    params.get("view") ??
+    DEFAULT_VIEW_MODE;
 
-const sortedTemplates = sortTemplates(
-  filteredTemplates,
-  sort as any
-);
+  // =========================
+  // Templates from API
+  // =========================
 
-const templates = paginate(
-  sortedTemplates,
-  page,
-  pageSize
-);
+  const [allTemplates, setAllTemplates] =
+    useState<Template[]>([]);
 
-const totalTemplates = filteredTemplates.length;
+  const [isLoading, setIsLoading] =
+    useState(true);
 
-const totalPages = getTotalPages(
-  totalTemplates,
-  pageSize
-);
-const startIndex =
-  totalTemplates === 0
-    ? 0
-    : (page - 1) * pageSize + 1;
-const endIndex = Math.min(
-  page * pageSize,
-  totalTemplates
-);
+  const [error, setError] =
+    useState<string | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function loadTemplates() {
+      try {
+        setIsLoading(true);
+        setError(null);
+
+        const result =
+          await templateService.getAll();
+
+        if (!cancelled) {
+          setAllTemplates(result);
+        }
+      } catch (error) {
+        if (!cancelled) {
+          setError(
+            error instanceof Error
+              ? error.message
+              : "Không thể tải danh sách template.",
+          );
+
+          setAllTemplates([]);
+        }
+      } finally {
+        if (!cancelled) {
+          setIsLoading(false);
+        }
+      }
+    }
+
+    loadTemplates();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  // =========================
+  // Filter
+  // =========================
+
+  const filteredTemplates =
+    useMemo(() => {
+      return filterTemplates(
+        allTemplates,
+        {
+          search,
+          category,
+        },
+      );
+    }, [
+      allTemplates,
+      search,
+      category,
+    ]);
+
+  // =========================
+  // Sort
+  // =========================
+
+  const sortedTemplates =
+    useMemo(() => {
+      return sortTemplates(
+        filteredTemplates,
+        sort as SortOption,
+      );
+    }, [
+      filteredTemplates,
+      sort,
+    ]);
+
+  // =========================
+  // Pagination
+  // =========================
+
+  const templates = useMemo(() => {
+    return paginate(
+      sortedTemplates,
+      page,
+      pageSize,
+    );
+  }, [
+    sortedTemplates,
+    page,
+    pageSize,
+  ]);
+
+  const totalTemplates =
+    filteredTemplates.length;
+
+  const totalPages =
+    getTotalPages(
+      totalTemplates,
+      pageSize,
+    );
+
+  const startIndex =
+    totalTemplates === 0
+      ? 0
+      : (page - 1) * pageSize + 1;
+
+  const endIndex = Math.min(
+    page * pageSize,
+    totalTemplates,
+  );
+
+  // =========================
+  // Query update
+  // =========================
 
   function updateQuery(
     key: MarketplaceQueryKey,
-    value?: string | null
+    value?: string | null,
   ) {
-    const query = new URLSearchParams(params.toString());
+    const query =
+      new URLSearchParams(
+        params.toString(),
+      );
 
-    if (!value || value.trim() === "") {
+    if (
+      !value ||
+      value.trim() === ""
+    ) {
       query.delete(key);
     } else {
       query.set(key, value);
@@ -95,73 +215,149 @@ const endIndex = Math.min(
       query.set("page", "1");
     }
 
-    router.push(`/marketplace?${query.toString()}`);
+    router.push(
+      `/marketplace?${query.toString()}`,
+    );
   }
+
+  // =========================
+  // Search
+  // =========================
 
   function setSearch(value: string) {
-    updateQuery("search", value);
+    updateQuery(
+      "search",
+      value,
+    );
   }
+
+  // =========================
+  // Category
+  // =========================
 
   function setCategory(value: string) {
-    updateQuery("category", value);
+    updateQuery(
+      "category",
+      value,
+    );
   }
 
-  function setSort(value: SortOption) {
-  updateQuery("sort", value);
-}
+  // =========================
+  // Sort
+  // =========================
+
+  function setSort(
+    value: SortOption,
+  ) {
+    updateQuery(
+      "sort",
+      value,
+    );
+  }
+
+  // =========================
+  // Page
+  // =========================
 
   function setPage(value: number) {
-    updateQuery("page", value.toString());
+    updateQuery(
+      "page",
+      value.toString(),
+    );
   }
-function clearSearch() {
-  updateQuery("search", "");
-}
 
-function clearCategory() {
-  updateQuery("category", "All");
-}
+  // =========================
+  // Clear filters
+  // =========================
 
-function clearSort() {
-  updateQuery("sort", "latest");
-}
-function clearAllFilters() {
-  router.push("/marketplace");
-}
-function setPageSize(value: PageSize) {
-  updateQuery(
-    "pageSize",
-    value.toString()
-  );
-}
-function setView(value: ViewMode) {
-  updateQuery("view", value);
-}
+  function clearSearch() {
+    updateQuery(
+      "search",
+      "",
+    );
+  }
+
+  function clearCategory() {
+    updateQuery(
+      "category",
+      "All",
+    );
+  }
+
+  function clearSort() {
+    updateQuery(
+      "sort",
+      "latest",
+    );
+  }
+
+  function clearAllFilters() {
+    router.push(
+      "/marketplace",
+    );
+  }
+
+  // =========================
+  // Page size
+  // =========================
+
+  function setPageSize(
+    value: PageSize,
+  ) {
+    updateQuery(
+      "pageSize",
+      value.toString(),
+    );
+  }
+
+  // =========================
+  // View mode
+  // =========================
+
+  function setView(
+    value: ViewMode,
+  ) {
+    updateQuery(
+      "view",
+      value,
+    );
+  }
+
+  // =========================
+  // Return
+  // =========================
+
   return {
-  search,
-  category,
-  sort,
-  page,
+    search,
+    category,
+    sort,
+    page,
 
-  templates,
-  totalTemplates,
-  totalPages,
+    templates,
 
-  startIndex,
-  endIndex,
-  pageSize,
-  view,
+    totalTemplates,
+    totalPages,
 
-setPageSize,
+    startIndex,
+    endIndex,
 
-  setSearch,
-  setCategory,
-  setSort,
-  setPage,
-  setView,
+    pageSize,
+    view,
 
-  clearSearch,
-  clearCategory,
-  clearSort,
-  clearAllFilters,
-};
+    isLoading,
+    error,
+
+    setPageSize,
+
+    setSearch,
+    setCategory,
+    setSort,
+    setPage,
+    setView,
+
+    clearSearch,
+    clearCategory,
+    clearSort,
+    clearAllFilters,
+  };
 }

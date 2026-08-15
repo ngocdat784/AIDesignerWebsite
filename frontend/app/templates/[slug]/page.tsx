@@ -24,33 +24,64 @@ export default async function TemplateDetailPage({
 }: Props) {
   const { slug } = await params;
 
-  const template = templateService.getBySlug(slug);
+  // =========================
+  // Get template from API
+  // =========================
+
+  const template =
+    await templateService.getBySlug(slug);
+
+  // =========================
+  // Template not found
+  // =========================
 
   if (!template) {
     notFound();
   }
 
+  // =========================
+  // Render
+  // =========================
+
   return (
-   <main className="container py-10 space-y-10">
-  <Breadcrumb />
+    <main className="container space-y-10 py-10">
+      <Breadcrumb />
 
-  <TemplateGallery template={template} />
+      <TemplateGallery
+        template={template}
+      />
 
-  <TemplateHeader template={template} />
+      <TemplateHeader
+        template={template}
+      />
 
-  <TemplateStatistics template={template} />
+      <TemplateStatistics
+        template={template}
+      />
 
-  <TemplatePriceCard template={template} />
+      <TemplatePriceCard
+        template={template}
+      />
 
-  <TemplateActions template={template} />
+      <TemplateActions
+        template={template}
+      />
 
-  <TemplateDescription template={template} />
+      <TemplateDescription
+        template={template}
+      />
 
-  <TemplateTechStack template={template} />
+      <TemplateTechStack
+        template={template}
+      />
 
-  <TemplateIncludedFiles template={template} />
+      <TemplateIncludedFiles
+        template={template}
+      />
 
-  <RelatedTemplates template={template} />
-</main>
+      <RelatedTemplates
+        template={template}
+      />
+    </main>
   );
 }

@@ -1,3 +1,5 @@
+import type { Template } from "@/types/template/template";
+
 import WishlistButton from "./actions/WishlistButton";
 import ShareButton from "./actions/ShareButton";
 import CopyLinkButton from "./actions/CopyLinkButton";
@@ -5,7 +7,13 @@ import CompareButton from "./actions/CompareButton";
 import SaveLaterButton from "./actions/SaveLaterButton";
 import ReportButton from "./actions/ReportButton";
 
-export default function TemplateActions() {
+interface TemplateActionsProps {
+  template: Template;
+}
+
+export default function TemplateActions({
+  template,
+}: TemplateActionsProps) {
   return (
     <section className="space-y-4">
       <h2 className="text-xl font-semibold">

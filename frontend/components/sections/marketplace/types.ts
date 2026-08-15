@@ -10,8 +10,9 @@ export interface MarketplaceBadge {
 }
 
 export interface MarketplaceAuthor {
+  id?: string;
   name: string;
-  avatar: string;
+  avatar?: string | null;
   verified?: boolean;
 }
 
@@ -31,7 +32,7 @@ export interface MarketplaceTemplate {
 
   thumbnail: string;
 
-  images?: string[];
+  images: string[];
 
   category: string;
 
@@ -43,23 +44,27 @@ export interface MarketplaceTemplate {
 
   badge?: MarketplaceBadge;
 
-  rating: number;
+  rating?: number;
 
-  reviews: number;
+  reviews?: number;
 
-  downloads: number;
+  downloads?: number;
 
   price: number;
 
-  originalPrice?: number;
+  originalPrice?: number | null;
 
   featured?: boolean;
 
   newest?: boolean;
 
-  stock?: number;
+  stock?: number | null;
 
-  license?: string;
+  license?: string | null;
+
+  createdAt?: string;
+
+  updatedAt?: string;
 }
 
 export interface MarketplaceTab {
