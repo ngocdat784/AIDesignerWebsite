@@ -25,7 +25,16 @@ function mapApiTemplateToTemplate(
 
     thumbnail: item.thumbnail,
 
-    images: item.images ?? [],
+    coverImage:
+      item.coverImage ?? null,
+
+    images:
+      item.images ?? [],
+
+    gallery:
+      item.gallery ??
+      item.images ??
+      [],
 
     // =========================
     // Category / Tags
@@ -33,13 +42,18 @@ function mapApiTemplateToTemplate(
 
     category: item.category,
 
-    tags: item.tags ?? [],
+    tags:
+      item.tags ?? [],
+
+    relatedTemplateIds:
+      item.relatedTemplateIds ?? [],
 
     // =========================
     // Author
     // =========================
 
-    authorId: item.authorId,
+    authorId:
+      item.authorId,
 
     author: item.author
       ? {
@@ -49,44 +63,117 @@ function mapApiTemplateToTemplate(
 
           avatar:
             item.author.avatar ?? null,
+
+          verified:
+            item.author.verified ?? false,
         }
       : null,
+
+    // =========================
+    // Technology
+    // =========================
+
+    techStack:
+      item.techStack ?? [],
+
+    // =========================
+    // Detail information
+    // =========================
+
+    includedFiles:
+      item.includedFiles ?? [],
+
+    features:
+      item.features ?? [],
+
+    installationSteps:
+      item.installationSteps ?? [],
+
+    requirements:
+      item.requirements ?? [],
+
+    changelog:
+      item.changelog ?? [],
 
     // =========================
     // Statistics
     // =========================
 
-    rating: item.rating ?? 0,
+    rating:
+      item.rating ?? 0,
 
-    reviews: item.reviews ?? 0,
+    reviews:
+      item.reviews ?? 0,
+
+    reviewCount:
+      item.reviewCount ??
+      item.reviews ??
+      0,
 
     downloads:
       item.downloads ?? 0,
+
+    favorites:
+      item.favorites ?? 0,
+
+    views:
+      item.views ?? 0,
 
     // =========================
     // Pricing
     // =========================
 
-    price: item.price,
+    price:
+      item.price,
 
     originalPrice:
       item.originalPrice ?? null,
+
+    discountPrice:
+      item.discountPrice ??
+      item.originalPrice ??
+      null,
 
     // =========================
     // Status
     // =========================
 
     featured:
-      item.featured ?? false,
+      item.featured ??
+      item.isFeatured ??
+      false,
 
     newest:
-      item.newest ?? false,
+      item.newest ??
+      false,
+
+    isFeatured:
+      item.isFeatured ??
+      item.featured ??
+      false,
+
+    isPremium:
+      item.isPremium ??
+      false,
+
+    status:
+      item.status,
 
     stock:
       item.stock ?? null,
 
     license:
       item.license ?? null,
+
+    // =========================
+    // Demo / Version
+    // =========================
+
+    demoUrl:
+      item.demoUrl,
+
+    version:
+      item.version,
 
     // =========================
     // Timestamps

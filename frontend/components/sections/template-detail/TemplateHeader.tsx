@@ -9,9 +9,7 @@ export default function TemplateHeader({
 }: TemplateDetailProps) {
   return (
     <section className="space-y-6">
-
       <div className="space-y-3">
-
         <h1 className="text-4xl font-bold">
           {template.title}
         </h1>
@@ -19,16 +17,14 @@ export default function TemplateHeader({
         <p className="max-w-3xl text-lg text-muted-foreground">
           {template.description}
         </p>
-
       </div>
 
       <div className="flex flex-wrap gap-2">
-
         <Badge>
           {template.category}
         </Badge>
 
-        {template.techStack.map((item) => (
+        {(template.tags ?? []).map((item) => (
           <Badge
             key={item}
             variant="secondary"
@@ -36,26 +32,22 @@ export default function TemplateHeader({
             {item}
           </Badge>
         ))}
-
       </div>
 
       <div className="flex items-center gap-6">
-
         <Rating
-          value={template.rating}
-          reviewCount={template.reviewCount}
+          value={template.rating ?? 0}
+          reviewCount={template.reviews ?? 0}
         />
 
         <span className="text-muted-foreground">
-          by
-          {" "}
+          by{" "}
           <strong>
-            {template.author.name}
+            {template.author?.name ??
+              "Unknown Author"}
           </strong>
         </span>
-
       </div>
-
     </section>
   );
 }

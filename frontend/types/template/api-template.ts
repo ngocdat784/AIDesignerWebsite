@@ -4,6 +4,18 @@ export interface ApiTemplateAuthor {
   id: string;
   name: string;
   avatar?: string | null;
+  verified?: boolean;
+}
+
+export interface ApiTemplateIncludedFile {
+  name: string;
+  type: "file" | "folder";
+}
+
+export interface ApiTemplateChangelog {
+  version: string;
+  date: string;
+  changes: string[];
 }
 
 export interface ApiTemplate {
@@ -25,7 +37,11 @@ export interface ApiTemplate {
   // Images
   // =========================
 
+  coverImage?: string | null;
+
   images?: string[];
+
+  gallery?: string[];
 
   // =========================
   // Category / Tags
@@ -35,14 +51,35 @@ export interface ApiTemplate {
 
   tags?: string[];
 
+  relatedTemplateIds?: string[];
+
   // =========================
   // Author
   // =========================
 
   authorId: string;
 
-  // Backend có thể include author
   author?: ApiTemplateAuthor | null;
+
+  // =========================
+  // Technology
+  // =========================
+
+  techStack?: string[];
+
+  // =========================
+  // Detail information
+  // =========================
+
+  includedFiles?: ApiTemplateIncludedFile[];
+
+  features?: string[];
+
+  installationSteps?: string[];
+
+  requirements?: string[];
+
+  changelog?: ApiTemplateChangelog[];
 
   // =========================
   // Statistics
@@ -52,7 +89,13 @@ export interface ApiTemplate {
 
   reviews?: number;
 
+  reviewCount?: number;
+
   downloads?: number;
+
+  favorites?: number;
+
+  views?: number;
 
   // =========================
   // Pricing
@@ -62,6 +105,8 @@ export interface ApiTemplate {
 
   originalPrice?: number | null;
 
+  discountPrice?: number | null;
+
   // =========================
   // Status
   // =========================
@@ -70,9 +115,23 @@ export interface ApiTemplate {
 
   newest?: boolean;
 
+  isFeatured?: boolean;
+
+  isPremium?: boolean;
+
+  status?: string;
+
   stock?: number | null;
 
   license?: string | null;
+
+  // =========================
+  // Demo / Version
+  // =========================
+
+  demoUrl?: string;
+
+  version?: string;
 
   // =========================
   // Timestamps

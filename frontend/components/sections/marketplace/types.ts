@@ -32,7 +32,7 @@ export interface MarketplaceTemplate {
 
   thumbnail: string;
 
-  images: string[];
+  images?: string[];
 
   category: string;
 
@@ -44,27 +44,24 @@ export interface MarketplaceTemplate {
 
   badge?: MarketplaceBadge;
 
-  rating?: number;
+  rating: number;
 
-  reviews?: number;
+  reviews: number;
 
-  downloads?: number;
+  downloads: number;
 
   price: number;
+  discountPrice?: number;
 
-  originalPrice?: number | null;
+  originalPrice?: number;
 
   featured?: boolean;
 
   newest?: boolean;
 
-  stock?: number | null;
+  stock?: number;
 
-  license?: string | null;
-
-  createdAt?: string;
-
-  updatedAt?: string;
+  license?: string;
 }
 
 export interface MarketplaceTab {

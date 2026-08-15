@@ -3,7 +3,7 @@ export interface TemplateAuthor {
 
   name: string;
 
-  avatar: string;
+  avatar?: string | null;
 
   verified: boolean;
 

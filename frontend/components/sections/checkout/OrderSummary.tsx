@@ -150,11 +150,11 @@ export default function OrderSummary({
                     {/* Price */}
                     <div className="shrink-0 text-right">
                       <PriceTag
-                        price={template.price}
-                        discountPrice={
-                          template.originalPrice
-                        }
-                      />
+  price={template.price}
+  discountPrice={
+    template.originalPrice ?? undefined
+  }
+/>
                     </div>
                   </div>
 

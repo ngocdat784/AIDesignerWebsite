@@ -126,7 +126,7 @@ export default function TemplateCard({
 
             <PriceTag
               price={template.price}
-              discountPrice={template.originalPrice}
+              discountPrice={template.originalPrice ?? undefined}
             />
           </div>
 

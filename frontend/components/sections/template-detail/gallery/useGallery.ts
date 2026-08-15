@@ -10,21 +10,28 @@ import type { Template } from "@/types/template/template";
 
 export function useGallery(template: Template) {
   const images = useMemo(() => {
+    const galleryImages = template.images ?? [];
+
+    // Thumbnail được dùng làm ảnh chính,
+    // sau đó là các ảnh gallery từ backend.
     return [
-      template.coverImage,
-      ...template.gallery,
+      template.thumbnail,
+      ...galleryImages.filter(
+        (image) => image !== template.thumbnail,
+      ),
     ];
   }, [template]);
 
   const [current, setCurrent] = useState(0);
+
   const [lightboxOpen, setLightboxOpen] =
-  useState(false);
+    useState(false);
 
   function next() {
     setCurrent((value) =>
       value === images.length - 1
         ? 0
-        : value + 1
+        : value + 1,
     );
   }
 
@@ -32,56 +39,68 @@ export function useGallery(template: Template) {
     setCurrent((value) =>
       value === 0
         ? images.length - 1
-        : value - 1
+        : value - 1,
     );
   }
+
   function openLightbox() {
-  setLightboxOpen(true);
-}
-
-function closeLightbox() {
-  setLightboxOpen(false);
-}
-useEffect(() => {
-  function handleKeyDown(
-    event: KeyboardEvent
-  ) {
-    switch (event.key) {
-      case "ArrowRight":
-        next();
-        break;
-
-      case "ArrowLeft":
-        previous();
-        break;
-
-      case "Escape":
-        closeLightbox();
-        break;
-    }
+    setLightboxOpen(true);
   }
 
-  window.addEventListener(
-    "keydown",
-    handleKeyDown
-  );
+  function closeLightbox() {
+    setLightboxOpen(false);
+  }
 
-  return () =>
-    window.removeEventListener(
+  useEffect(() => {
+    function handleKeyDown(
+      event: KeyboardEvent,
+    ) {
+      switch (event.key) {
+        case "ArrowRight":
+          next();
+          break;
+
+        case "ArrowLeft":
+          previous();
+          break;
+
+        case "Escape":
+          closeLightbox();
+          break;
+      }
+    }
+
+    window.addEventListener(
       "keydown",
-      handleKeyDown
+      handleKeyDown,
     );
-}, [next, previous]);
+
+    return () =>
+      window.removeEventListener(
+        "keydown",
+        handleKeyDown,
+      );
+  });
 
   return {
     images,
+
     current,
-    currentImage: images[current],
+
+    currentImage:
+      images[current] ??
+      template.thumbnail,
+
     lightboxOpen,
+
     setCurrent,
+
     next,
+
     previous,
-openLightbox,
-closeLightbox,
+
+    openLightbox,
+
+    closeLightbox,
   };
 }

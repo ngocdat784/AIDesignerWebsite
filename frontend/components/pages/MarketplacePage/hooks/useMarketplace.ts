@@ -33,6 +33,10 @@ import {
 
 import type { Template } from "@/types/template/template";
 
+import type {
+  MarketplaceTemplate,
+} from "@/components/sections/marketplace/types";
+
 export type MarketplaceQueryKey =
   | "search"
   | "category"
@@ -41,46 +45,200 @@ export type MarketplaceQueryKey =
   | "view"
   | "pageSize";
 
+/**
+ * =========================================================
+ * Template → MarketplaceTemplate
+ * =========================================================
+ *
+ * Template:
+ *   Model dữ liệu chính của frontend.
+ *
+ * MarketplaceTemplate:
+ *   Model dành riêng cho UI Marketplace.
+ *
+ * Không dùng MarketplaceTemplate làm nguồn dữ liệu chính.
+ */
+function toMarketplaceTemplate(
+  template: Template,
+): MarketplaceTemplate {
+  return {
+    // =========================
+    // Basic information
+    // =========================
+
+    id: template.id,
+
+    slug: template.slug,
+
+    title: template.title,
+
+    description: template.description,
+
+    thumbnail: template.thumbnail,
+
+    images:
+      template.images ?? [],
+
+    // =========================
+    // Category / Tags
+    // =========================
+
+    category:
+      template.category,
+
+    tags:
+      template.tags ?? [],
+
+    // =========================
+    // Author
+    // =========================
+
+    authorId:
+      template.authorId,
+
+    author: {
+      name:
+        template.author?.name ??
+        "Unknown Author",
+
+      avatar:
+        template.author?.avatar ??
+        "/avatars/default.png",
+
+      verified:
+        false,
+    },
+
+    // =========================
+    // Statistics
+    // =========================
+
+    rating:
+      template.rating ?? 0,
+
+    reviews:
+      template.reviews ?? 0,
+
+    downloads:
+      template.downloads ?? 0,
+
+    // =========================
+    // Pricing
+    // =========================
+
+    price:
+      template.price,
+
+    /**
+     * discountPrice:
+     *
+     * Không lấy template.price.
+     *
+     * Nếu Template có discountPrice thì dùng nó.
+     * Nếu không có thì undefined.
+     *
+     * Dùng ?? để chuyển null → undefined.
+     */
+    discountPrice:
+      template.discountPrice ??
+      undefined,
+
+    /**
+     * originalPrice:
+     *
+     * Template có thể trả null.
+     * MarketplaceTemplate chỉ nhận number | undefined.
+     */
+    originalPrice:
+      template.originalPrice ??
+      undefined,
+
+    // =========================
+    // Status
+    // =========================
+
+    featured:
+      template.featured ??
+      false,
+
+    newest:
+      template.newest ??
+      false,
+
+    stock:
+      template.stock ??
+      undefined,
+
+    license:
+      template.license ??
+      undefined,
+  };
+}
+
 export function useMarketplace() {
-  const router = useRouter();
-  const params = useSearchParams();
+  const router =
+    useRouter();
 
-  // =========================
+  const params =
+    useSearchParams();
+
+  // ========================================================
   // Query params
-  // =========================
+  // ========================================================
 
-  const search = params.get("search") ?? "";
+  const search =
+    params.get("search") ?? "";
 
   const category =
-    params.get("category") ?? "All";
+    params.get("category") ??
+    "All";
 
   const sort =
-    params.get("sort") ?? "latest";
+    params.get("sort") ??
+    "latest";
 
-  const page = Number(
-    params.get("page") ?? "1",
+  const page = Math.max(
+    1,
+    Number(
+      params.get("page") ??
+      "1",
+    ),
   );
 
   const pageSize =
-    Number(params.get("pageSize")) ||
+    Number(
+      params.get("pageSize"),
+    ) ||
     DEFAULT_PAGE_SIZE;
 
   const view =
     params.get("view") ??
     DEFAULT_VIEW_MODE;
 
-  // =========================
+  // ========================================================
   // Templates from API
-  // =========================
+  // ========================================================
 
-  const [allTemplates, setAllTemplates] =
-    useState<Template[]>([]);
+  const [
+    allTemplates,
+    setAllTemplates,
+  ] = useState<Template[]>([]);
 
-  const [isLoading, setIsLoading] =
-    useState(true);
+  const [
+    isLoading,
+    setIsLoading,
+  ] = useState(true);
 
-  const [error, setError] =
-    useState<string | null>(null);
+  const [
+    error,
+    setError,
+  ] = useState<string | null>(
+    null,
+  );
+
+  // ========================================================
+  // Load templates
+  // ========================================================
 
   useEffect(() => {
     let cancelled = false;
@@ -88,24 +246,31 @@ export function useMarketplace() {
     async function loadTemplates() {
       try {
         setIsLoading(true);
+
         setError(null);
 
         const result =
           await templateService.getAll();
 
-        if (!cancelled) {
-          setAllTemplates(result);
+        if (cancelled) {
+          return;
         }
-      } catch (error) {
-        if (!cancelled) {
-          setError(
-            error instanceof Error
-              ? error.message
-              : "Không thể tải danh sách template.",
-          );
 
-          setAllTemplates([]);
+        setAllTemplates(
+          result,
+        );
+      } catch (error) {
+        if (cancelled) {
+          return;
         }
+
+        setError(
+          error instanceof Error
+            ? error.message
+            : "Không thể tải danh sách template.",
+        );
+
+        setAllTemplates([]);
       } finally {
         if (!cancelled) {
           setIsLoading(false);
@@ -120,9 +285,18 @@ export function useMarketplace() {
     };
   }, []);
 
-  // =========================
+  // ========================================================
   // Filter
-  // =========================
+  // ========================================================
+  //
+  // Template[]
+  //      ↓
+  // filterTemplates
+  //      ↓
+  // Template[]
+  //
+  // Không mapping sang MarketplaceTemplate ở đây.
+  // ========================================================
 
   const filteredTemplates =
     useMemo(() => {
@@ -139,9 +313,16 @@ export function useMarketplace() {
       category,
     ]);
 
-  // =========================
+  // ========================================================
   // Sort
-  // =========================
+  // ========================================================
+  //
+  // Template[]
+  //      ↓
+  // sortTemplates
+  //      ↓
+  // Template[]
+  // ========================================================
 
   const sortedTemplates =
     useMemo(() => {
@@ -154,21 +335,60 @@ export function useMarketplace() {
       sort,
     ]);
 
-  // =========================
+  // ========================================================
   // Pagination
-  // =========================
+  // ========================================================
+  //
+  // Template[]
+  //      ↓
+  // paginate
+  //      ↓
+  // Template[]
+  // ========================================================
 
-  const templates = useMemo(() => {
-    return paginate(
+  const paginatedTemplates =
+    useMemo(() => {
+      return paginate(
+        sortedTemplates,
+        page,
+        pageSize,
+      );
+    }, [
       sortedTemplates,
       page,
       pageSize,
-    );
-  }, [
-    sortedTemplates,
-    page,
-    pageSize,
-  ]);
+    ]);
+
+  // ========================================================
+  // Mapping
+  // ========================================================
+  //
+  // Chỉ mapping ở cuối pipeline.
+  //
+  // Template[]
+  //      ↓
+  // MarketplaceTemplate[]
+  //
+  // Điều này giúp:
+  //
+  // - filterTemplates vẫn dùng Template[]
+  // - sortTemplates vẫn dùng Template[]
+  // - paginate vẫn dùng Template[]
+  // - Marketplace UI nhận MarketplaceTemplate[]
+  // ========================================================
+
+  const templates =
+    useMemo(() => {
+      return paginatedTemplates.map(
+        toMarketplaceTemplate,
+      );
+    }, [
+      paginatedTemplates,
+    ]);
+
+  // ========================================================
+  // Statistics
+  // ========================================================
 
   const totalTemplates =
     filteredTemplates.length;
@@ -182,16 +402,19 @@ export function useMarketplace() {
   const startIndex =
     totalTemplates === 0
       ? 0
-      : (page - 1) * pageSize + 1;
+      : (page - 1) *
+          pageSize +
+        1;
 
-  const endIndex = Math.min(
-    page * pageSize,
-    totalTemplates,
-  );
+  const endIndex =
+    Math.min(
+      page * pageSize,
+      totalTemplates,
+    );
 
-  // =========================
+  // ========================================================
   // Query update
-  // =========================
+  // ========================================================
 
   function updateQuery(
     key: MarketplaceQueryKey,
@@ -208,43 +431,62 @@ export function useMarketplace() {
     ) {
       query.delete(key);
     } else {
-      query.set(key, value);
+      query.set(
+        key,
+        value,
+      );
     }
 
+    /**
+     * Khi thay đổi filter/sort/search/pageSize/view,
+     * quay lại page 1.
+     */
     if (key !== "page") {
-      query.set("page", "1");
+      query.set(
+        "page",
+        "1",
+      );
     }
+
+    const queryString =
+      query.toString();
 
     router.push(
-      `/marketplace?${query.toString()}`,
+      queryString
+        ? `/marketplace?${queryString}`
+        : "/marketplace",
     );
   }
 
-  // =========================
+  // ========================================================
   // Search
-  // =========================
+  // ========================================================
 
-  function setSearch(value: string) {
+  function setSearch(
+    value: string,
+  ) {
     updateQuery(
       "search",
       value,
     );
   }
 
-  // =========================
+  // ========================================================
   // Category
-  // =========================
+  // ========================================================
 
-  function setCategory(value: string) {
+  function setCategory(
+    value: string,
+  ) {
     updateQuery(
       "category",
       value,
     );
   }
 
-  // =========================
+  // ========================================================
   // Sort
-  // =========================
+  // ========================================================
 
   function setSort(
     value: SortOption,
@@ -255,20 +497,22 @@ export function useMarketplace() {
     );
   }
 
-  // =========================
+  // ========================================================
   // Page
-  // =========================
+  // ========================================================
 
-  function setPage(value: number) {
+  function setPage(
+    value: number,
+  ) {
     updateQuery(
       "page",
       value.toString(),
     );
   }
 
-  // =========================
+  // ========================================================
   // Clear filters
-  // =========================
+  // ========================================================
 
   function clearSearch() {
     updateQuery(
@@ -297,9 +541,9 @@ export function useMarketplace() {
     );
   }
 
-  // =========================
+  // ========================================================
   // Page size
-  // =========================
+  // ========================================================
 
   function setPageSize(
     value: PageSize,
@@ -310,9 +554,9 @@ export function useMarketplace() {
     );
   }
 
-  // =========================
+  // ========================================================
   // View mode
-  // =========================
+  // ========================================================
 
   function setView(
     value: ViewMode,
@@ -323,41 +567,80 @@ export function useMarketplace() {
     );
   }
 
-  // =========================
+  // ========================================================
   // Return
-  // =========================
+  // ========================================================
 
   return {
+    // =========================
+    // Query state
+    // =========================
+
     search,
+
     category,
+
     sort,
+
     page,
 
+    pageSize,
+
+    view,
+
+    // =========================
+    // Templates
+    // =========================
+
+    /**
+     * Đây là MarketplaceTemplate[].
+     *
+     * Component Marketplace có thể nhận trực tiếp.
+     */
     templates,
 
+    /**
+     * Số lượng Template sau filter,
+     * trước pagination.
+     */
     totalTemplates,
+
     totalPages,
 
     startIndex,
+
     endIndex,
 
-    pageSize,
-    view,
+    // =========================
+    // Loading / Error
+    // =========================
 
     isLoading,
+
     error,
+
+    // =========================
+    // Actions
+    // =========================
+
+    setSearch,
+
+    setCategory,
+
+    setSort,
+
+    setPage,
 
     setPageSize,
 
-    setSearch,
-    setCategory,
-    setSort,
-    setPage,
     setView,
 
     clearSearch,
+
     clearCategory,
+
     clearSort,
+
     clearAllFilters,
   };
 }
