@@ -1,15 +1,12 @@
-export type TemplateLicense =
-  | "Personal"
-  | "Commercial"
-  | string;
+// frontend/types/template/api-template.ts
 
-export interface TemplateAuthor {
+export interface ApiTemplateAuthor {
   id: string;
   name: string;
   avatar?: string | null;
 }
 
-export interface Template {
+export interface ApiTemplate {
   // =========================
   // Basic information
   // =========================
@@ -24,8 +21,11 @@ export interface Template {
 
   thumbnail: string;
 
-  // Backend dùng images
-  images: string[];
+  // =========================
+  // Images
+  // =========================
+
+  images?: string[];
 
   // =========================
   // Category / Tags
@@ -33,7 +33,7 @@ export interface Template {
 
   category: string;
 
-  tags: string[];
+  tags?: string[];
 
   // =========================
   // Author
@@ -42,8 +42,7 @@ export interface Template {
   authorId: string;
 
   // Backend có thể include author
-  // khi trả về relation.
-  author?: TemplateAuthor | null;
+  author?: ApiTemplateAuthor | null;
 
   // =========================
   // Statistics
@@ -73,7 +72,7 @@ export interface Template {
 
   stock?: number | null;
 
-  license?: TemplateLicense | null;
+  license?: string | null;
 
   // =========================
   // Timestamps
