@@ -1,158 +1,168 @@
 import { Template } from "@/types/template/template";
 
 export const templates: Template[] = [
-  {
-    id: "1",
+ {
+  id: "1",
 
-    slug: "modern-saas",
+  slug: "modern-saas",
 
-    title: "Modern SaaS",
+  title: "Modern SaaS",
 
-    description:
-      "Professional SaaS Landing Page built with Next.js and Tailwind CSS. Suitable for startups, AI products and software companies.",
+  description:
+    "Professional SaaS Landing Page built with Next.js and Tailwind CSS. Suitable for startups, AI products and software companies.",
 
-    thumbnail:
-      "/templates/modern-saas/thumb.jpg",
+  thumbnail:
+    "/templates/modern-saas/thumb.jpg",
 
-    coverImage:
-      "/templates/modern-saas/cover.jpg",
+  coverImage:
+    "/templates/modern-saas/cover.jpg",
 
-    gallery: [
-      "/templates/modern-saas/1.jpg",
-      "/templates/modern-saas/2.jpg",
-      "/templates/modern-saas/3.jpg",
-      "/templates/modern-saas/4.jpg",
-    ],
+  images: [
+    "/templates/modern-saas/1.jpg",
+    "/templates/modern-saas/2.jpg",
+    "/templates/modern-saas/3.jpg",
+    "/templates/modern-saas/4.jpg",
+  ],
 
-    category: "Landing Page",
+  gallery: [
+    "/templates/modern-saas/1.jpg",
+    "/templates/modern-saas/2.jpg",
+    "/templates/modern-saas/3.jpg",
+    "/templates/modern-saas/4.jpg",
+  ],
 
-    tags: [
-      "AI",
-      "SaaS",
-      "Startup",
-      "Next.js",
-      "React",
-      "Tailwind CSS",
-    ],
-    relatedTemplateIds: [
-  "2",
-  "3",
-],
+  category: "Landing Page",
 
-status: "published",
+  tags: [
+    "AI",
+    "SaaS",
+    "Startup",
+    "Next.js",
+    "React",
+    "Tailwind CSS",
+  ],
 
-    price: 39,
+  relatedTemplateIds: [
+    "2",
+    "3",
+  ],
 
-    discountPrice: 29,
+  status: "published",
 
-    rating: 4.9,
+  authorId: "u1",
 
-    reviewCount: 218,
-
-    downloads: 1542,
-
-    favorites: 536,
-
-    views: 18452,
-
-    author: {
-      id: "u1",
-      name: "AI Studio",
-      avatar: "/avatars/default.png",
-    },
-
-    techStack: [
-      "Next.js",
-      "React",
-      "Tailwind CSS",
-      "TypeScript",
-    ],
-
-    includedFiles: [
-      {
-        name: "Source Code",
-        type: "folder",
-      },
-      {
-        name: "Components",
-        type: "folder",
-      },
-      {
-        name: "Assets",
-        type: "folder",
-      },
-      {
-        name: "Figma Design",
-        type: "folder",
-      },
-      {
-        name: "Documentation.pdf",
-        type: "file",
-      },
-      {
-        name: "License.txt",
-        type: "file",
-      },
-    ],
-
-    features: [
-      "Responsive Design",
-      "Dark Mode",
-      "SEO Optimized",
-      "Authentication Pages",
-      "Dashboard UI",
-      "Reusable Components",
-    ],
-
-    installationSteps: [
-      "Download the template.",
-      "Run npm install.",
-      "Configure environment variables.",
-      "Run npm run dev.",
-    ],
-
-    requirements: [
-      "Node.js 20+",
-      "Next.js 15",
-      "React 19",
-      "Tailwind CSS 4",
-    ],
-
-    changelog: [
-      {
-        version: "2.4.1",
-        date: "2026-07-20",
-        changes: [
-          "Improved dashboard UI",
-          "Added AI Builder page",
-          "Performance optimization",
-        ],
-      },
-      {
-        version: "2.4.0",
-        date: "2026-06-12",
-        changes: [
-          "New pricing section",
-          "Updated Hero",
-        ],
-      },
-    ],
-
-    demoUrl:
-      "https://modern-saas.vercel.app",
-
-    license: "Commercial",
-
-    version: "2.4.1",
-
-    isFeatured: true,
-
-    isPremium: true,
-
-    createdAt: "2026-01-01",
-
-    updatedAt: "2026-07-20",
+  author: {
+    id: "u1",
+    name: "AI Studio",
+    avatar: "/avatars/default.png",
   },
+
+  price: 39,
+
+  discountPrice: 29,
+
+  rating: 4.9,
+
+  reviewCount: 218,
+
+  downloads: 1542,
+
+  favorites: 536,
+
+  views: 18452,
+
+  techStack: [
+    "Next.js",
+    "React",
+    "Tailwind CSS",
+    "TypeScript",
+  ],
+
+  includedFiles: [
+    {
+      name: "Source Code",
+      type: "folder",
+    },
+    {
+      name: "Components",
+      type: "folder",
+    },
+    {
+      name: "Assets",
+      type: "folder",
+    },
+    {
+      name: "Figma Design",
+      type: "folder",
+    },
+    {
+      name: "Documentation.pdf",
+      type: "file",
+    },
+    {
+      name: "License.txt",
+      type: "file",
+    },
+  ],
+
+  features: [
+    "Responsive Design",
+    "Dark Mode",
+    "SEO Optimized",
+    "Authentication Pages",
+    "Dashboard UI",
+    "Reusable Components",
+  ],
+
+  installationSteps: [
+    "Download the template.",
+    "Run npm install.",
+    "Configure environment variables.",
+    "Run npm run dev.",
+  ],
+
+  requirements: [
+    "Node.js 20+",
+    "Next.js 15",
+    "React 19",
+    "Tailwind CSS 4",
+  ],
+
+  changelog: [
+    {
+      version: "2.4.1",
+      date: "2026-07-20",
+      changes: [
+        "Improved dashboard UI",
+        "Added AI Builder page",
+        "Performance optimization",
+      ],
+    },
+    {
+      version: "2.4.0",
+      date: "2026-06-12",
+      changes: [
+        "New pricing section",
+        "Updated Hero",
+      ],
+    },
+  ],
+
+  demoUrl:
+    "https://modern-saas.vercel.app",
+
+  license: "Commercial",
+
+  version: "2.4.1",
+
+  isFeatured: true,
+
+  isPremium: true,
+
+  createdAt: "2026-01-01",
+
+  updatedAt: "2026-07-20",
+},
 
   {
     id: "2",
@@ -169,6 +179,11 @@ status: "published",
 
     coverImage:
       "/templates/creative-portfolio/cover.jpg",
+      images: [
+  "/templates/creative-portfolio/1.jpg",
+  "/templates/creative-portfolio/2.jpg",
+  "/templates/creative-portfolio/3.jpg",
+],
 
     gallery: [
       "/templates/creative-portfolio/1.jpg",
@@ -190,6 +205,7 @@ status: "published",
 
 status: "published",
 
+
     price: 29,
 
     rating: 4.8,
@@ -201,6 +217,7 @@ status: "published",
     favorites: 342,
 
     views: 11356,
+    authorId: "u2",
 
     author: {
       id: "u2",
@@ -290,6 +307,12 @@ status: "published",
 
     coverImage:
       "/templates/ecommerce-pro/cover.jpg",
+      images: [
+  "/templates/ecommerce-pro/1.jpg",
+  "/templates/ecommerce-pro/2.jpg",
+  "/templates/ecommerce-pro/3.jpg",
+  "/templates/ecommerce-pro/4.jpg",
+],
 
     gallery: [
       "/templates/ecommerce-pro/1.jpg",
@@ -325,6 +348,8 @@ status: "published",
     favorites: 1150,
 
     views: 35892,
+
+    authorId: "u3",
 
     author: {
       id: "u3",

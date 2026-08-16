@@ -1,7 +1,5 @@
 import {
   Download,
-  Eye,
-  Heart,
   Star,
   Calendar,
   BadgeInfo,
@@ -18,47 +16,43 @@ export default function TemplateStatistics({
 }: TemplateDetailProps) {
   return (
     <section>
-
       <div className="grid gap-5 md:grid-cols-3">
 
         <StatItem
-          icon={<Star className="fill-yellow-400 text-yellow-400" />}
-          value={`${template.rating} (${template.reviewCount})`}
+          icon={
+            <Star className="fill-yellow-400 text-yellow-400" />
+          }
+          value={`${template.rating ?? 0} (${template.reviews ?? 0})`}
           label="Reviews"
         />
 
         <StatItem
           icon={<Download />}
-          value={formatCompactNumber(template.downloads)}
+          value={formatCompactNumber(
+            template.downloads ?? 0,
+          )}
           label="Downloads"
         />
 
         <StatItem
-          icon={<Eye />}
-          value={formatCompactNumber(template.views)}
-          label="Views"
-        />
-
-        <StatItem
-          icon={<Heart />}
-          value={formatCompactNumber(template.favorites)}
-          label="Favorites"
-        />
-
-        <StatItem
           icon={<Calendar />}
-          value={template.updatedAt}
+          value={
+            template.updatedAt ??
+            "Unknown"
+          }
           label="Updated"
         />
 
         <StatItem
           icon={<BadgeInfo />}
-          value={template.version}
-          label="Version"
+          value={
+            template.license ??
+            "Standard"
+          }
+          label="License"
         />
 
       </div>
-
     </section>
   );
 }

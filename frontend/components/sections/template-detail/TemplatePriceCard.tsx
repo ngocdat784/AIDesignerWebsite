@@ -17,6 +17,96 @@ import { useCart } from "@/hooks/useCart";
 
 import type { TemplateDetailProps } from "./types";
 
+import type { Template } from "@/types/template/template";
+
+import type {
+  MarketplaceTemplate,
+} from "@/components/sections/marketplace/types";
+
+// =========================================================
+// Template -> MarketplaceTemplate
+// =========================================================
+
+function toMarketplaceTemplate(
+  template: Template,
+): MarketplaceTemplate {
+  return {
+    id: template.id,
+
+    slug: template.slug,
+
+    title: template.title,
+
+    description: template.description,
+
+    thumbnail: template.thumbnail,
+
+    images: template.images ?? [],
+
+    category: template.category,
+
+    tags: template.tags ?? [],
+
+    authorId: template.authorId,
+
+    author: {
+      name:
+        template.author?.name ??
+        "Unknown Author",
+
+      avatar:
+        template.author?.avatar ??
+        "/avatars/default.png",
+
+      verified: false,
+    },
+
+    rating:
+      template.rating ?? 0,
+
+    reviews:
+      template.reviews ?? 0,
+
+    downloads:
+      template.downloads ?? 0,
+
+    price:
+      template.price,
+
+    /*
+     * MarketplaceTemplate yêu cầu discountPrice.
+     *
+     * Nếu Template chưa có discountPrice,
+     * dùng originalPrice làm giá giảm nếu có.
+     */
+    discountPrice:
+      template.originalPrice ??
+      undefined,
+
+    originalPrice:
+      template.originalPrice ??
+      undefined,
+
+    featured:
+      template.featured ?? false,
+
+    newest:
+      template.newest ?? false,
+
+    stock:
+      template.stock ??
+      undefined,
+
+    license:
+      template.license ??
+      undefined,
+  };
+}
+
+// =========================================================
+// Component
+// =========================================================
+
 export default function TemplatePriceCard({
   template,
 }: TemplateDetailProps) {
@@ -27,7 +117,18 @@ export default function TemplatePriceCard({
     subtotal,
   } = useCart();
 
-  const added = isInCart(template.id);
+  const added =
+    isInCart(template.id);
+
+  // =======================================================
+  // Map Template -> MarketplaceTemplate
+  // để tương thích với useCart().add()
+  // =======================================================
+
+  const marketplaceTemplate =
+    toMarketplaceTemplate(
+      template,
+    );
 
   return (
     <aside
@@ -53,8 +154,7 @@ export default function TemplatePriceCard({
         <PriceTag
           price={template.price}
           discountPrice={
-            template.discountPrice ??
-            undefined
+            marketplaceTemplate.discountPrice
           }
         />
 
@@ -63,13 +163,20 @@ export default function TemplatePriceCard({
         ========================= */}
 
         <div className="space-y-3 text-sm text-muted-foreground">
-          <div>Lifetime Updates</div>
-
-          <div>Premium Support</div>
 
           <div>
-            {template.license ?? "Standard License"}
+            Lifetime Updates
           </div>
+
+          <div>
+            Premium Support
+          </div>
+
+          <div>
+            {template.license ??
+              "Standard License"}
+          </div>
+
         </div>
 
         {/* =========================
@@ -91,6 +198,7 @@ export default function TemplatePriceCard({
             "
           >
             <CreditCard className="mr-2 h-4 w-4" />
+
             Buy Now
           </AppButton>
 
@@ -141,27 +249,37 @@ export default function TemplatePriceCard({
                 "
               >
                 <div className="flex items-center gap-2 text-green-600">
+
                   <Check className="h-4 w-4" />
 
                   <span className="font-medium">
                     Added to your cart
                   </span>
+
                 </div>
 
                 <div className="flex justify-between text-sm text-muted-foreground">
-                  <span>Items</span>
+
+                  <span>
+                    Items
+                  </span>
 
                   <span>
                     {itemCount}
                   </span>
+
                 </div>
 
                 <div className="flex justify-between font-semibold">
-                  <span>Subtotal</span>
+
+                  <span>
+                    Subtotal
+                  </span>
 
                   <span>
                     ${subtotal}
                   </span>
+
                 </div>
 
                 <div className="grid grid-cols-2 gap-3 pt-2">
@@ -196,6 +314,7 @@ export default function TemplatePriceCard({
                 >
                   Continue Shopping
                 </Link>
+
               </div>
             </>
           ) : (
@@ -211,7 +330,11 @@ export default function TemplatePriceCard({
                 hover:text-primary
                 active:scale-[0.98]
               "
-              onClick={() => add(template)}
+              onClick={() =>
+                add(
+                  marketplaceTemplate,
+                )
+              }
             >
               <ShoppingCart
                 className="
@@ -248,6 +371,7 @@ export default function TemplatePriceCard({
                 "
               >
                 <ExternalLink className="mr-2 h-4 w-4" />
+
                 Live Demo
               </AppButton>
             </a>
