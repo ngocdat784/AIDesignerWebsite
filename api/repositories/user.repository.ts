@@ -118,7 +118,6 @@ export class UserRepository implements UserRepositoryInterface {
       name?: string;
       avatar?: string | null;
       email?: string;
-      passwordHash?: string;
       role?: "USER" | "CREATOR" | "ADMIN";
     },
   ) {

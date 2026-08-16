@@ -1,88 +1,157 @@
+import type { Template } from "../../generated/prisma/client";
+
+// =========================
+// Create Template
+// =========================
+
+export interface CreateTemplateData {
+  id: string;
+  slug: string;
+
+  title: string;
+  description: string;
+
+  thumbnail: string;
+
+  coverImage?: string | null;
+  images?: string[];
+  gallery?: string[];
+
+  category: string;
+  tags?: string[];
+
+  relatedTemplateIds?: string[];
+
+  authorId: string;
+
+  techStack?: string[];
+
+  includedFiles?: unknown;
+  features?: string[];
+  installationSteps?: string[];
+  requirements?: string[];
+  changelog?: unknown;
+
+  rating?: number;
+  reviews?: number;
+  downloads?: number;
+  favorites?: number;
+  views?: number;
+
+  price: number;
+  originalPrice?: number | null;
+  discountPrice?: number | null;
+
+  featured?: boolean;
+  newest?: boolean;
+  isFeatured?: boolean;
+  isPremium?: boolean;
+
+  status?: string;
+
+  stock?: number | null;
+  license?: string | null;
+
+  demoUrl?: string;
+  version?: string;
+  createdAt?: Date | string;
+  updatedAt?: Date | string;
+}
+
+// =========================
+// Update Template
+// =========================
+
+export interface UpdateTemplateData {
+  title?: string;
+  description?: string;
+
+  thumbnail?: string;
+
+  coverImage?: string | null;
+  images?: string[];
+  gallery?: string[];
+
+  category?: string;
+  tags?: string[];
+
+  relatedTemplateIds?: string[];
+
+  techStack?: string[];
+
+  includedFiles?: unknown;
+  features?: string[];
+  installationSteps?: string[];
+  requirements?: string[];
+  changelog?: unknown;
+
+  rating?: number;
+  reviews?: number;
+  downloads?: number;
+  favorites?: number;
+  views?: number;
+
+  price?: number;
+  originalPrice?: number | null;
+  discountPrice?: number | null;
+
+  featured?: boolean;
+  newest?: boolean;
+  isFeatured?: boolean;
+  isPremium?: boolean;
+
+  status?: string;
+
+  stock?: number | null;
+  license?: string | null;
+
+  demoUrl?: string;
+  version?: string;
+  createdAt?: Date | string;
+  updatedAt?: Date | string;
+}
+
+// =========================
+// Template Repository Interface
+// =========================
+
 export interface TemplateRepositoryInterface {
   // =========================
   // Query
   // =========================
 
-  getAll(): Promise<any[]>;
+  getAll(): Promise<Template[]>;
 
   getById(
     id: string,
-  ): Promise<any | null>;
+  ): Promise<Template | null>;
 
   getBySlug(
     slug: string,
-  ): Promise<any | null>;
+  ): Promise<Template | null>;
 
   getByAuthorId(
     authorId: string,
-  ): Promise<any[]>;
+  ): Promise<Template[]>;
 
   getByCategory(
     category: string,
-  ): Promise<any[]>;
+  ): Promise<Template[]>;
 
   // =========================
   // Commands
   // =========================
 
   create(
-    data: {
-      id: string;
-      slug: string;
-      title: string;
-      description: string;
-      thumbnail: string;
-      images?: string[];
-      category: string;
-      tags?: string[];
-
-      authorId: string;
-
-      rating?: number;
-      reviews?: number;
-      downloads?: number;
-
-      price: number;
-      originalPrice?: number;
-
-      featured?: boolean;
-      newest?: boolean;
-
-      stock?: number;
-      license?: string;
-    },
-  ): Promise<any>;
+    data: CreateTemplateData,
+  ): Promise<Template>;
 
   update(
     id: string,
-    data: {
-      title?: string;
-      description?: string;
-      thumbnail?: string;
-      images?: string[];
-      category?: string;
-      tags?: string[];
-
-      rating?: number;
-      reviews?: number;
-      downloads?: number;
-
-      price?: number;
-      originalPrice?: number | null;
-
-      featured?: boolean;
-      newest?: boolean;
-
-      stock?: number | null;
-      license?: string | null;
-    },
-  ): Promise<any>;
-
-  // =========================
-  // Delete
-  // =========================
+    data: UpdateTemplateData,
+  ): Promise<Template>;
 
   delete(
     id: string,
-  ): Promise<any>;
+  ): Promise<Template>;
 }

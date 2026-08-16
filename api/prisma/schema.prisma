@@ -7,7 +7,6 @@ generator client {
   output   = "../generated/prisma"
 }
 
-
 // =========================
 // Database
 // =========================
@@ -15,7 +14,6 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
-
 
 // =========================
 // Enums
@@ -42,6 +40,9 @@ enum OrderPaymentMethod {
   bank
 }
 
+// =========================
+// User
+// =========================
 
 model User {
   id           String   @id
@@ -58,47 +59,144 @@ model User {
   updatedAt DateTime @updatedAt
 }
 
-
 // =========================
 // Template
 // =========================
 
 model Template {
-  id            String   @id
-  slug          String   @unique
+  // =========================
+  // Basic information
+  // =========================
 
-  title         String
-  description   String
+  id   String @id
+  slug String @unique
 
-  thumbnail     String
-  images        String[]
+  title       String
+  description String
 
-  category      String
-  tags          String[]
+  thumbnail String
+
+  // =========================
+  // Images
+  // =========================
+
+  coverImage String?
+
+  images String[]
+
+  gallery String[]
+
+  // =========================
+  // Category / Tags
+  // =========================
+
+  category String
+
+  tags String[]
+
+  // =========================
+  // Related templates
+  // =========================
+
+  relatedTemplateIds String[]
+
+  // =========================
+  // Author
+  // =========================
 
   authorId String
-  author   User @relation(fields: [authorId], references: [id], onDelete: Cascade)
 
-  rating        Float    @default(0)
-  reviews       Int      @default(0)
-  downloads     Int      @default(0)
+  author User @relation(fields: [authorId], references: [id], onDelete: Cascade)
 
-  price         Float
+  // =========================
+  // Technology
+  // =========================
+
+  techStack String[]
+
+  // =========================
+  // Detail information
+  // =========================
+
+  includedFiles Json?
+
+  features String[]
+
+  installationSteps String[]
+
+  requirements String[]
+
+  changelog Json?
+
+  // =========================
+  // Statistics
+  // =========================
+
+  rating Float @default(0)
+
+  reviews Int @default(0)
+
+  downloads Int @default(0)
+
+  favorites Int @default(0)
+
+  views Int @default(0)
+
+  // =========================
+  // Pricing
+  // =========================
+
+  price Float
+
   originalPrice Float?
 
-  featured Boolean @default(false)
-  newest   Boolean @default(false)
+  discountPrice Float?
 
-  stock   Int?
+  // =========================
+  // Status
+  // =========================
+
+  featured Boolean @default(false)
+
+  newest Boolean @default(false)
+
+  isFeatured Boolean @default(false)
+
+  isPremium Boolean @default(false)
+
+  status String @default("published")
+
+  stock Int?
+
   license String?
 
+  // =========================
+  // Demo / Version
+  // =========================
+
+  demoUrl String?
+
+  version String?
+
+  // =========================
+  // Timestamps
+  // =========================
+
   createdAt DateTime @default(now())
+
   updatedAt DateTime @updatedAt
+
+  // =========================
+  // Indexes
+  // =========================
 
   @@index([authorId])
   @@index([category])
+  @@index([status])
+  @@index([featured])
+  @@index([newest])
+  @@index([createdAt])
 }
-
 
 // =========================
 // Order
@@ -108,19 +206,25 @@ model Order {
   id String @id
 
   userId String
-  user   User @relation(fields: [userId], references: [id], onDelete: Restrict)
 
-  status        OrderStatus        @default(PENDING)
+  user User @relation(fields: [userId], references: [id], onDelete: Restrict)
+
+  status OrderStatus @default(PENDING)
+
   paymentMethod OrderPaymentMethod
 
   subtotal Float
+
   discount Float
-  total    Float
+
+  total Float
 
   billing OrderBilling?
-  items   OrderItem[]
+
+  items OrderItem[]
 
   createdAt DateTime @default(now())
+
   updatedAt DateTime @updatedAt
 
   @@index([userId])
@@ -136,19 +240,25 @@ model OrderBilling {
   id String @id @default(cuid())
 
   orderId String @unique
-  order   Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
 
   firstName String
-  lastName  String
-  email     String
-  phone     String
 
-  address    String
-  city       String
-  country    String
+  lastName String
+
+  email String
+
+  phone String
+
+  address String
+
+  city String
+
+  country String
+
   postalCode String
 }
-
 
 // =========================
 // Order Item
@@ -158,15 +268,22 @@ model OrderItem {
   id String @id
 
   orderId String
-  order   Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
 
+  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  // =========================
   // Product snapshot
-  productId   String
+  // =========================
+
+  productId String
+
   productName String
 
   unitPrice Float
-  quantity  Int
-  subtotal  Float
+
+  quantity Int
+
+  subtotal Float
 
   createdAt DateTime @default(now())
 

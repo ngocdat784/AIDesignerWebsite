@@ -4,6 +4,7 @@ import {
   IsNotEmpty,
   IsOptional,
   IsString,
+  MinLength,
 } from "class-validator";
 
 export enum UserRole {
@@ -30,7 +31,8 @@ export class CreateUserDto {
 
   @IsString()
   @IsNotEmpty()
-  passwordHash!: string;
+  @MinLength(6)
+  password!: string;
 
   @IsOptional()
   @IsEnum(UserRole)

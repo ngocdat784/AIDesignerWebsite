@@ -30,8 +30,11 @@ export type TemplateAvgAggregateOutputType = {
   rating: number | null
   reviews: number | null
   downloads: number | null
+  favorites: number | null
+  views: number | null
   price: number | null
   originalPrice: number | null
+  discountPrice: number | null
   stock: number | null
 }
 
@@ -39,8 +42,11 @@ export type TemplateSumAggregateOutputType = {
   rating: number | null
   reviews: number | null
   downloads: number | null
+  favorites: number | null
+  views: number | null
   price: number | null
   originalPrice: number | null
+  discountPrice: number | null
   stock: number | null
 }
 
@@ -50,17 +56,26 @@ export type TemplateMinAggregateOutputType = {
   title: string | null
   description: string | null
   thumbnail: string | null
+  coverImage: string | null
   category: string | null
   authorId: string | null
   rating: number | null
   reviews: number | null
   downloads: number | null
+  favorites: number | null
+  views: number | null
   price: number | null
   originalPrice: number | null
+  discountPrice: number | null
   featured: boolean | null
   newest: boolean | null
+  isFeatured: boolean | null
+  isPremium: boolean | null
+  status: string | null
   stock: number | null
   license: string | null
+  demoUrl: string | null
+  version: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -71,17 +86,26 @@ export type TemplateMaxAggregateOutputType = {
   title: string | null
   description: string | null
   thumbnail: string | null
+  coverImage: string | null
   category: string | null
   authorId: string | null
   rating: number | null
   reviews: number | null
   downloads: number | null
+  favorites: number | null
+  views: number | null
   price: number | null
   originalPrice: number | null
+  discountPrice: number | null
   featured: boolean | null
   newest: boolean | null
+  isFeatured: boolean | null
+  isPremium: boolean | null
+  status: string | null
   stock: number | null
   license: string | null
+  demoUrl: string | null
+  version: string | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -92,19 +116,36 @@ export type TemplateCountAggregateOutputType = {
   title: number
   description: number
   thumbnail: number
+  coverImage: number
   images: number
+  gallery: number
   category: number
   tags: number
+  relatedTemplateIds: number
   authorId: number
+  techStack: number
+  includedFiles: number
+  features: number
+  installationSteps: number
+  requirements: number
+  changelog: number
   rating: number
   reviews: number
   downloads: number
+  favorites: number
+  views: number
   price: number
   originalPrice: number
+  discountPrice: number
   featured: number
   newest: number
+  isFeatured: number
+  isPremium: number
+  status: number
   stock: number
   license: number
+  demoUrl: number
+  version: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -115,8 +156,11 @@ export type TemplateAvgAggregateInputType = {
   rating?: true
   reviews?: true
   downloads?: true
+  favorites?: true
+  views?: true
   price?: true
   originalPrice?: true
+  discountPrice?: true
   stock?: true
 }
 
@@ -124,8 +168,11 @@ export type TemplateSumAggregateInputType = {
   rating?: true
   reviews?: true
   downloads?: true
+  favorites?: true
+  views?: true
   price?: true
   originalPrice?: true
+  discountPrice?: true
   stock?: true
 }
 
@@ -135,17 +182,26 @@ export type TemplateMinAggregateInputType = {
   title?: true
   description?: true
   thumbnail?: true
+  coverImage?: true
   category?: true
   authorId?: true
   rating?: true
   reviews?: true
   downloads?: true
+  favorites?: true
+  views?: true
   price?: true
   originalPrice?: true
+  discountPrice?: true
   featured?: true
   newest?: true
+  isFeatured?: true
+  isPremium?: true
+  status?: true
   stock?: true
   license?: true
+  demoUrl?: true
+  version?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -156,17 +212,26 @@ export type TemplateMaxAggregateInputType = {
   title?: true
   description?: true
   thumbnail?: true
+  coverImage?: true
   category?: true
   authorId?: true
   rating?: true
   reviews?: true
   downloads?: true
+  favorites?: true
+  views?: true
   price?: true
   originalPrice?: true
+  discountPrice?: true
   featured?: true
   newest?: true
+  isFeatured?: true
+  isPremium?: true
+  status?: true
   stock?: true
   license?: true
+  demoUrl?: true
+  version?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -177,19 +242,36 @@ export type TemplateCountAggregateInputType = {
   title?: true
   description?: true
   thumbnail?: true
+  coverImage?: true
   images?: true
+  gallery?: true
   category?: true
   tags?: true
+  relatedTemplateIds?: true
   authorId?: true
+  techStack?: true
+  includedFiles?: true
+  features?: true
+  installationSteps?: true
+  requirements?: true
+  changelog?: true
   rating?: true
   reviews?: true
   downloads?: true
+  favorites?: true
+  views?: true
   price?: true
   originalPrice?: true
+  discountPrice?: true
   featured?: true
   newest?: true
+  isFeatured?: true
+  isPremium?: true
+  status?: true
   stock?: true
   license?: true
+  demoUrl?: true
+  version?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -287,19 +369,36 @@ export type TemplateGroupByOutputType = {
   title: string
   description: string
   thumbnail: string
+  coverImage: string | null
   images: string[]
+  gallery: string[]
   category: string
   tags: string[]
+  relatedTemplateIds: string[]
   authorId: string
+  techStack: string[]
+  includedFiles: runtime.JsonValue | null
+  features: string[]
+  installationSteps: string[]
+  requirements: string[]
+  changelog: runtime.JsonValue | null
   rating: number
   reviews: number
   downloads: number
+  favorites: number
+  views: number
   price: number
   originalPrice: number | null
+  discountPrice: number | null
   featured: boolean
   newest: boolean
+  isFeatured: boolean
+  isPremium: boolean
+  status: string
   stock: number | null
   license: string | null
+  demoUrl: string | null
+  version: string | null
   createdAt: Date
   updatedAt: Date
   _count: TemplateCountAggregateOutputType | null
@@ -333,19 +432,36 @@ export type TemplateWhereInput = {
   title?: Prisma.StringFilter<"Template"> | string
   description?: Prisma.StringFilter<"Template"> | string
   thumbnail?: Prisma.StringFilter<"Template"> | string
+  coverImage?: Prisma.StringNullableFilter<"Template"> | string | null
   images?: Prisma.StringNullableListFilter<"Template">
+  gallery?: Prisma.StringNullableListFilter<"Template">
   category?: Prisma.StringFilter<"Template"> | string
   tags?: Prisma.StringNullableListFilter<"Template">
+  relatedTemplateIds?: Prisma.StringNullableListFilter<"Template">
   authorId?: Prisma.StringFilter<"Template"> | string
+  techStack?: Prisma.StringNullableListFilter<"Template">
+  includedFiles?: Prisma.JsonNullableFilter<"Template">
+  features?: Prisma.StringNullableListFilter<"Template">
+  installationSteps?: Prisma.StringNullableListFilter<"Template">
+  requirements?: Prisma.StringNullableListFilter<"Template">
+  changelog?: Prisma.JsonNullableFilter<"Template">
   rating?: Prisma.FloatFilter<"Template"> | number
   reviews?: Prisma.IntFilter<"Template"> | number
   downloads?: Prisma.IntFilter<"Template"> | number
+  favorites?: Prisma.IntFilter<"Template"> | number
+  views?: Prisma.IntFilter<"Template"> | number
   price?: Prisma.FloatFilter<"Template"> | number
   originalPrice?: Prisma.FloatNullableFilter<"Template"> | number | null
+  discountPrice?: Prisma.FloatNullableFilter<"Template"> | number | null
   featured?: Prisma.BoolFilter<"Template"> | boolean
   newest?: Prisma.BoolFilter<"Template"> | boolean
+  isFeatured?: Prisma.BoolFilter<"Template"> | boolean
+  isPremium?: Prisma.BoolFilter<"Template"> | boolean
+  status?: Prisma.StringFilter<"Template"> | string
   stock?: Prisma.IntNullableFilter<"Template"> | number | null
   license?: Prisma.StringNullableFilter<"Template"> | string | null
+  demoUrl?: Prisma.StringNullableFilter<"Template"> | string | null
+  version?: Prisma.StringNullableFilter<"Template"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Template"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Template"> | Date | string
   author?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -357,19 +473,36 @@ export type TemplateOrderByWithRelationInput = {
   title?: Prisma.SortOrder
   description?: Prisma.SortOrder
   thumbnail?: Prisma.SortOrder
+  coverImage?: Prisma.SortOrderInput | Prisma.SortOrder
   images?: Prisma.SortOrder
+  gallery?: Prisma.SortOrder
   category?: Prisma.SortOrder
   tags?: Prisma.SortOrder
+  relatedTemplateIds?: Prisma.SortOrder
   authorId?: Prisma.SortOrder
+  techStack?: Prisma.SortOrder
+  includedFiles?: Prisma.SortOrderInput | Prisma.SortOrder
+  features?: Prisma.SortOrder
+  installationSteps?: Prisma.SortOrder
+  requirements?: Prisma.SortOrder
+  changelog?: Prisma.SortOrderInput | Prisma.SortOrder
   rating?: Prisma.SortOrder
   reviews?: Prisma.SortOrder
   downloads?: Prisma.SortOrder
+  favorites?: Prisma.SortOrder
+  views?: Prisma.SortOrder
   price?: Prisma.SortOrder
   originalPrice?: Prisma.SortOrderInput | Prisma.SortOrder
+  discountPrice?: Prisma.SortOrderInput | Prisma.SortOrder
   featured?: Prisma.SortOrder
   newest?: Prisma.SortOrder
+  isFeatured?: Prisma.SortOrder
+  isPremium?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   stock?: Prisma.SortOrderInput | Prisma.SortOrder
   license?: Prisma.SortOrderInput | Prisma.SortOrder
+  demoUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  version?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   author?: Prisma.UserOrderByWithRelationInput
@@ -384,19 +517,36 @@ export type TemplateWhereUniqueInput = Prisma.AtLeast<{
   title?: Prisma.StringFilter<"Template"> | string
   description?: Prisma.StringFilter<"Template"> | string
   thumbnail?: Prisma.StringFilter<"Template"> | string
+  coverImage?: Prisma.StringNullableFilter<"Template"> | string | null
   images?: Prisma.StringNullableListFilter<"Template">
+  gallery?: Prisma.StringNullableListFilter<"Template">
   category?: Prisma.StringFilter<"Template"> | string
   tags?: Prisma.StringNullableListFilter<"Template">
+  relatedTemplateIds?: Prisma.StringNullableListFilter<"Template">
   authorId?: Prisma.StringFilter<"Template"> | string
+  techStack?: Prisma.StringNullableListFilter<"Template">
+  includedFiles?: Prisma.JsonNullableFilter<"Template">
+  features?: Prisma.StringNullableListFilter<"Template">
+  installationSteps?: Prisma.StringNullableListFilter<"Template">
+  requirements?: Prisma.StringNullableListFilter<"Template">
+  changelog?: Prisma.JsonNullableFilter<"Template">
   rating?: Prisma.FloatFilter<"Template"> | number
   reviews?: Prisma.IntFilter<"Template"> | number
   downloads?: Prisma.IntFilter<"Template"> | number
+  favorites?: Prisma.IntFilter<"Template"> | number
+  views?: Prisma.IntFilter<"Template"> | number
   price?: Prisma.FloatFilter<"Template"> | number
   originalPrice?: Prisma.FloatNullableFilter<"Template"> | number | null
+  discountPrice?: Prisma.FloatNullableFilter<"Template"> | number | null
   featured?: Prisma.BoolFilter<"Template"> | boolean
   newest?: Prisma.BoolFilter<"Template"> | boolean
+  isFeatured?: Prisma.BoolFilter<"Template"> | boolean
+  isPremium?: Prisma.BoolFilter<"Template"> | boolean
+  status?: Prisma.StringFilter<"Template"> | string
   stock?: Prisma.IntNullableFilter<"Template"> | number | null
   license?: Prisma.StringNullableFilter<"Template"> | string | null
+  demoUrl?: Prisma.StringNullableFilter<"Template"> | string | null
+  version?: Prisma.StringNullableFilter<"Template"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Template"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Template"> | Date | string
   author?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
@@ -408,19 +558,36 @@ export type TemplateOrderByWithAggregationInput = {
   title?: Prisma.SortOrder
   description?: Prisma.SortOrder
   thumbnail?: Prisma.SortOrder
+  coverImage?: Prisma.SortOrderInput | Prisma.SortOrder
   images?: Prisma.SortOrder
+  gallery?: Prisma.SortOrder
   category?: Prisma.SortOrder
   tags?: Prisma.SortOrder
+  relatedTemplateIds?: Prisma.SortOrder
   authorId?: Prisma.SortOrder
+  techStack?: Prisma.SortOrder
+  includedFiles?: Prisma.SortOrderInput | Prisma.SortOrder
+  features?: Prisma.SortOrder
+  installationSteps?: Prisma.SortOrder
+  requirements?: Prisma.SortOrder
+  changelog?: Prisma.SortOrderInput | Prisma.SortOrder
   rating?: Prisma.SortOrder
   reviews?: Prisma.SortOrder
   downloads?: Prisma.SortOrder
+  favorites?: Prisma.SortOrder
+  views?: Prisma.SortOrder
   price?: Prisma.SortOrder
   originalPrice?: Prisma.SortOrderInput | Prisma.SortOrder
+  discountPrice?: Prisma.SortOrderInput | Prisma.SortOrder
   featured?: Prisma.SortOrder
   newest?: Prisma.SortOrder
+  isFeatured?: Prisma.SortOrder
+  isPremium?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   stock?: Prisma.SortOrderInput | Prisma.SortOrder
   license?: Prisma.SortOrderInput | Prisma.SortOrder
+  demoUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  version?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.TemplateCountOrderByAggregateInput
@@ -439,19 +606,36 @@ export type TemplateScalarWhereWithAggregatesInput = {
   title?: Prisma.StringWithAggregatesFilter<"Template"> | string
   description?: Prisma.StringWithAggregatesFilter<"Template"> | string
   thumbnail?: Prisma.StringWithAggregatesFilter<"Template"> | string
+  coverImage?: Prisma.StringNullableWithAggregatesFilter<"Template"> | string | null
   images?: Prisma.StringNullableListFilter<"Template">
+  gallery?: Prisma.StringNullableListFilter<"Template">
   category?: Prisma.StringWithAggregatesFilter<"Template"> | string
   tags?: Prisma.StringNullableListFilter<"Template">
+  relatedTemplateIds?: Prisma.StringNullableListFilter<"Template">
   authorId?: Prisma.StringWithAggregatesFilter<"Template"> | string
+  techStack?: Prisma.StringNullableListFilter<"Template">
+  includedFiles?: Prisma.JsonNullableWithAggregatesFilter<"Template">
+  features?: Prisma.StringNullableListFilter<"Template">
+  installationSteps?: Prisma.StringNullableListFilter<"Template">
+  requirements?: Prisma.StringNullableListFilter<"Template">
+  changelog?: Prisma.JsonNullableWithAggregatesFilter<"Template">
   rating?: Prisma.FloatWithAggregatesFilter<"Template"> | number
   reviews?: Prisma.IntWithAggregatesFilter<"Template"> | number
   downloads?: Prisma.IntWithAggregatesFilter<"Template"> | number
+  favorites?: Prisma.IntWithAggregatesFilter<"Template"> | number
+  views?: Prisma.IntWithAggregatesFilter<"Template"> | number
   price?: Prisma.FloatWithAggregatesFilter<"Template"> | number
   originalPrice?: Prisma.FloatNullableWithAggregatesFilter<"Template"> | number | null
+  discountPrice?: Prisma.FloatNullableWithAggregatesFilter<"Template"> | number | null
   featured?: Prisma.BoolWithAggregatesFilter<"Template"> | boolean
   newest?: Prisma.BoolWithAggregatesFilter<"Template"> | boolean
+  isFeatured?: Prisma.BoolWithAggregatesFilter<"Template"> | boolean
+  isPremium?: Prisma.BoolWithAggregatesFilter<"Template"> | boolean
+  status?: Prisma.StringWithAggregatesFilter<"Template"> | string
   stock?: Prisma.IntNullableWithAggregatesFilter<"Template"> | number | null
   license?: Prisma.StringNullableWithAggregatesFilter<"Template"> | string | null
+  demoUrl?: Prisma.StringNullableWithAggregatesFilter<"Template"> | string | null
+  version?: Prisma.StringNullableWithAggregatesFilter<"Template"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Template"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Template"> | Date | string
 }
@@ -462,18 +646,35 @@ export type TemplateCreateInput = {
   title: string
   description: string
   thumbnail: string
+  coverImage?: string | null
   images?: Prisma.TemplateCreateimagesInput | string[]
+  gallery?: Prisma.TemplateCreategalleryInput | string[]
   category: string
   tags?: Prisma.TemplateCreatetagsInput | string[]
+  relatedTemplateIds?: Prisma.TemplateCreaterelatedTemplateIdsInput | string[]
+  techStack?: Prisma.TemplateCreatetechStackInput | string[]
+  includedFiles?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  features?: Prisma.TemplateCreatefeaturesInput | string[]
+  installationSteps?: Prisma.TemplateCreateinstallationStepsInput | string[]
+  requirements?: Prisma.TemplateCreaterequirementsInput | string[]
+  changelog?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   rating?: number
   reviews?: number
   downloads?: number
+  favorites?: number
+  views?: number
   price: number
   originalPrice?: number | null
+  discountPrice?: number | null
   featured?: boolean
   newest?: boolean
+  isFeatured?: boolean
+  isPremium?: boolean
+  status?: string
   stock?: number | null
   license?: string | null
+  demoUrl?: string | null
+  version?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   author: Prisma.UserCreateNestedOneWithoutTemplatesInput
@@ -485,19 +686,36 @@ export type TemplateUncheckedCreateInput = {
   title: string
   description: string
   thumbnail: string
+  coverImage?: string | null
   images?: Prisma.TemplateCreateimagesInput | string[]
+  gallery?: Prisma.TemplateCreategalleryInput | string[]
   category: string
   tags?: Prisma.TemplateCreatetagsInput | string[]
+  relatedTemplateIds?: Prisma.TemplateCreaterelatedTemplateIdsInput | string[]
   authorId: string
+  techStack?: Prisma.TemplateCreatetechStackInput | string[]
+  includedFiles?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  features?: Prisma.TemplateCreatefeaturesInput | string[]
+  installationSteps?: Prisma.TemplateCreateinstallationStepsInput | string[]
+  requirements?: Prisma.TemplateCreaterequirementsInput | string[]
+  changelog?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   rating?: number
   reviews?: number
   downloads?: number
+  favorites?: number
+  views?: number
   price: number
   originalPrice?: number | null
+  discountPrice?: number | null
   featured?: boolean
   newest?: boolean
+  isFeatured?: boolean
+  isPremium?: boolean
+  status?: string
   stock?: number | null
   license?: string | null
+  demoUrl?: string | null
+  version?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -508,18 +726,35 @@ export type TemplateUpdateInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   thumbnail?: Prisma.StringFieldUpdateOperationsInput | string
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   images?: Prisma.TemplateUpdateimagesInput | string[]
+  gallery?: Prisma.TemplateUpdategalleryInput | string[]
   category?: Prisma.StringFieldUpdateOperationsInput | string
   tags?: Prisma.TemplateUpdatetagsInput | string[]
+  relatedTemplateIds?: Prisma.TemplateUpdaterelatedTemplateIdsInput | string[]
+  techStack?: Prisma.TemplateUpdatetechStackInput | string[]
+  includedFiles?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  features?: Prisma.TemplateUpdatefeaturesInput | string[]
+  installationSteps?: Prisma.TemplateUpdateinstallationStepsInput | string[]
+  requirements?: Prisma.TemplateUpdaterequirementsInput | string[]
+  changelog?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   rating?: Prisma.FloatFieldUpdateOperationsInput | number
   reviews?: Prisma.IntFieldUpdateOperationsInput | number
   downloads?: Prisma.IntFieldUpdateOperationsInput | number
+  favorites?: Prisma.IntFieldUpdateOperationsInput | number
+  views?: Prisma.IntFieldUpdateOperationsInput | number
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   originalPrice?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  discountPrice?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   featured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   newest?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isPremium?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.StringFieldUpdateOperationsInput | string
   stock?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   license?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  demoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   author?: Prisma.UserUpdateOneRequiredWithoutTemplatesNestedInput
@@ -531,19 +766,36 @@ export type TemplateUncheckedUpdateInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   thumbnail?: Prisma.StringFieldUpdateOperationsInput | string
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   images?: Prisma.TemplateUpdateimagesInput | string[]
+  gallery?: Prisma.TemplateUpdategalleryInput | string[]
   category?: Prisma.StringFieldUpdateOperationsInput | string
   tags?: Prisma.TemplateUpdatetagsInput | string[]
+  relatedTemplateIds?: Prisma.TemplateUpdaterelatedTemplateIdsInput | string[]
   authorId?: Prisma.StringFieldUpdateOperationsInput | string
+  techStack?: Prisma.TemplateUpdatetechStackInput | string[]
+  includedFiles?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  features?: Prisma.TemplateUpdatefeaturesInput | string[]
+  installationSteps?: Prisma.TemplateUpdateinstallationStepsInput | string[]
+  requirements?: Prisma.TemplateUpdaterequirementsInput | string[]
+  changelog?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   rating?: Prisma.FloatFieldUpdateOperationsInput | number
   reviews?: Prisma.IntFieldUpdateOperationsInput | number
   downloads?: Prisma.IntFieldUpdateOperationsInput | number
+  favorites?: Prisma.IntFieldUpdateOperationsInput | number
+  views?: Prisma.IntFieldUpdateOperationsInput | number
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   originalPrice?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  discountPrice?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   featured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   newest?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isPremium?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.StringFieldUpdateOperationsInput | string
   stock?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   license?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  demoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -554,19 +806,36 @@ export type TemplateCreateManyInput = {
   title: string
   description: string
   thumbnail: string
+  coverImage?: string | null
   images?: Prisma.TemplateCreateimagesInput | string[]
+  gallery?: Prisma.TemplateCreategalleryInput | string[]
   category: string
   tags?: Prisma.TemplateCreatetagsInput | string[]
+  relatedTemplateIds?: Prisma.TemplateCreaterelatedTemplateIdsInput | string[]
   authorId: string
+  techStack?: Prisma.TemplateCreatetechStackInput | string[]
+  includedFiles?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  features?: Prisma.TemplateCreatefeaturesInput | string[]
+  installationSteps?: Prisma.TemplateCreateinstallationStepsInput | string[]
+  requirements?: Prisma.TemplateCreaterequirementsInput | string[]
+  changelog?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   rating?: number
   reviews?: number
   downloads?: number
+  favorites?: number
+  views?: number
   price: number
   originalPrice?: number | null
+  discountPrice?: number | null
   featured?: boolean
   newest?: boolean
+  isFeatured?: boolean
+  isPremium?: boolean
+  status?: string
   stock?: number | null
   license?: string | null
+  demoUrl?: string | null
+  version?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -577,18 +846,35 @@ export type TemplateUpdateManyMutationInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   thumbnail?: Prisma.StringFieldUpdateOperationsInput | string
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   images?: Prisma.TemplateUpdateimagesInput | string[]
+  gallery?: Prisma.TemplateUpdategalleryInput | string[]
   category?: Prisma.StringFieldUpdateOperationsInput | string
   tags?: Prisma.TemplateUpdatetagsInput | string[]
+  relatedTemplateIds?: Prisma.TemplateUpdaterelatedTemplateIdsInput | string[]
+  techStack?: Prisma.TemplateUpdatetechStackInput | string[]
+  includedFiles?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  features?: Prisma.TemplateUpdatefeaturesInput | string[]
+  installationSteps?: Prisma.TemplateUpdateinstallationStepsInput | string[]
+  requirements?: Prisma.TemplateUpdaterequirementsInput | string[]
+  changelog?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   rating?: Prisma.FloatFieldUpdateOperationsInput | number
   reviews?: Prisma.IntFieldUpdateOperationsInput | number
   downloads?: Prisma.IntFieldUpdateOperationsInput | number
+  favorites?: Prisma.IntFieldUpdateOperationsInput | number
+  views?: Prisma.IntFieldUpdateOperationsInput | number
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   originalPrice?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  discountPrice?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   featured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   newest?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isPremium?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.StringFieldUpdateOperationsInput | string
   stock?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   license?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  demoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -599,19 +885,36 @@ export type TemplateUncheckedUpdateManyInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   thumbnail?: Prisma.StringFieldUpdateOperationsInput | string
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   images?: Prisma.TemplateUpdateimagesInput | string[]
+  gallery?: Prisma.TemplateUpdategalleryInput | string[]
   category?: Prisma.StringFieldUpdateOperationsInput | string
   tags?: Prisma.TemplateUpdatetagsInput | string[]
+  relatedTemplateIds?: Prisma.TemplateUpdaterelatedTemplateIdsInput | string[]
   authorId?: Prisma.StringFieldUpdateOperationsInput | string
+  techStack?: Prisma.TemplateUpdatetechStackInput | string[]
+  includedFiles?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  features?: Prisma.TemplateUpdatefeaturesInput | string[]
+  installationSteps?: Prisma.TemplateUpdateinstallationStepsInput | string[]
+  requirements?: Prisma.TemplateUpdaterequirementsInput | string[]
+  changelog?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   rating?: Prisma.FloatFieldUpdateOperationsInput | number
   reviews?: Prisma.IntFieldUpdateOperationsInput | number
   downloads?: Prisma.IntFieldUpdateOperationsInput | number
+  favorites?: Prisma.IntFieldUpdateOperationsInput | number
+  views?: Prisma.IntFieldUpdateOperationsInput | number
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   originalPrice?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  discountPrice?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   featured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   newest?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isPremium?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.StringFieldUpdateOperationsInput | string
   stock?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   license?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  demoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -640,19 +943,36 @@ export type TemplateCountOrderByAggregateInput = {
   title?: Prisma.SortOrder
   description?: Prisma.SortOrder
   thumbnail?: Prisma.SortOrder
+  coverImage?: Prisma.SortOrder
   images?: Prisma.SortOrder
+  gallery?: Prisma.SortOrder
   category?: Prisma.SortOrder
   tags?: Prisma.SortOrder
+  relatedTemplateIds?: Prisma.SortOrder
   authorId?: Prisma.SortOrder
+  techStack?: Prisma.SortOrder
+  includedFiles?: Prisma.SortOrder
+  features?: Prisma.SortOrder
+  installationSteps?: Prisma.SortOrder
+  requirements?: Prisma.SortOrder
+  changelog?: Prisma.SortOrder
   rating?: Prisma.SortOrder
   reviews?: Prisma.SortOrder
   downloads?: Prisma.SortOrder
+  favorites?: Prisma.SortOrder
+  views?: Prisma.SortOrder
   price?: Prisma.SortOrder
   originalPrice?: Prisma.SortOrder
+  discountPrice?: Prisma.SortOrder
   featured?: Prisma.SortOrder
   newest?: Prisma.SortOrder
+  isFeatured?: Prisma.SortOrder
+  isPremium?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   stock?: Prisma.SortOrder
   license?: Prisma.SortOrder
+  demoUrl?: Prisma.SortOrder
+  version?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -661,8 +981,11 @@ export type TemplateAvgOrderByAggregateInput = {
   rating?: Prisma.SortOrder
   reviews?: Prisma.SortOrder
   downloads?: Prisma.SortOrder
+  favorites?: Prisma.SortOrder
+  views?: Prisma.SortOrder
   price?: Prisma.SortOrder
   originalPrice?: Prisma.SortOrder
+  discountPrice?: Prisma.SortOrder
   stock?: Prisma.SortOrder
 }
 
@@ -672,17 +995,26 @@ export type TemplateMaxOrderByAggregateInput = {
   title?: Prisma.SortOrder
   description?: Prisma.SortOrder
   thumbnail?: Prisma.SortOrder
+  coverImage?: Prisma.SortOrder
   category?: Prisma.SortOrder
   authorId?: Prisma.SortOrder
   rating?: Prisma.SortOrder
   reviews?: Prisma.SortOrder
   downloads?: Prisma.SortOrder
+  favorites?: Prisma.SortOrder
+  views?: Prisma.SortOrder
   price?: Prisma.SortOrder
   originalPrice?: Prisma.SortOrder
+  discountPrice?: Prisma.SortOrder
   featured?: Prisma.SortOrder
   newest?: Prisma.SortOrder
+  isFeatured?: Prisma.SortOrder
+  isPremium?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   stock?: Prisma.SortOrder
   license?: Prisma.SortOrder
+  demoUrl?: Prisma.SortOrder
+  version?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -693,17 +1025,26 @@ export type TemplateMinOrderByAggregateInput = {
   title?: Prisma.SortOrder
   description?: Prisma.SortOrder
   thumbnail?: Prisma.SortOrder
+  coverImage?: Prisma.SortOrder
   category?: Prisma.SortOrder
   authorId?: Prisma.SortOrder
   rating?: Prisma.SortOrder
   reviews?: Prisma.SortOrder
   downloads?: Prisma.SortOrder
+  favorites?: Prisma.SortOrder
+  views?: Prisma.SortOrder
   price?: Prisma.SortOrder
   originalPrice?: Prisma.SortOrder
+  discountPrice?: Prisma.SortOrder
   featured?: Prisma.SortOrder
   newest?: Prisma.SortOrder
+  isFeatured?: Prisma.SortOrder
+  isPremium?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   stock?: Prisma.SortOrder
   license?: Prisma.SortOrder
+  demoUrl?: Prisma.SortOrder
+  version?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -712,8 +1053,11 @@ export type TemplateSumOrderByAggregateInput = {
   rating?: Prisma.SortOrder
   reviews?: Prisma.SortOrder
   downloads?: Prisma.SortOrder
+  favorites?: Prisma.SortOrder
+  views?: Prisma.SortOrder
   price?: Prisma.SortOrder
   originalPrice?: Prisma.SortOrder
+  discountPrice?: Prisma.SortOrder
   stock?: Prisma.SortOrder
 }
 
@@ -763,7 +1107,31 @@ export type TemplateCreateimagesInput = {
   set: string[]
 }
 
+export type TemplateCreategalleryInput = {
+  set: string[]
+}
+
 export type TemplateCreatetagsInput = {
+  set: string[]
+}
+
+export type TemplateCreaterelatedTemplateIdsInput = {
+  set: string[]
+}
+
+export type TemplateCreatetechStackInput = {
+  set: string[]
+}
+
+export type TemplateCreatefeaturesInput = {
+  set: string[]
+}
+
+export type TemplateCreateinstallationStepsInput = {
+  set: string[]
+}
+
+export type TemplateCreaterequirementsInput = {
   set: string[]
 }
 
@@ -772,7 +1140,37 @@ export type TemplateUpdateimagesInput = {
   push?: string | string[]
 }
 
+export type TemplateUpdategalleryInput = {
+  set?: string[]
+  push?: string | string[]
+}
+
 export type TemplateUpdatetagsInput = {
+  set?: string[]
+  push?: string | string[]
+}
+
+export type TemplateUpdaterelatedTemplateIdsInput = {
+  set?: string[]
+  push?: string | string[]
+}
+
+export type TemplateUpdatetechStackInput = {
+  set?: string[]
+  push?: string | string[]
+}
+
+export type TemplateUpdatefeaturesInput = {
+  set?: string[]
+  push?: string | string[]
+}
+
+export type TemplateUpdateinstallationStepsInput = {
+  set?: string[]
+  push?: string | string[]
+}
+
+export type TemplateUpdaterequirementsInput = {
   set?: string[]
   push?: string | string[]
 }
@@ -819,18 +1217,35 @@ export type TemplateCreateWithoutAuthorInput = {
   title: string
   description: string
   thumbnail: string
+  coverImage?: string | null
   images?: Prisma.TemplateCreateimagesInput | string[]
+  gallery?: Prisma.TemplateCreategalleryInput | string[]
   category: string
   tags?: Prisma.TemplateCreatetagsInput | string[]
+  relatedTemplateIds?: Prisma.TemplateCreaterelatedTemplateIdsInput | string[]
+  techStack?: Prisma.TemplateCreatetechStackInput | string[]
+  includedFiles?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  features?: Prisma.TemplateCreatefeaturesInput | string[]
+  installationSteps?: Prisma.TemplateCreateinstallationStepsInput | string[]
+  requirements?: Prisma.TemplateCreaterequirementsInput | string[]
+  changelog?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   rating?: number
   reviews?: number
   downloads?: number
+  favorites?: number
+  views?: number
   price: number
   originalPrice?: number | null
+  discountPrice?: number | null
   featured?: boolean
   newest?: boolean
+  isFeatured?: boolean
+  isPremium?: boolean
+  status?: string
   stock?: number | null
   license?: string | null
+  demoUrl?: string | null
+  version?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -841,18 +1256,35 @@ export type TemplateUncheckedCreateWithoutAuthorInput = {
   title: string
   description: string
   thumbnail: string
+  coverImage?: string | null
   images?: Prisma.TemplateCreateimagesInput | string[]
+  gallery?: Prisma.TemplateCreategalleryInput | string[]
   category: string
   tags?: Prisma.TemplateCreatetagsInput | string[]
+  relatedTemplateIds?: Prisma.TemplateCreaterelatedTemplateIdsInput | string[]
+  techStack?: Prisma.TemplateCreatetechStackInput | string[]
+  includedFiles?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  features?: Prisma.TemplateCreatefeaturesInput | string[]
+  installationSteps?: Prisma.TemplateCreateinstallationStepsInput | string[]
+  requirements?: Prisma.TemplateCreaterequirementsInput | string[]
+  changelog?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   rating?: number
   reviews?: number
   downloads?: number
+  favorites?: number
+  views?: number
   price: number
   originalPrice?: number | null
+  discountPrice?: number | null
   featured?: boolean
   newest?: boolean
+  isFeatured?: boolean
+  isPremium?: boolean
+  status?: string
   stock?: number | null
   license?: string | null
+  demoUrl?: string | null
+  version?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -892,19 +1324,36 @@ export type TemplateScalarWhereInput = {
   title?: Prisma.StringFilter<"Template"> | string
   description?: Prisma.StringFilter<"Template"> | string
   thumbnail?: Prisma.StringFilter<"Template"> | string
+  coverImage?: Prisma.StringNullableFilter<"Template"> | string | null
   images?: Prisma.StringNullableListFilter<"Template">
+  gallery?: Prisma.StringNullableListFilter<"Template">
   category?: Prisma.StringFilter<"Template"> | string
   tags?: Prisma.StringNullableListFilter<"Template">
+  relatedTemplateIds?: Prisma.StringNullableListFilter<"Template">
   authorId?: Prisma.StringFilter<"Template"> | string
+  techStack?: Prisma.StringNullableListFilter<"Template">
+  includedFiles?: Prisma.JsonNullableFilter<"Template">
+  features?: Prisma.StringNullableListFilter<"Template">
+  installationSteps?: Prisma.StringNullableListFilter<"Template">
+  requirements?: Prisma.StringNullableListFilter<"Template">
+  changelog?: Prisma.JsonNullableFilter<"Template">
   rating?: Prisma.FloatFilter<"Template"> | number
   reviews?: Prisma.IntFilter<"Template"> | number
   downloads?: Prisma.IntFilter<"Template"> | number
+  favorites?: Prisma.IntFilter<"Template"> | number
+  views?: Prisma.IntFilter<"Template"> | number
   price?: Prisma.FloatFilter<"Template"> | number
   originalPrice?: Prisma.FloatNullableFilter<"Template"> | number | null
+  discountPrice?: Prisma.FloatNullableFilter<"Template"> | number | null
   featured?: Prisma.BoolFilter<"Template"> | boolean
   newest?: Prisma.BoolFilter<"Template"> | boolean
+  isFeatured?: Prisma.BoolFilter<"Template"> | boolean
+  isPremium?: Prisma.BoolFilter<"Template"> | boolean
+  status?: Prisma.StringFilter<"Template"> | string
   stock?: Prisma.IntNullableFilter<"Template"> | number | null
   license?: Prisma.StringNullableFilter<"Template"> | string | null
+  demoUrl?: Prisma.StringNullableFilter<"Template"> | string | null
+  version?: Prisma.StringNullableFilter<"Template"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Template"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Template"> | Date | string
 }
@@ -915,18 +1364,35 @@ export type TemplateCreateManyAuthorInput = {
   title: string
   description: string
   thumbnail: string
+  coverImage?: string | null
   images?: Prisma.TemplateCreateimagesInput | string[]
+  gallery?: Prisma.TemplateCreategalleryInput | string[]
   category: string
   tags?: Prisma.TemplateCreatetagsInput | string[]
+  relatedTemplateIds?: Prisma.TemplateCreaterelatedTemplateIdsInput | string[]
+  techStack?: Prisma.TemplateCreatetechStackInput | string[]
+  includedFiles?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  features?: Prisma.TemplateCreatefeaturesInput | string[]
+  installationSteps?: Prisma.TemplateCreateinstallationStepsInput | string[]
+  requirements?: Prisma.TemplateCreaterequirementsInput | string[]
+  changelog?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   rating?: number
   reviews?: number
   downloads?: number
+  favorites?: number
+  views?: number
   price: number
   originalPrice?: number | null
+  discountPrice?: number | null
   featured?: boolean
   newest?: boolean
+  isFeatured?: boolean
+  isPremium?: boolean
+  status?: string
   stock?: number | null
   license?: string | null
+  demoUrl?: string | null
+  version?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -937,18 +1403,35 @@ export type TemplateUpdateWithoutAuthorInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   thumbnail?: Prisma.StringFieldUpdateOperationsInput | string
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   images?: Prisma.TemplateUpdateimagesInput | string[]
+  gallery?: Prisma.TemplateUpdategalleryInput | string[]
   category?: Prisma.StringFieldUpdateOperationsInput | string
   tags?: Prisma.TemplateUpdatetagsInput | string[]
+  relatedTemplateIds?: Prisma.TemplateUpdaterelatedTemplateIdsInput | string[]
+  techStack?: Prisma.TemplateUpdatetechStackInput | string[]
+  includedFiles?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  features?: Prisma.TemplateUpdatefeaturesInput | string[]
+  installationSteps?: Prisma.TemplateUpdateinstallationStepsInput | string[]
+  requirements?: Prisma.TemplateUpdaterequirementsInput | string[]
+  changelog?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   rating?: Prisma.FloatFieldUpdateOperationsInput | number
   reviews?: Prisma.IntFieldUpdateOperationsInput | number
   downloads?: Prisma.IntFieldUpdateOperationsInput | number
+  favorites?: Prisma.IntFieldUpdateOperationsInput | number
+  views?: Prisma.IntFieldUpdateOperationsInput | number
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   originalPrice?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  discountPrice?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   featured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   newest?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isPremium?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.StringFieldUpdateOperationsInput | string
   stock?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   license?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  demoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -959,18 +1442,35 @@ export type TemplateUncheckedUpdateWithoutAuthorInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   thumbnail?: Prisma.StringFieldUpdateOperationsInput | string
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   images?: Prisma.TemplateUpdateimagesInput | string[]
+  gallery?: Prisma.TemplateUpdategalleryInput | string[]
   category?: Prisma.StringFieldUpdateOperationsInput | string
   tags?: Prisma.TemplateUpdatetagsInput | string[]
+  relatedTemplateIds?: Prisma.TemplateUpdaterelatedTemplateIdsInput | string[]
+  techStack?: Prisma.TemplateUpdatetechStackInput | string[]
+  includedFiles?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  features?: Prisma.TemplateUpdatefeaturesInput | string[]
+  installationSteps?: Prisma.TemplateUpdateinstallationStepsInput | string[]
+  requirements?: Prisma.TemplateUpdaterequirementsInput | string[]
+  changelog?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   rating?: Prisma.FloatFieldUpdateOperationsInput | number
   reviews?: Prisma.IntFieldUpdateOperationsInput | number
   downloads?: Prisma.IntFieldUpdateOperationsInput | number
+  favorites?: Prisma.IntFieldUpdateOperationsInput | number
+  views?: Prisma.IntFieldUpdateOperationsInput | number
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   originalPrice?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  discountPrice?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   featured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   newest?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isPremium?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.StringFieldUpdateOperationsInput | string
   stock?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   license?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  demoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -981,18 +1481,35 @@ export type TemplateUncheckedUpdateManyWithoutAuthorInput = {
   title?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   thumbnail?: Prisma.StringFieldUpdateOperationsInput | string
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   images?: Prisma.TemplateUpdateimagesInput | string[]
+  gallery?: Prisma.TemplateUpdategalleryInput | string[]
   category?: Prisma.StringFieldUpdateOperationsInput | string
   tags?: Prisma.TemplateUpdatetagsInput | string[]
+  relatedTemplateIds?: Prisma.TemplateUpdaterelatedTemplateIdsInput | string[]
+  techStack?: Prisma.TemplateUpdatetechStackInput | string[]
+  includedFiles?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  features?: Prisma.TemplateUpdatefeaturesInput | string[]
+  installationSteps?: Prisma.TemplateUpdateinstallationStepsInput | string[]
+  requirements?: Prisma.TemplateUpdaterequirementsInput | string[]
+  changelog?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   rating?: Prisma.FloatFieldUpdateOperationsInput | number
   reviews?: Prisma.IntFieldUpdateOperationsInput | number
   downloads?: Prisma.IntFieldUpdateOperationsInput | number
+  favorites?: Prisma.IntFieldUpdateOperationsInput | number
+  views?: Prisma.IntFieldUpdateOperationsInput | number
   price?: Prisma.FloatFieldUpdateOperationsInput | number
   originalPrice?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  discountPrice?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
   featured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   newest?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isPremium?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.StringFieldUpdateOperationsInput | string
   stock?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
   license?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  demoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -1005,19 +1522,36 @@ export type TemplateSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   title?: boolean
   description?: boolean
   thumbnail?: boolean
+  coverImage?: boolean
   images?: boolean
+  gallery?: boolean
   category?: boolean
   tags?: boolean
+  relatedTemplateIds?: boolean
   authorId?: boolean
+  techStack?: boolean
+  includedFiles?: boolean
+  features?: boolean
+  installationSteps?: boolean
+  requirements?: boolean
+  changelog?: boolean
   rating?: boolean
   reviews?: boolean
   downloads?: boolean
+  favorites?: boolean
+  views?: boolean
   price?: boolean
   originalPrice?: boolean
+  discountPrice?: boolean
   featured?: boolean
   newest?: boolean
+  isFeatured?: boolean
+  isPremium?: boolean
+  status?: boolean
   stock?: boolean
   license?: boolean
+  demoUrl?: boolean
+  version?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   author?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -1029,19 +1563,36 @@ export type TemplateSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   title?: boolean
   description?: boolean
   thumbnail?: boolean
+  coverImage?: boolean
   images?: boolean
+  gallery?: boolean
   category?: boolean
   tags?: boolean
+  relatedTemplateIds?: boolean
   authorId?: boolean
+  techStack?: boolean
+  includedFiles?: boolean
+  features?: boolean
+  installationSteps?: boolean
+  requirements?: boolean
+  changelog?: boolean
   rating?: boolean
   reviews?: boolean
   downloads?: boolean
+  favorites?: boolean
+  views?: boolean
   price?: boolean
   originalPrice?: boolean
+  discountPrice?: boolean
   featured?: boolean
   newest?: boolean
+  isFeatured?: boolean
+  isPremium?: boolean
+  status?: boolean
   stock?: boolean
   license?: boolean
+  demoUrl?: boolean
+  version?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   author?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -1053,19 +1604,36 @@ export type TemplateSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   title?: boolean
   description?: boolean
   thumbnail?: boolean
+  coverImage?: boolean
   images?: boolean
+  gallery?: boolean
   category?: boolean
   tags?: boolean
+  relatedTemplateIds?: boolean
   authorId?: boolean
+  techStack?: boolean
+  includedFiles?: boolean
+  features?: boolean
+  installationSteps?: boolean
+  requirements?: boolean
+  changelog?: boolean
   rating?: boolean
   reviews?: boolean
   downloads?: boolean
+  favorites?: boolean
+  views?: boolean
   price?: boolean
   originalPrice?: boolean
+  discountPrice?: boolean
   featured?: boolean
   newest?: boolean
+  isFeatured?: boolean
+  isPremium?: boolean
+  status?: boolean
   stock?: boolean
   license?: boolean
+  demoUrl?: boolean
+  version?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   author?: boolean | Prisma.UserDefaultArgs<ExtArgs>
@@ -1077,24 +1645,41 @@ export type TemplateSelectScalar = {
   title?: boolean
   description?: boolean
   thumbnail?: boolean
+  coverImage?: boolean
   images?: boolean
+  gallery?: boolean
   category?: boolean
   tags?: boolean
+  relatedTemplateIds?: boolean
   authorId?: boolean
+  techStack?: boolean
+  includedFiles?: boolean
+  features?: boolean
+  installationSteps?: boolean
+  requirements?: boolean
+  changelog?: boolean
   rating?: boolean
   reviews?: boolean
   downloads?: boolean
+  favorites?: boolean
+  views?: boolean
   price?: boolean
   originalPrice?: boolean
+  discountPrice?: boolean
   featured?: boolean
   newest?: boolean
+  isFeatured?: boolean
+  isPremium?: boolean
+  status?: boolean
   stock?: boolean
   license?: boolean
+  demoUrl?: boolean
+  version?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type TemplateOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "slug" | "title" | "description" | "thumbnail" | "images" | "category" | "tags" | "authorId" | "rating" | "reviews" | "downloads" | "price" | "originalPrice" | "featured" | "newest" | "stock" | "license" | "createdAt" | "updatedAt", ExtArgs["result"]["template"]>
+export type TemplateOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "slug" | "title" | "description" | "thumbnail" | "coverImage" | "images" | "gallery" | "category" | "tags" | "relatedTemplateIds" | "authorId" | "techStack" | "includedFiles" | "features" | "installationSteps" | "requirements" | "changelog" | "rating" | "reviews" | "downloads" | "favorites" | "views" | "price" | "originalPrice" | "discountPrice" | "featured" | "newest" | "isFeatured" | "isPremium" | "status" | "stock" | "license" | "demoUrl" | "version" | "createdAt" | "updatedAt", ExtArgs["result"]["template"]>
 export type TemplateInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   author?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
@@ -1116,19 +1701,36 @@ export type $TemplatePayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     title: string
     description: string
     thumbnail: string
+    coverImage: string | null
     images: string[]
+    gallery: string[]
     category: string
     tags: string[]
+    relatedTemplateIds: string[]
     authorId: string
+    techStack: string[]
+    includedFiles: runtime.JsonValue | null
+    features: string[]
+    installationSteps: string[]
+    requirements: string[]
+    changelog: runtime.JsonValue | null
     rating: number
     reviews: number
     downloads: number
+    favorites: number
+    views: number
     price: number
     originalPrice: number | null
+    discountPrice: number | null
     featured: boolean
     newest: boolean
+    isFeatured: boolean
+    isPremium: boolean
+    status: string
     stock: number | null
     license: string | null
+    demoUrl: string | null
+    version: string | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["template"]>
@@ -1560,19 +2162,36 @@ export interface TemplateFieldRefs {
   readonly title: Prisma.FieldRef<"Template", 'String'>
   readonly description: Prisma.FieldRef<"Template", 'String'>
   readonly thumbnail: Prisma.FieldRef<"Template", 'String'>
+  readonly coverImage: Prisma.FieldRef<"Template", 'String'>
   readonly images: Prisma.FieldRef<"Template", 'String[]'>
+  readonly gallery: Prisma.FieldRef<"Template", 'String[]'>
   readonly category: Prisma.FieldRef<"Template", 'String'>
   readonly tags: Prisma.FieldRef<"Template", 'String[]'>
+  readonly relatedTemplateIds: Prisma.FieldRef<"Template", 'String[]'>
   readonly authorId: Prisma.FieldRef<"Template", 'String'>
+  readonly techStack: Prisma.FieldRef<"Template", 'String[]'>
+  readonly includedFiles: Prisma.FieldRef<"Template", 'Json'>
+  readonly features: Prisma.FieldRef<"Template", 'String[]'>
+  readonly installationSteps: Prisma.FieldRef<"Template", 'String[]'>
+  readonly requirements: Prisma.FieldRef<"Template", 'String[]'>
+  readonly changelog: Prisma.FieldRef<"Template", 'Json'>
   readonly rating: Prisma.FieldRef<"Template", 'Float'>
   readonly reviews: Prisma.FieldRef<"Template", 'Int'>
   readonly downloads: Prisma.FieldRef<"Template", 'Int'>
+  readonly favorites: Prisma.FieldRef<"Template", 'Int'>
+  readonly views: Prisma.FieldRef<"Template", 'Int'>
   readonly price: Prisma.FieldRef<"Template", 'Float'>
   readonly originalPrice: Prisma.FieldRef<"Template", 'Float'>
+  readonly discountPrice: Prisma.FieldRef<"Template", 'Float'>
   readonly featured: Prisma.FieldRef<"Template", 'Boolean'>
   readonly newest: Prisma.FieldRef<"Template", 'Boolean'>
+  readonly isFeatured: Prisma.FieldRef<"Template", 'Boolean'>
+  readonly isPremium: Prisma.FieldRef<"Template", 'Boolean'>
+  readonly status: Prisma.FieldRef<"Template", 'String'>
   readonly stock: Prisma.FieldRef<"Template", 'Int'>
   readonly license: Prisma.FieldRef<"Template", 'String'>
+  readonly demoUrl: Prisma.FieldRef<"Template", 'String'>
+  readonly version: Prisma.FieldRef<"Template", 'String'>
   readonly createdAt: Prisma.FieldRef<"Template", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Template", 'DateTime'>
 }

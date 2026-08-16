@@ -4,6 +4,8 @@ import {
   NotFoundException,
 } from "@nestjs/common";
 
+import * as bcrypt from "bcrypt";
+
 import { UserServiceInterface } from "./interfaces/user.service.interface";
 import { UserRepositoryInterface } from "./interfaces/user.repository.interface";
 
@@ -70,7 +72,16 @@ export class UserService implements UserServiceInterface {
      *      ↓
      * ConflictException
      */
-    return this.userRepository.create(dto);
+    const passwordHash = await bcrypt.hash(dto.password, 10);
+
+    return this.userRepository.create({
+      id: dto.id,
+      name: dto.name,
+      avatar: dto.avatar ?? null,
+      email: dto.email,
+      passwordHash,
+      role: dto.role,
+    });
   }
 
   // =========================

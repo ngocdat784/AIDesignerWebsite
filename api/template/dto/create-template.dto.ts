@@ -1,12 +1,23 @@
 import {
   IsArray,
   IsBoolean,
+  IsDateString,
   IsNumber,
   IsOptional,
   IsString,
+  ValidateNested,
 } from "class-validator";
 
+import { Type } from "class-transformer";
+
+import { IncludedFileDto } from "./included-file.dto";
+import { ChangelogDto } from "./changelog.dto";
+
 export class CreateTemplateDto {
+  // =========================
+  // Basic information
+  // =========================
+
   @IsString()
   id!: string;
 
@@ -22,10 +33,27 @@ export class CreateTemplateDto {
   @IsString()
   thumbnail!: string;
 
+  // =========================
+  // Images
+  // =========================
+
+  @IsOptional()
+  @IsString()
+  coverImage?: string | null;
+
   @IsOptional()
   @IsArray()
   @IsString({ each: true })
   images?: string[];
+
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  gallery?: string[];
+
+  // =========================
+  // Category / Tags
+  // =========================
 
   @IsString()
   category!: string;
@@ -35,8 +63,54 @@ export class CreateTemplateDto {
   @IsString({ each: true })
   tags?: string[];
 
-  @IsString()
-  authorId!: string;
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  relatedTemplateIds?: string[];
+
+  // =========================
+  // Technology
+  // =========================
+
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  techStack?: string[];
+
+  // =========================
+  // Detail information
+  // =========================
+
+  @IsOptional()
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => IncludedFileDto)
+  includedFiles?: IncludedFileDto[];
+
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  features?: string[];
+
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  installationSteps?: string[];
+
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  requirements?: string[];
+
+  @IsOptional()
+  @IsArray()
+  @ValidateNested({ each: true })
+  @Type(() => ChangelogDto)
+  changelog?: ChangelogDto[];
+
+  // =========================
+  // Statistics
+  // =========================
 
   @IsOptional()
   @IsNumber()
@@ -50,12 +124,32 @@ export class CreateTemplateDto {
   @IsNumber()
   downloads?: number;
 
+  @IsOptional()
+  @IsNumber()
+  favorites?: number;
+
+  @IsOptional()
+  @IsNumber()
+  views?: number;
+
+  // =========================
+  // Pricing
+  // =========================
+
   @IsNumber()
   price!: number;
 
   @IsOptional()
   @IsNumber()
-  originalPrice?: number;
+  originalPrice?: number | null;
+
+  @IsOptional()
+  @IsNumber()
+  discountPrice?: number | null;
+
+  // =========================
+  // Status
+  // =========================
 
   @IsOptional()
   @IsBoolean()
@@ -66,10 +160,42 @@ export class CreateTemplateDto {
   newest?: boolean;
 
   @IsOptional()
-  @IsNumber()
-  stock?: number;
+  @IsBoolean()
+  isFeatured?: boolean;
+
+  @IsOptional()
+  @IsBoolean()
+  isPremium?: boolean;
 
   @IsOptional()
   @IsString()
-  license?: string;
+  status?: string;
+
+  @IsOptional()
+  @IsNumber()
+  stock?: number | null;
+
+  @IsOptional()
+  @IsString()
+  license?: string | null;
+
+  // =========================
+  // Demo / Version
+  // =========================
+
+  @IsOptional()
+  @IsString()
+  demoUrl?: string;
+
+  @IsOptional()
+  @IsString()
+  version?: string;
+
+  @IsOptional()
+  @IsDateString()
+  createdAt?: Date | string;
+
+  @IsOptional()
+  @IsDateString()
+  updatedAt?: Date | string;
 }

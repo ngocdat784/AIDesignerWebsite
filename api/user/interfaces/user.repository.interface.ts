@@ -26,7 +26,6 @@ export interface UserRepositoryInterface {
       name?: string;
       avatar?: string | null;
       email?: string;
-      passwordHash?: string;
       role?: "USER" | "CREATOR" | "ADMIN";
     },
   ): Promise<any>;

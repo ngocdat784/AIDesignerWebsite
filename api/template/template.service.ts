@@ -6,6 +6,7 @@ import {
 } from "@nestjs/common";
 
 import { TemplateServiceInterface } from "./interfaces/template.service.interface";
+
 import { TemplateRepositoryInterface } from "./interfaces/template.repository.interface";
 
 import { CreateTemplateDto } from "./dto/create-template.dto";
@@ -16,19 +17,25 @@ import { CurrentUserPayload } from "../auth/interfaces/current-user.interface";
 import { TEMPLATE_REPOSITORY } from "../common/constants/repository.tokens";
 
 @Injectable()
-export class TemplateService implements TemplateServiceInterface {
+export class TemplateService
+  implements TemplateServiceInterface
+{
   constructor(
     @Inject(TEMPLATE_REPOSITORY)
     private readonly templateRepository: TemplateRepositoryInterface,
   ) {}
 
-  // =========================
+  // =========================================================
   // Query
-  // =========================
+  // =========================================================
 
   async getAll() {
     return this.templateRepository.getAll();
   }
+
+  // =========================================================
+  // GET /templates/:id
+  // =========================================================
 
   async getById(id: string) {
     const template =
@@ -43,6 +50,10 @@ export class TemplateService implements TemplateServiceInterface {
     return template;
   }
 
+  // =========================================================
+  // GET /templates/slug/:slug
+  // =========================================================
+
   async getBySlug(slug: string) {
     const template =
       await this.templateRepository.getBySlug(slug);
@@ -56,58 +67,101 @@ export class TemplateService implements TemplateServiceInterface {
     return template;
   }
 
-  async getByAuthorId(authorId: string) {
-    return this.templateRepository.getByAuthorId(authorId);
+  // =========================================================
+  // GET /templates/author/:authorId
+  // =========================================================
+
+  async getByAuthorId(
+    authorId: string,
+  ) {
+    return this.templateRepository.getByAuthorId(
+      authorId,
+    );
   }
 
-  async getByCategory(category: string) {
-    return this.templateRepository.getByCategory(category);
+  // =========================================================
+  // GET /templates/category/:category
+  // =========================================================
+
+  async getByCategory(
+    category: string,
+  ) {
+    return this.templateRepository.getByCategory(
+      category,
+    );
   }
 
-  // =========================
+  // =========================================================
   // Create
-  // =========================
+  // =========================================================
 
   async create(
     dto: CreateTemplateDto,
     user: CurrentUserPayload,
   ) {
     /*
-     * Chỉ CREATOR và ADMIN được đi tới đây
-     * nhờ RoleGuard.
+     * RoleGuard đã đảm bảo user là:
      *
-     * Author của template phải là user hiện tại.
+     * CREATOR hoặc ADMIN
+     *
+     * Không lấy authorId từ request body.
+     * Template luôn được gắn với user hiện tại.
      */
+
     const data = {
       ...dto,
+
       authorId: user.id,
     };
 
-    return this.templateRepository.create(data);
+    return this.templateRepository.create(
+      data,
+    );
   }
 
-  // =========================
+  // =========================================================
   // Update
-  // =========================
+  // =========================================================
 
   async update(
     id: string,
     dto: UpdateTemplateDto,
     user: CurrentUserPayload,
   ) {
-    const template = await this.getById(id);
-
     /*
-     * ADMIN có toàn quyền.
+     * Kiểm tra template tồn tại trước.
      */
-    if (user.role === "ADMIN") {
-      return this.templateRepository.update(id, dto);
+
+    const template =
+      await this.templateRepository.getById(
+        id,
+      );
+
+    if (!template) {
+      throw new NotFoundException(
+        `Template with id ${id} not found.`,
+      );
     }
 
     /*
-     * CREATOR chỉ được sửa template
-     * do chính mình tạo.
+     * ADMIN:
+     *
+     * Có quyền sửa mọi template.
      */
+
+    if (user.role === "ADMIN") {
+      return this.templateRepository.update(
+        id,
+        dto,
+      );
+    }
+
+    /*
+     * CREATOR:
+     *
+     * Chỉ được sửa template của chính mình.
+     */
+
     if (
       user.role === "CREATOR" &&
       template.authorId !== user.id
@@ -117,30 +171,53 @@ export class TemplateService implements TemplateServiceInterface {
       );
     }
 
-    return this.templateRepository.update(id, dto);
+    return this.templateRepository.update(
+      id,
+      dto,
+    );
   }
 
-  // =========================
+  // =========================================================
   // Delete
-  // =========================
+  // =========================================================
 
   async delete(
     id: string,
     user: CurrentUserPayload,
   ) {
-    const template = await this.getById(id);
-
     /*
-     * ADMIN có toàn quyền xóa.
+     * Kiểm tra template tồn tại.
      */
-    if (user.role === "ADMIN") {
-      return this.templateRepository.delete(id);
+
+    const template =
+      await this.templateRepository.getById(
+        id,
+      );
+
+    if (!template) {
+      throw new NotFoundException(
+        `Template with id ${id} not found.`,
+      );
     }
 
     /*
-     * CREATOR chỉ được xóa template
-     * do chính mình tạo.
+     * ADMIN:
+     *
+     * Có quyền xóa mọi template.
      */
+
+    if (user.role === "ADMIN") {
+      return this.templateRepository.delete(
+        id,
+      );
+    }
+
+    /*
+     * CREATOR:
+     *
+     * Chỉ được xóa template của chính mình.
+     */
+
     if (
       user.role === "CREATOR" &&
       template.authorId !== user.id
@@ -150,6 +227,8 @@ export class TemplateService implements TemplateServiceInterface {
       );
     }
 
-    return this.templateRepository.delete(id);
+    return this.templateRepository.delete(
+      id,
+    );
   }
 }

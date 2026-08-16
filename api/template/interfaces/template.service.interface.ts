@@ -1,5 +1,8 @@
+import type { Template } from "../../generated/prisma/client";
+
 import { CreateTemplateDto } from "../dto/create-template.dto";
 import { UpdateTemplateDto } from "../dto/update-template.dto";
+
 import { CurrentUserPayload } from "../../auth/interfaces/current-user.interface";
 
 export interface TemplateServiceInterface {
@@ -7,15 +10,23 @@ export interface TemplateServiceInterface {
   // Query
   // =========================
 
-  getAll(): Promise<any>;
+  getAll(): Promise<Template[]>;
 
-  getById(id: string): Promise<any>;
+  getById(
+    id: string,
+  ): Promise<Template | null>;
 
-  getBySlug(slug: string): Promise<any>;
+  getBySlug(
+    slug: string,
+  ): Promise<Template | null>;
 
-  getByAuthorId(authorId: string): Promise<any>;
+  getByAuthorId(
+    authorId: string,
+  ): Promise<Template[]>;
 
-  getByCategory(category: string): Promise<any>;
+  getByCategory(
+    category: string,
+  ): Promise<Template[]>;
 
   // =========================
   // Create
@@ -24,7 +35,7 @@ export interface TemplateServiceInterface {
   create(
     dto: CreateTemplateDto,
     user: CurrentUserPayload,
-  ): Promise<any>;
+  ): Promise<Template>;
 
   // =========================
   // Update
@@ -34,7 +45,7 @@ export interface TemplateServiceInterface {
     id: string,
     dto: UpdateTemplateDto,
     user: CurrentUserPayload,
-  ): Promise<any>;
+  ): Promise<Template>;
 
   // =========================
   // Delete
@@ -43,5 +54,5 @@ export interface TemplateServiceInterface {
   delete(
     id: string,
     user: CurrentUserPayload,
-  ): Promise<any>;
+  ): Promise<Template>;
 }
