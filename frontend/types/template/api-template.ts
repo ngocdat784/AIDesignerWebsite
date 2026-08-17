@@ -1,22 +1,39 @@
 // frontend/types/template/api-template.ts
 
+// =========================
+// Author
+// =========================
+
 export interface ApiTemplateAuthor {
   id: string;
   name: string;
   avatar?: string | null;
-  verified?: boolean;
+  email?: string;
+  role?: "USER" | "CREATOR" | "ADMIN";
 }
+
+// =========================
+// Included File
+// =========================
 
 export interface ApiTemplateIncludedFile {
   name: string;
   type: "file" | "folder";
 }
 
+// =========================
+// Changelog
+// =========================
+
 export interface ApiTemplateChangelog {
   version: string;
   date: string;
   changes: string[];
 }
+
+// =========================
+// Template
+// =========================
 
 export interface ApiTemplate {
   // =========================
@@ -39,9 +56,9 @@ export interface ApiTemplate {
 
   coverImage?: string | null;
 
-  images?: string[];
+  images: string[];
 
-  gallery?: string[];
+  gallery: string[];
 
   // =========================
   // Category / Tags
@@ -49,9 +66,9 @@ export interface ApiTemplate {
 
   category: string;
 
-  tags?: string[];
+  tags: string[];
 
-  relatedTemplateIds?: string[];
+  relatedTemplateIds: string[];
 
   // =========================
   // Author
@@ -65,37 +82,35 @@ export interface ApiTemplate {
   // Technology
   // =========================
 
-  techStack?: string[];
+  techStack: string[];
 
   // =========================
   // Detail information
   // =========================
 
-  includedFiles?: ApiTemplateIncludedFile[];
+  includedFiles?: ApiTemplateIncludedFile[] | null;
 
-  features?: string[];
+  features: string[];
 
-  installationSteps?: string[];
+  installationSteps: string[];
 
-  requirements?: string[];
+  requirements: string[];
 
-  changelog?: ApiTemplateChangelog[];
+  changelog?: ApiTemplateChangelog[] | null;
 
   // =========================
   // Statistics
   // =========================
 
-  rating?: number;
+  rating: number;
 
-  reviews?: number;
+  reviews: number;
 
-  reviewCount?: number;
+  downloads: number;
 
-  downloads?: number;
+  favorites: number;
 
-  favorites?: number;
-
-  views?: number;
+  views: number;
 
   // =========================
   // Pricing
@@ -111,15 +126,15 @@ export interface ApiTemplate {
   // Status
   // =========================
 
-  featured?: boolean;
+  featured: boolean;
 
-  newest?: boolean;
+  newest: boolean;
 
-  isFeatured?: boolean;
+  isFeatured: boolean;
 
-  isPremium?: boolean;
+  isPremium: boolean;
 
-  status?: string;
+  status: string;
 
   stock?: number | null;
 
@@ -129,15 +144,15 @@ export interface ApiTemplate {
   // Demo / Version
   // =========================
 
-  demoUrl?: string;
+  demoUrl?: string | null;
 
-  version?: string;
+  version?: string | null;
 
   // =========================
   // Timestamps
   // =========================
 
-  createdAt?: string;
+  createdAt: string;
 
-  updatedAt?: string;
+  updatedAt: string;
 }

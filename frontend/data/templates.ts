@@ -63,7 +63,13 @@ export const templates: Template[] = [
 
   rating: 4.9,
 
+  reviews: 218,
+
   reviewCount: 218,
+
+  featured: true,
+
+  newest: true,
 
   downloads: 1542,
 
@@ -210,7 +216,13 @@ status: "published",
 
     rating: 4.8,
 
+    reviews: 162,
+
     reviewCount: 162,
+
+    featured: true,
+
+    newest: false,
 
     downloads: 987,
 
@@ -341,7 +353,13 @@ status: "published",
 
     rating: 5,
 
+    reviews: 401,
+
     reviewCount: 401,
+
+    featured: true,
+
+    newest: false,
 
     downloads: 2860,
 

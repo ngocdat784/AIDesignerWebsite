@@ -28,6 +28,32 @@ export default function TemplateCard({
 
   const added = isInCart(template.id);
 
+  // =========================================================
+  // Pricing
+  // =========================================================
+  //
+  // Backend:
+  //
+  // price         = giá bán hiện tại
+  // originalPrice = giá gốc
+  // discountPrice = giá sau giảm nếu có
+  //
+  // Ưu tiên discountPrice nếu backend có truyền giá này.
+  // Nếu không có thì sử dụng price.
+  // =========================================================
+
+  const currentPrice =
+    template.discountPrice ??
+    template.price;
+
+  const originalPrice =
+    template.originalPrice ?? null;
+
+  // Chỉ xem là giảm giá khi giá gốc lớn hơn giá hiện tại.
+  const hasDiscount =
+    originalPrice !== null &&
+    originalPrice > currentPrice;
+
   return (
     <article
       className="
@@ -47,7 +73,9 @@ export default function TemplateCard({
         hover:shadow-lg
       "
     >
+      {/* ===================================================== */}
       {/* Thumbnail */}
+      {/* ===================================================== */}
 
       <div
         className="
@@ -62,6 +90,11 @@ export default function TemplateCard({
           src={template.thumbnail}
           alt={template.title}
           fill
+          sizes="
+            (max-width: 640px) 100vw,
+            (max-width: 1024px) 50vw,
+            33vw
+          "
           className="
             object-cover
             transition-transform
@@ -89,9 +122,33 @@ export default function TemplateCard({
             {template.badge.text}
           </div>
         )}
+
+        {/* Premium badge */}
+
+        {template.isPremium && !template.badge && (
+          <div
+            className="
+              absolute
+              left-4
+              top-4
+              rounded-full
+              bg-primary
+              px-3
+              py-1
+              text-xs
+              font-semibold
+              text-primary-foreground
+              shadow-sm
+            "
+          >
+            Premium
+          </div>
+        )}
       </div>
 
+      {/* ===================================================== */}
       {/* Content */}
+      {/* ===================================================== */}
 
       <div
         className="
@@ -101,7 +158,9 @@ export default function TemplateCard({
           p-5
         "
       >
-        {/* Title + Description */}
+        {/* =================================================== */}
+        {/* Title + Price */}
+        {/* =================================================== */}
 
         <div>
           <div
@@ -115,6 +174,7 @@ export default function TemplateCard({
             <h3
               className="
                 line-clamp-1
+                min-w-0
                 text-lg
                 font-semibold
                 leading-6
@@ -125,9 +185,13 @@ export default function TemplateCard({
             </h3>
 
             <PriceTag
-              price={template.price}
-              discountPrice={template.originalPrice ?? undefined}
-            />
+  price={currentPrice}
+  originalPrice={
+    hasDiscount
+      ? originalPrice
+      : undefined
+  }
+/>
           </div>
 
           <p
@@ -143,7 +207,9 @@ export default function TemplateCard({
           </p>
         </div>
 
+        {/* =================================================== */}
         {/* Rating + Downloads */}
+        {/* =================================================== */}
 
         <div
           className="
@@ -155,8 +221,12 @@ export default function TemplateCard({
           "
         >
           <Rating
-            value={template.rating}
-            reviewCount={template.reviews}
+            value={template.rating ?? 0}
+            reviewCount={
+              template.reviews ??
+              template.reviewCount ??
+              0
+            }
           />
 
           <div
@@ -172,12 +242,14 @@ export default function TemplateCard({
             <Download className="h-3.5 w-3.5" />
 
             <span>
-              {template.downloads.toLocaleString()}
+              {(template.downloads ?? 0).toLocaleString()}
             </span>
           </div>
         </div>
 
+        {/* =================================================== */}
         {/* Author */}
+        {/* =================================================== */}
 
         <div
           className="
@@ -197,7 +269,8 @@ export default function TemplateCard({
                 font-medium
               "
             >
-              {template.author.name}
+              {template.author?.name ??
+                "Unknown Creator"}
             </p>
 
             <p
@@ -212,7 +285,7 @@ export default function TemplateCard({
             </p>
           </div>
 
-          {template.author.verified && (
+          {template.author?.verified && (
             <div
               className="
                 ml-3
@@ -231,7 +304,9 @@ export default function TemplateCard({
           )}
         </div>
 
+        {/* =================================================== */}
         {/* Actions */}
+        {/* =================================================== */}
 
         <div
           className="
@@ -240,6 +315,8 @@ export default function TemplateCard({
             gap-2.5
           "
         >
+          {/* Preview */}
+
           <Link
             href={`/templates/${template.slug}`}
             className="min-w-0 flex-1"
@@ -254,6 +331,8 @@ export default function TemplateCard({
               Preview
             </AppButton>
           </Link>
+
+          {/* Cart */}
 
           {added ? (
             <Link href="/cart">

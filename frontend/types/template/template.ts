@@ -1,7 +1,17 @@
+// frontend/types/template/template.ts
+
+// =========================
+// License
+// =========================
+
 export type TemplateLicense =
   | "Personal"
   | "Commercial"
   | string;
+
+// =========================
+// Author
+// =========================
 
 export interface TemplateAuthor {
   id: string;
@@ -10,16 +20,28 @@ export interface TemplateAuthor {
   verified?: boolean;
 }
 
+// =========================
+// Included File
+// =========================
+
 export interface TemplateIncludedFile {
   name: string;
   type: "file" | "folder";
 }
+
+// =========================
+// Changelog
+// =========================
 
 export interface TemplateChangelog {
   version: string;
   date: string;
   changes: string[];
 }
+
+// =========================
+// Template
+// =========================
 
 export interface Template {
   // =========================
@@ -36,11 +58,15 @@ export interface Template {
 
   thumbnail: string;
 
+  // =========================
+  // Images
+  // =========================
+
   coverImage?: string | null;
 
   images: string[];
 
-  gallery?: string[];
+  gallery: string[];
 
   // =========================
   // Category / Tags
@@ -50,7 +76,7 @@ export interface Template {
 
   tags: string[];
 
-  relatedTemplateIds?: string[];
+  relatedTemplateIds: string[];
 
   // =========================
   // Author
@@ -64,38 +90,42 @@ export interface Template {
   // Technology
   // =========================
 
-  techStack?: string[];
+  techStack: string[];
 
   // =========================
   // Detail information
   // =========================
 
-  includedFiles?: TemplateIncludedFile[];
+  includedFiles: TemplateIncludedFile[];
 
-  features?: string[];
+  features: string[];
 
-  installationSteps?: string[];
+  installationSteps: string[];
 
-  requirements?: string[];
+  requirements: string[];
 
-  changelog?: TemplateChangelog[];
+  changelog: TemplateChangelog[];
 
   // =========================
   // Statistics
   // =========================
 
-  rating?: number;
+  rating: number;
 
-  reviews?: number;
+  reviews: number;
 
-  // Alias nếu UI cũ đang dùng reviewCount
+  /**
+   * Alias cho code/UI cũ.
+   *
+   * Backend sử dụng `reviews`.
+   */
   reviewCount?: number;
 
-  downloads?: number;
+  downloads: number;
 
-  favorites?: number;
+  favorites: number;
 
-  views?: number;
+  views: number;
 
   // =========================
   // Pricing
@@ -105,23 +135,31 @@ export interface Template {
 
   originalPrice?: number | null;
 
-  // Alias cho code cũ
+  /**
+   * Alias cho code/UI cũ.
+   *
+   * Backend hiện có `discountPrice`.
+   */
   discountPrice?: number | null;
 
   // =========================
   // Status
   // =========================
 
-  featured?: boolean;
+  featured: boolean;
 
-  newest?: boolean;
+  newest: boolean;
 
-  // Alias cho code cũ
-  isFeatured?: boolean;
+  /**
+   * Alias cho code/UI cũ.
+   *
+   * Backend hiện có cả `featured` và `isFeatured`.
+   */
+  isFeatured: boolean;
 
-  isPremium?: boolean;
+  isPremium: boolean;
 
-  status?: string;
+  status: string;
 
   stock?: number | null;
 
@@ -131,15 +169,15 @@ export interface Template {
   // Demo / Version
   // =========================
 
-  demoUrl?: string;
+  demoUrl?: string | null;
 
-  version?: string;
+  version?: string | null;
 
   // =========================
   // Timestamps
   // =========================
 
-  createdAt?: string;
+  createdAt: string;
 
-  updatedAt?: string;
+  updatedAt: string;
 }

@@ -25,6 +25,10 @@ function mapApiTemplateToTemplate(
 
     thumbnail: item.thumbnail,
 
+    // =========================
+    // Images
+    // =========================
+
     coverImage:
       item.coverImage ?? null,
 
@@ -40,7 +44,8 @@ function mapApiTemplateToTemplate(
     // Category / Tags
     // =========================
 
-    category: item.category,
+    category:
+      item.category,
 
     tags:
       item.tags ?? [],
@@ -63,9 +68,6 @@ function mapApiTemplateToTemplate(
 
           avatar:
             item.author.avatar ?? null,
-
-          verified:
-            item.author.verified ?? false,
         }
       : null,
 
@@ -105,11 +107,6 @@ function mapApiTemplateToTemplate(
     reviews:
       item.reviews ?? 0,
 
-    reviewCount:
-      item.reviewCount ??
-      item.reviews ??
-      0,
-
     downloads:
       item.downloads ?? 0,
 
@@ -130,34 +127,26 @@ function mapApiTemplateToTemplate(
       item.originalPrice ?? null,
 
     discountPrice:
-      item.discountPrice ??
-      item.originalPrice ??
-      null,
+      item.discountPrice ?? null,
 
     // =========================
     // Status
     // =========================
 
     featured:
-      item.featured ??
-      item.isFeatured ??
-      false,
+      item.featured ?? false,
 
     newest:
-      item.newest ??
-      false,
+      item.newest ?? false,
 
     isFeatured:
-      item.isFeatured ??
-      item.featured ??
-      false,
+      item.isFeatured ?? false,
 
     isPremium:
-      item.isPremium ??
-      false,
+      item.isPremium ?? false,
 
     status:
-      item.status,
+      item.status ?? "published",
 
     stock:
       item.stock ?? null,
@@ -170,10 +159,10 @@ function mapApiTemplateToTemplate(
     // =========================
 
     demoUrl:
-      item.demoUrl,
+      item.demoUrl ?? null,
 
     version:
-      item.version,
+      item.version ?? null,
 
     // =========================
     // Timestamps

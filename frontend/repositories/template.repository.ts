@@ -6,61 +6,225 @@ import type { ApiTemplate } from "@/types/template/api-template";
 // =========================
 
 export interface CreateTemplateData {
+  // =========================
+  // Basic information
+  // =========================
+
   id: string;
   slug: string;
+
   title: string;
   description: string;
+
   thumbnail: string;
 
+  // =========================
+  // Images
+  // =========================
+
+  coverImage?: string | null;
+
   images?: string[];
+
+  gallery?: string[];
+
+  // =========================
+  // Category / Tags
+  // =========================
 
   category: string;
 
   tags?: string[];
 
-  authorId: string;
+  relatedTemplateIds?: string[];
+
+  // =========================
+  // Technology
+  // =========================
+
+  techStack?: string[];
+
+  // =========================
+  // Detail information
+  // =========================
+
+  includedFiles?: {
+    name: string;
+    type: "file" | "folder";
+  }[];
+
+  features?: string[];
+
+  installationSteps?: string[];
+
+  requirements?: string[];
+
+  changelog?: {
+    version: string;
+    date: string;
+    changes: string[];
+  }[];
+
+  // =========================
+  // Statistics
+  // =========================
 
   rating?: number;
+
   reviews?: number;
+
   downloads?: number;
+
+  favorites?: number;
+
+  views?: number;
+
+  // =========================
+  // Pricing
+  // =========================
 
   price: number;
 
-  originalPrice?: number;
+  originalPrice?: number | null;
+
+  discountPrice?: number | null;
+
+  // =========================
+  // Status
+  // =========================
 
   featured?: boolean;
+
   newest?: boolean;
 
-  stock?: number;
+  isFeatured?: boolean;
 
-  license?: string;
+  isPremium?: boolean;
+
+  status?: string;
+
+  stock?: number | null;
+
+  license?: string | null;
+
+  // =========================
+  // Demo / Version
+  // =========================
+
+  demoUrl?: string;
+
+  version?: string;
 }
 
 export interface UpdateTemplateData {
+  // =========================
+  // Basic information
+  // =========================
+
+  slug?: string;
+
   title?: string;
+
   description?: string;
+
   thumbnail?: string;
 
+  // =========================
+  // Images
+  // =========================
+
+  coverImage?: string | null;
+
   images?: string[];
+
+  gallery?: string[];
+
+  // =========================
+  // Category / Tags
+  // =========================
 
   category?: string;
 
   tags?: string[];
 
+  relatedTemplateIds?: string[];
+
+  // =========================
+  // Technology
+  // =========================
+
+  techStack?: string[];
+
+  // =========================
+  // Detail information
+  // =========================
+
+  includedFiles?: {
+    name: string;
+    type: "file" | "folder";
+  }[];
+
+  features?: string[];
+
+  installationSteps?: string[];
+
+  requirements?: string[];
+
+  changelog?: {
+    version: string;
+    date: string;
+    changes: string[];
+  }[];
+
+  // =========================
+  // Statistics
+  // =========================
+
   rating?: number;
+
   reviews?: number;
+
   downloads?: number;
+
+  favorites?: number;
+
+  views?: number;
+
+  // =========================
+  // Pricing
+  // =========================
 
   price?: number;
 
   originalPrice?: number | null;
 
+  discountPrice?: number | null;
+
+  // =========================
+  // Status
+  // =========================
+
   featured?: boolean;
+
   newest?: boolean;
+
+  isFeatured?: boolean;
+
+  isPremium?: boolean;
+
+  status?: string;
 
   stock?: number | null;
 
   license?: string | null;
+
+  // =========================
+  // Demo / Version
+  // =========================
+
+  demoUrl?: string;
+
+  version?: string;
 }
 
 // =========================
@@ -68,9 +232,9 @@ export interface UpdateTemplateData {
 // =========================
 
 export const templateRepository = {
-  // =========================
+  // =========================================================
   // GET /templates
-  // =========================
+  // =========================================================
 
   async findAll(): Promise<ApiTemplate[]> {
     return apiClient<ApiTemplate[]>(
@@ -81,9 +245,9 @@ export const templateRepository = {
     );
   },
 
-  // =========================
+  // =========================================================
   // GET /templates/:id
-  // =========================
+  // =========================================================
 
   async findById(
     id: string,
@@ -96,9 +260,9 @@ export const templateRepository = {
     );
   },
 
-  // =========================
+  // =========================================================
   // GET /templates/slug/:slug
-  // =========================
+  // =========================================================
 
   async findBySlug(
     slug: string,
@@ -111,9 +275,9 @@ export const templateRepository = {
     );
   },
 
-  // =========================
+  // =========================================================
   // GET /templates/author/:authorId
-  // =========================
+  // =========================================================
 
   async findByAuthorId(
     authorId: string,
@@ -126,9 +290,9 @@ export const templateRepository = {
     );
   },
 
-  // =========================
+  // =========================================================
   // GET /templates/category/:category
-  // =========================
+  // =========================================================
 
   async findByCategory(
     category: string,
@@ -141,33 +305,36 @@ export const templateRepository = {
     );
   },
 
-  // =========================
+  // =========================================================
   // Featured
-  // =========================
+  // =========================================================
   //
-  // Backend hiện chưa có:
+  // Backend chưa có:
   // GET /templates/featured
   //
-  // Vì vậy lấy toàn bộ template
-  // rồi filter ở frontend.
-  // =========================
+  // Vì vậy filter ở frontend.
+  // =========================================================
 
   async findFeatured(): Promise<ApiTemplate[]> {
     const templates =
       await this.findAll();
 
     return templates.filter(
-      (item) => item.featured === true,
+      (template) =>
+        template.featured === true ||
+        template.isFeatured === true,
     );
   },
 
-  // =========================
-  // Related
-  // =========================
+  // =========================================================
+  // Related templates
+  // =========================================================
   //
-  // Related template được xác định
-  // dựa trên category hoặc tags.
-  // =========================
+  // Ưu tiên relatedTemplateIds.
+  // Nếu không có thì fallback:
+  // - cùng category
+  // - hoặc có tag chung
+  // =========================================================
 
   async findRelated(
     current: ApiTemplate,
@@ -176,24 +343,57 @@ export const templateRepository = {
     const templates =
       await this.findAll();
 
+    // ---------------------------------------------------------
+    // 1. Nếu template có relatedTemplateIds
+    // ---------------------------------------------------------
+
+    const relatedIds =
+      current.relatedTemplateIds ?? [];
+
+    if (relatedIds.length > 0) {
+      const related =
+        relatedIds
+          .map((id) =>
+            templates.find(
+              (template) =>
+                template.id === id,
+            ),
+          )
+          .filter(
+            (
+              template,
+            ): template is ApiTemplate =>
+              template !== undefined,
+          )
+          .slice(0, limit);
+
+      if (related.length > 0) {
+        return related;
+      }
+    }
+
+    // ---------------------------------------------------------
+    // 2. Fallback: category + tags
+    // ---------------------------------------------------------
+
     const currentTags =
       current.tags ?? [];
 
     return templates
-      .filter((item) => {
+      .filter((template) => {
         // Không lấy chính template hiện tại
-        if (item.id === current.id) {
+        if (template.id === current.id) {
           return false;
         }
 
         // Cùng category
         const sameCategory =
-          item.category ===
+          template.category ===
           current.category;
 
-        // Có ít nhất một tag chung
+        // Có tag chung
         const sameTags =
-          (item.tags ?? []).some(
+          (template.tags ?? []).some(
             (tag) =>
               currentTags.includes(tag),
           );
@@ -203,15 +403,50 @@ export const templateRepository = {
           sameTags
         );
       })
+      .sort((a, b) => {
+        // Ưu tiên cùng category
+        const aSameCategory =
+          a.category ===
+          current.category
+            ? 1
+            : 0;
+
+        const bSameCategory =
+          b.category ===
+          current.category
+            ? 1
+            : 0;
+
+        if (
+          aSameCategory !==
+          bSameCategory
+        ) {
+          return (
+            bSameCategory -
+            aSameCategory
+          );
+        }
+
+        // Sau đó ưu tiên rating
+        return (
+          (b.rating ?? 0) -
+          (a.rating ?? 0)
+        );
+      })
       .slice(0, limit);
   },
 
-  // =========================
+  // =========================================================
   // POST /templates
-  // =========================
+  // =========================================================
   //
   // CREATOR / ADMIN
-  // =========================
+  //
+  // authorId KHÔNG gửi từ frontend.
+  // Backend tự lấy:
+  //
+  // authorId = CurrentUser.id
+  // =========================================================
 
   async create(
     data: CreateTemplateData,
@@ -225,9 +460,9 @@ export const templateRepository = {
     );
   },
 
-  // =========================
+  // =========================================================
   // PATCH /templates/:id
-  // =========================
+  // =========================================================
   //
   // CREATOR:
   //   chỉ sửa template của mình
@@ -235,9 +470,8 @@ export const templateRepository = {
   // ADMIN:
   //   sửa mọi template
   //
-  // Quyền thực tế được kiểm tra
-  // ở backend.
-  // =========================
+  // Quyền được kiểm tra ở backend.
+  // =========================================================
 
   async update(
     id: string,
@@ -252,16 +486,16 @@ export const templateRepository = {
     );
   },
 
-  // =========================
+  // =========================================================
   // DELETE /templates/:id
-  // =========================
+  // =========================================================
   //
   // CREATOR:
   //   chỉ xóa template của mình
   //
   // ADMIN:
   //   xóa mọi template
-  // =========================
+  // =========================================================
 
   async delete(
     id: string,

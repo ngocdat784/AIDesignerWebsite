@@ -48,10 +48,14 @@ export interface MarketplaceTemplate {
 
   reviews: number;
 
+  reviewCount?: number;
+
   downloads: number;
 
   price: number;
   discountPrice?: number;
+
+  isPremium?: boolean;
 
   originalPrice?: number;
 
