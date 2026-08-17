@@ -10,8 +10,16 @@ import TemplatePriceCard from "@/components/sections/template-detail/TemplatePri
 import TemplateDescription from "@/components/sections/template-detail/TemplateDescription";
 import TemplateTechStack from "@/components/sections/template-detail/TemplateTechStack";
 import TemplateIncludedFiles from "@/components/sections/template-detail/TemplateIncludedFiles";
+import TemplateFeatures from "@/components/sections/template-detail/TemplateFeatures";
+import TemplateInstallation from "@/components/sections/template-detail/TemplateInstallation";
+import TemplateRequirements from "@/components/sections/template-detail/TemplateRequirements";
+import TemplateChangelog from "@/components/sections/template-detail/TemplateChangelog";
 import TemplateActions from "@/components/sections/template-detail/TemplateActions";
 import RelatedTemplates from "@/components/sections/template-detail/RelatedTemplates";
+import TemplateFeatures from "@/components/sections/template-detail/TemplateFeatures";
+import TemplateInstallation from "@/components/sections/template-detail/TemplateInstallation";
+import TemplateRequirements from "@/components/sections/template-detail/TemplateRequirements";
+import TemplateChangelog from "@/components/sections/template-detail/TemplateChangelog";
 
 interface Props {
   params: Promise<{
@@ -24,64 +32,181 @@ export default async function TemplateDetailPage({
 }: Props) {
   const { slug } = await params;
 
-  // =========================
-  // Get template from API
-  // =========================
+  // =========================================================
+  // Get template
+  // =========================================================
 
   const template =
     await templateService.getBySlug(slug);
 
-  // =========================
-  // Template not found
-  // =========================
+  // =========================================================
+  // Not found
+  // =========================================================
 
   if (!template) {
     notFound();
   }
 
-  // =========================
-  // Render
-  // =========================
+  // =========================================================
+  // Related templates
+  // =========================================================
+
+  const relatedTemplates =
+    await templateService.getRelated(
+      template,
+      3,
+    );
 
   return (
-    <main className="container space-y-10 py-10">
+    <main
+      className="
+        container
+        mx-auto
+        space-y-10
+        px-4
+        py-8
+        sm:px-6
+        sm:py-10
+        lg:px-8
+      "
+    >
+      {/* =================================================== */}
+      {/* Breadcrumb */}
+      {/* =================================================== */}
+
       <Breadcrumb />
+
+      {/* =================================================== */}
+      {/* Gallery */}
+      {/* */}
+      {/* coverImage */}
+      {/* gallery */}
+      {/* images */}
+      {/* =================================================== */}
 
       <TemplateGallery
         template={template}
       />
 
+      {/* =================================================== */}
+      {/* Header */}
+      {/* */}
+      {/* title */}
+      {/* slug */}
+      {/* category */}
+      {/* author */}
+      {/* premium */}
+      {/* version */}
+      {/* =================================================== */}
+
       <TemplateHeader
         template={template}
       />
+
+      {/* =================================================== */}
+      {/* Statistics */}
+      {/* */}
+      {/* rating */}
+      {/* reviews */}
+      {/* downloads */}
+      {/* favorites */}
+      {/* views */}
+      {/* =================================================== */}
 
       <TemplateStatistics
         template={template}
       />
 
+      {/* =================================================== */}
+      {/* Price */}
+      {/* */}
+      {/* price */}
+      {/* originalPrice */}
+      {/* discountPrice */}
+      {/* stock */}
+      {/* =================================================== */}
+
       <TemplatePriceCard
         template={template}
       />
+
+      {/* =================================================== */}
+      {/* Actions */}
+      {/* */}
+      {/* Preview */}
+      {/* Add to cart */}
+      {/* Demo */}
+      {/* =================================================== */}
 
       <TemplateActions
         template={template}
       />
 
+      {/* =================================================== */}
+      {/* Description */}
+      {/* =================================================== */}
+
       <TemplateDescription
         template={template}
       />
+
+      {/* =================================================== */}
+      {/* Features */}
+      {/* =================================================== */}
+
+      <TemplateFeatures
+        template={template}
+      />
+
+      {/* =================================================== */}
+      {/* Technology */}
+      {/* =================================================== */}
 
       <TemplateTechStack
         template={template}
       />
 
+      {/* =================================================== */}
+      {/* Included Files */}
+      {/* =================================================== */}
+
       <TemplateIncludedFiles
         template={template}
       />
 
-      <RelatedTemplates
+      {/* =================================================== */}
+      {/* Installation */}
+      {/* =================================================== */}
+
+      <TemplateInstallation
         template={template}
       />
+
+      {/* =================================================== */}
+      {/* Requirements */}
+      {/* =================================================== */}
+
+      <TemplateRequirements
+        template={template}
+      />
+
+      {/* =================================================== */}
+      {/* Changelog */}
+      {/* =================================================== */}
+
+      <TemplateChangelog
+        template={template}
+      />
+
+      {/* =================================================== */}
+      {/* Related Templates */}
+      {/* =================================================== */}
+
+      <RelatedTemplates
+        template={template}
+        templates={relatedTemplates}
+      />
+      
     </main>
   );
 }

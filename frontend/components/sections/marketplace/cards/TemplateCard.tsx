@@ -1,3 +1,4 @@
+
 "use client";
 
 import Image from "next/image";
@@ -31,16 +32,6 @@ export default function TemplateCard({
   // =========================================================
   // Pricing
   // =========================================================
-  //
-  // Backend:
-  //
-  // price         = giá bán hiện tại
-  // originalPrice = giá gốc
-  // discountPrice = giá sau giảm nếu có
-  //
-  // Ưu tiên discountPrice nếu backend có truyền giá này.
-  // Nếu không có thì sử dụng price.
-  // =========================================================
 
   const currentPrice =
     template.discountPrice ??
@@ -49,10 +40,35 @@ export default function TemplateCard({
   const originalPrice =
     template.originalPrice ?? null;
 
-  // Chỉ xem là giảm giá khi giá gốc lớn hơn giá hiện tại.
   const hasDiscount =
     originalPrice !== null &&
     originalPrice > currentPrice;
+
+  // =========================================================
+  // Statistics
+  // =========================================================
+
+  const rating =
+    template.rating ?? 0;
+
+  const reviewCount =
+    template.reviews ??
+    template.reviewCount ??
+    0;
+
+  const downloads =
+    template.downloads ?? 0;
+
+  // =========================================================
+  // Author
+  // =========================================================
+
+  const authorName =
+    template.author?.name ??
+    "Unknown Creator";
+
+  const authorVerified =
+    template.author?.verified ?? false;
 
   return (
     <article
@@ -60,10 +76,12 @@ export default function TemplateCard({
         group
         flex
         h-full
+        min-w-0
         flex-col
         overflow-hidden
         rounded-2xl
         border
+        border-border/60
         bg-card
         shadow-sm
         transition-all
@@ -77,74 +95,109 @@ export default function TemplateCard({
       {/* Thumbnail */}
       {/* ===================================================== */}
 
-      <div
+      <Link
+        href={`/templates/${template.slug}`}
         className="
-          relative
-          aspect-[16/9]
-          w-full
-          overflow-hidden
-          bg-muted
+          block
+          shrink-0
         "
       >
-        <Image
-          src={template.thumbnail}
-          alt={template.title}
-          fill
-          sizes="
-            (max-width: 640px) 100vw,
-            (max-width: 1024px) 50vw,
-            33vw
-          "
+        <div
           className="
-            object-cover
-            transition-transform
-            duration-500
-            group-hover:scale-105
+            relative
+            aspect-[16/9]
+            w-full
+            overflow-hidden
+            bg-muted
           "
-        />
-
-        {template.badge && (
-          <div
-            className="
-              absolute
-              left-4
-              top-4
-              rounded-full
-              bg-primary
-              px-3
-              py-1
-              text-xs
-              font-semibold
-              text-primary-foreground
-              shadow-sm
+        >
+          <Image
+            src={template.thumbnail}
+            alt={template.title}
+            fill
+            sizes="
+              (max-width: 640px) 100vw,
+              (max-width: 1024px) 50vw,
+              (max-width: 1536px) 33vw,
+              25vw
             "
-          >
-            {template.badge.text}
-          </div>
-        )}
-
-        {/* Premium badge */}
-
-        {template.isPremium && !template.badge && (
-          <div
             className="
-              absolute
-              left-4
-              top-4
-              rounded-full
-              bg-primary
-              px-3
-              py-1
-              text-xs
-              font-semibold
-              text-primary-foreground
-              shadow-sm
+              object-cover
+              transition-transform
+              duration-500
+              group-hover:scale-105
             "
-          >
-            Premium
-          </div>
-        )}
-      </div>
+          />
+
+          {/* Custom badge */}
+
+          {template.badge && (
+            <div
+              className="
+                absolute
+                left-3
+                top-3
+                rounded-full
+                bg-primary
+                px-3
+                py-1
+                text-xs
+                font-semibold
+                text-primary-foreground
+                shadow-md
+              "
+            >
+              {template.badge.text}
+            </div>
+          )}
+
+          {/* Premium badge */}
+
+          {template.isPremium &&
+            !template.badge && (
+              <div
+                className="
+                  absolute
+                  left-3
+                  top-3
+                  rounded-full
+                  bg-primary
+                  px-3
+                  py-1
+                  text-xs
+                  font-semibold
+                  text-primary-foreground
+                  shadow-md
+                "
+              >
+                Premium
+              </div>
+            )}
+
+          {/* New badge */}
+
+          {template.newest && (
+            <div
+              className="
+                absolute
+                right-3
+                top-3
+                rounded-full
+                bg-background/90
+                px-3
+                py-1
+                text-xs
+                font-semibold
+                text-foreground
+                shadow-md
+                backdrop-blur
+              "
+            >
+              New
+            </div>
+          )}
+        </div>
+      </Link>
 
       {/* ===================================================== */}
       {/* Content */}
@@ -153,58 +206,105 @@ export default function TemplateCard({
       <div
         className="
           flex
+          min-w-0
           flex-1
           flex-col
-          p-5
+          p-4
+          sm:p-5
         "
       >
         {/* =================================================== */}
-        {/* Title + Price */}
+        {/* Title */}
         {/* =================================================== */}
 
-        <div>
+        <Link
+          href={`/templates/${template.slug}`}
+          className="
+            block
+            min-w-0
+          "
+        >
+          <h3
+            className="
+              line-clamp-2
+              min-h-[3rem]
+              text-base
+              font-semibold
+              leading-6
+              tracking-tight
+              transition-colors
+              group-hover:text-primary
+              sm:text-lg
+            "
+          >
+            {template.title}
+          </h3>
+        </Link>
+
+        {/* =================================================== */}
+        {/* Description */}
+        {/* =================================================== */}
+
+        <p
+          className="
+            mt-2
+            line-clamp-2
+            min-h-[3rem]
+            text-sm
+            leading-6
+            text-muted-foreground
+          "
+        >
+          {template.description}
+        </p>
+
+        {/* =================================================== */}
+        {/* Price */}
+        {/* =================================================== */}
+
+        <div
+          className="
+            mt-4
+            flex
+            min-h-[5.5rem]
+            items-start
+            justify-between
+            gap-3
+            border-b
+            border-border/60
+            pb-4
+          "
+        >
+          <PriceTag
+            price={currentPrice}
+            originalPrice={
+              hasDiscount
+                ? originalPrice
+                : undefined
+            }
+            size="md"
+          />
+
+          {/* Category */}
+
           <div
             className="
-              flex
-              items-start
-              justify-between
-              gap-3
+              max-w-[40%]
+              pt-1
+              text-right
             "
           >
-            <h3
+            <span
               className="
-                line-clamp-1
-                min-w-0
-                text-lg
-                font-semibold
-                leading-6
-                tracking-tight
+                line-clamp-2
+                text-xs
+                font-medium
+                text-muted-foreground
               "
             >
-              {template.title}
-            </h3>
-
-            <PriceTag
-  price={currentPrice}
-  originalPrice={
-    hasDiscount
-      ? originalPrice
-      : undefined
-  }
-/>
+              {template.category}
+            </span>
           </div>
-
-          <p
-            className="
-              mt-2
-              line-clamp-2
-              text-sm
-              leading-6
-              text-muted-foreground
-            "
-          >
-            {template.description}
-          </p>
         </div>
 
         {/* =================================================== */}
@@ -215,19 +315,18 @@ export default function TemplateCard({
           className="
             mt-4
             flex
+            min-w-0
             items-center
             justify-between
-            gap-4
+            gap-3
           "
         >
-          <Rating
-            value={template.rating ?? 0}
-            reviewCount={
-              template.reviews ??
-              template.reviewCount ??
-              0
-            }
-          />
+          <div className="min-w-0">
+            <Rating
+              value={rating}
+              reviewCount={reviewCount}
+            />
+          </div>
 
           <div
             className="
@@ -239,10 +338,15 @@ export default function TemplateCard({
               text-muted-foreground
             "
           >
-            <Download className="h-3.5 w-3.5" />
+            <Download
+              className="
+                h-3.5
+                w-3.5
+              "
+            />
 
             <span>
-              {(template.downloads ?? 0).toLocaleString()}
+              {downloads.toLocaleString()}
             </span>
           </div>
         </div>
@@ -255,40 +359,81 @@ export default function TemplateCard({
           className="
             mt-4
             flex
+            min-w-0
             items-center
             justify-between
-            border-t
-            pt-4
+            gap-3
           "
         >
-          <div className="min-w-0">
-            <p
-              className="
-                truncate
-                text-sm
-                font-medium
-              "
-            >
-              {template.author?.name ??
-                "Unknown Creator"}
-            </p>
+          <div
+            className="
+              flex
+              min-w-0
+              items-center
+              gap-2.5
+            "
+          >
+            {/* Avatar */}
 
-            <p
-              className="
-                mt-0.5
-                truncate
-                text-xs
-                text-muted-foreground
-              "
-            >
-              {template.category}
-            </p>
-          </div>
-
-          {template.author?.verified && (
             <div
               className="
-                ml-3
+                flex
+                h-9
+                w-9
+                shrink-0
+                items-center
+                justify-center
+                overflow-hidden
+                rounded-full
+                bg-primary/10
+                text-xs
+                font-semibold
+                text-primary
+              "
+            >
+              {template.author?.avatar ? (
+                <Image
+                  src={template.author.avatar}
+                  alt={authorName}
+                  width={36}
+                  height={36}
+                  className="h-full w-full object-cover"
+                />
+              ) : (
+                authorName
+                  .charAt(0)
+                  .toUpperCase()
+              )}
+            </div>
+
+            <div className="min-w-0">
+              <p
+                className="
+                  truncate
+                  text-sm
+                  font-medium
+                "
+              >
+                {authorName}
+              </p>
+
+              <p
+                className="
+                  truncate
+                  text-xs
+                  text-muted-foreground
+                "
+              >
+                Creator
+              </p>
+            </div>
+          </div>
+
+          {/* Verified */}
+
+          {authorVerified && (
+            <div
+              className="
                 shrink-0
                 rounded-full
                 bg-primary/10
@@ -310,22 +455,27 @@ export default function TemplateCard({
 
         <div
           className="
-            mt-5
+            mt-auto
             flex
-            gap-2.5
+            gap-2
+            pt-5
           "
         >
           {/* Preview */}
 
           <Link
             href={`/templates/${template.slug}`}
-            className="min-w-0 flex-1"
+            className="
+              min-w-0
+              flex-1
+            "
           >
             <AppButton
               className="
-                h-11
+                h-10
                 w-full
                 rounded-xl
+                sm:h-11
               "
             >
               Preview
@@ -335,17 +485,34 @@ export default function TemplateCard({
           {/* Cart */}
 
           {added ? (
-            <Link href="/cart">
+            <Link
+              href="/cart"
+              className="shrink-0"
+            >
               <AppButton
                 className="
-                  h-11
+                  h-10
                   rounded-xl
-                  px-4
+                  px-3
+                  sm:h-11
+                  sm:px-4
                 "
               >
-                <Check className="mr-2 h-4 w-4" />
+                <Check
+                  className="
+                    mr-2
+                    h-4
+                    w-4
+                  "
+                />
 
-                View Cart
+                <span className="hidden sm:inline">
+                  View Cart
+                </span>
+
+                <span className="sm:hidden">
+                  Cart
+                </span>
               </AppButton>
             </Link>
           ) : (
@@ -353,14 +520,21 @@ export default function TemplateCard({
               variant="outline"
               size="icon"
               className="
-                h-11
-                w-11
+                h-10
+                w-10
                 shrink-0
                 rounded-xl
+                sm:h-11
+                sm:w-11
               "
               onClick={() => add(template)}
             >
-              <ShoppingCart className="h-4 w-4" />
+              <ShoppingCart
+                className="
+                  h-4
+                  w-4
+                "
+              />
             </AppButton>
           )}
         </div>
@@ -368,3 +542,4 @@ export default function TemplateCard({
     </article>
   );
 }
+
