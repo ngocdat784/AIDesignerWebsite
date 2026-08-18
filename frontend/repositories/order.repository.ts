@@ -1,210 +1,149 @@
-import type { Order } from "@/types/order/order";
+import { apiClient } from "@/lib/api-client";
 
-const ORDER_STORAGE_KEY = "ai-designer-orders";
+import type {
+  CreateOrderData,
+  Order,
+  OrderStatus,
+  UpdateOrderData,
+} from "@/types/order/order";
 
-class OrderRepository {
+// =========================
+// Order Repository
+// =========================
+
+export const orderRepository = {
   // =========================
-  // Query
+  // GET /orders
+  // =========================
+  //
+  // ADMIN ONLY
   // =========================
 
-  /**
-   * Lấy toàn bộ orders
-   */
-  getAll(): Order[] {
-    if (typeof window === "undefined") {
-      return [];
-    }
-
-    try {
-      const data =
-        localStorage.getItem(
-          ORDER_STORAGE_KEY
-        );
-
-      if (!data) {
-        return [];
-      }
-
-      return JSON.parse(data) as Order[];
-    } catch (error) {
-      console.error(
-        "Failed to get orders:",
-        error
-      );
-
-      return [];
-    }
-  }
-
-  /**
-   * Lấy order theo ID
-   */
-  getById(
-    orderId: string
-  ): Order | null {
-    return (
-      this.getAll().find(
-        (order) =>
-          order.id === orderId
-      ) ?? null
+  async getAll(): Promise<Order[]> {
+    return apiClient<Order[]>(
+      "/orders",
+      {
+        method: "GET",
+      },
     );
-  }
-
-  /**
-   * Lấy orders của user
-   */
-  getByUserId(
-    userId: string
-  ): Order[] {
-    return this.getAll().filter(
-      (order) =>
-        order.userId === userId
-    );
-  }
-
-  /**
-   * Kiểm tra order tồn tại
-   */
-  hasOrder(
-    orderId: string
-  ): boolean {
-    return (
-      this.getById(orderId) !== null
-    );
-  }
+  },
 
   // =========================
-  // Commands
+  // GET /orders/:id
+  // =========================
+  //
+  // USER:
+  //   chỉ xem order của mình
+  //
+  // ADMIN:
+  //   xem bất kỳ order
   // =========================
 
-  /**
-   * Tạo order
-   */
-  create(order: Order): Order {
-    const orders =
-      this.getAll();
-
-    orders.push(order);
-
-    this.saveAll(orders);
-
-    return order;
-  }
-
-  /**
-   * Cập nhật order
-   */
-  update(
+  async getById(
     orderId: string,
-    updates: Partial<Order>
-  ): Order | null {
-    const orders =
-      this.getAll();
-
-    const index =
-      orders.findIndex(
-        (order) =>
-          order.id === orderId
-      );
-
-    if (index === -1) {
-      return null;
-    }
-
-    const updated: Order = {
-      ...orders[index],
-      ...updates,
-      updatedAt:
-        new Date().toISOString(),
-    };
-
-    orders[index] = updated;
-
-    this.saveAll(orders);
-
-    return updated;
-  }
-
-  /**
-   * Xóa order
-   */
-  delete(
-    orderId: string
-  ): boolean {
-    const orders =
-      this.getAll();
-
-    const filtered =
-      orders.filter(
-        (order) =>
-          order.id !== orderId
-      );
-
-    if (
-      filtered.length ===
-      orders.length
-    ) {
-      return false;
-    }
-
-    this.saveAll(filtered);
-
-    return true;
-  }
+  ): Promise<Order | null> {
+    return apiClient<Order>(
+      `/orders/${encodeURIComponent(orderId)}`,
+      {
+        method: "GET",
+      },
+    );
+  },
 
   // =========================
-  // Storage
+  // GET /orders/user/:userId
+  // =========================
+  //
+  // USER:
+  //   chỉ xem order của mình
+  //
+  // ADMIN:
+  //   xem order của user bất kỳ
   // =========================
 
-  /**
-   * Lưu toàn bộ orders
-   */
-  private saveAll(
-    orders: Order[]
-  ): void {
-    if (
-      typeof window ===
-      "undefined"
-    ) {
-      return;
-    }
+  async getByUserId(
+    userId: string,
+  ): Promise<Order[]> {
+    return apiClient<Order[]>(
+      `/orders/user/${encodeURIComponent(userId)}`,
+      {
+        method: "GET",
+      },
+    );
+  },
 
-    try {
-      localStorage.setItem(
-        ORDER_STORAGE_KEY,
-        JSON.stringify(orders)
-      );
-    } catch (error) {
-      console.error(
-        "Failed to save orders:",
-        error
-      );
-    }
-  }
+  // =========================
+  // GET /orders/status/:status
+  // =========================
+  //
+  // ADMIN ONLY
+  // =========================
 
-  /**
-   * Xóa toàn bộ orders
-   */
-  clear(): void {
-    if (
-      typeof window ===
-      "undefined"
-    ) {
-      return;
-    }
+  async getByStatus(
+    status: OrderStatus,
+  ): Promise<Order[]> {
+    return apiClient<Order[]>(
+      `/orders/status/${encodeURIComponent(status)}`,
+      {
+        method: "GET",
+      },
+    );
+  },
 
-    try {
-      localStorage.removeItem(
-        ORDER_STORAGE_KEY
-      );
-    } catch (error) {
-      console.error(
-        "Failed to clear orders:",
-        error
-      );
-    }
-  }
-}
+  // =========================
+  // POST /orders
+  // =========================
+  //
+  // USER ONLY
+  // =========================
 
-export const orderRepository =
-  new OrderRepository();
+  async create(
+    data: CreateOrderData,
+  ): Promise<Order> {
+    return apiClient<Order>(
+      "/orders",
+      {
+        method: "POST",
+        body: JSON.stringify(data),
+      },
+    );
+  },
+
+  // =========================
+  // PATCH /orders/:id
+  // =========================
+  //
+  // ADMIN ONLY
+  // =========================
+
+  async update(
+    orderId: string,
+    data: UpdateOrderData,
+  ): Promise<Order> {
+    return apiClient<Order>(
+      `/orders/${encodeURIComponent(orderId)}`,
+      {
+        method: "PATCH",
+        body: JSON.stringify(data),
+      },
+    );
+  },
+
+  // =========================
+  // DELETE /orders/:id
+  // =========================
+  //
+  // ADMIN ONLY
+  // =========================
+
+  async delete(
+    orderId: string,
+  ): Promise<Order> {
+    return apiClient<Order>(
+      `/orders/${encodeURIComponent(orderId)}`,
+      {
+        method: "DELETE",
+      },
+    );
+  },
+};

@@ -9,8 +9,10 @@ import {
 
 import { toast } from "sonner";
 
+import { useAuth } from "@/contexts/AuthContext";
 import { CheckoutContext } from "@/contexts/CheckoutContext";
 import { checkoutService } from "@/services/checkout.service";
+import { orderService } from "@/services/order.service";
 
 import type {
   CheckoutBillingInfo,
@@ -19,6 +21,8 @@ import type {
   CheckoutPaymentInfo,
 } from "@/types/checkout";
 
+import type { Order } from "@/types/order/order";
+
 interface Props {
   children: ReactNode;
 }
@@ -26,6 +30,7 @@ interface Props {
 export default function CheckoutProvider({
   children,
 }: Props) {
+  const auth = useAuth();
   const [checkout, setCheckout] =
     useState<CheckoutData | null>(null);
 
@@ -142,7 +147,7 @@ export default function CheckoutProvider({
   // Order
   // =========================
 
-  function createOrder() {
+  async function createOrder(): Promise<Order | null> {
     const valid =
       checkoutService.validateCheckout();
 
@@ -154,22 +159,50 @@ export default function CheckoutProvider({
       return null;
     }
 
-    const order =
-      checkoutService.createOrder();
-
-    if (!order) {
+    if (!checkout) {
       toast.error(
-        "Unable to create order."
+        "No checkout data available."
       );
 
       return null;
     }
 
-    toast.success(
-      "Order created successfully."
-    );
+    if (
+      !auth.user ||
+      !auth.user.id
+    ) {
+      toast.error(
+        "You must be logged in to create an order."
+      );
 
-    return order;
+      return null;
+    }
+
+    try {
+      const order =
+        await orderService.createFromCheckout(
+          checkout,
+          auth.user.id
+        );
+
+      toast.success(
+        "Order created successfully."
+      );
+
+      // Clear checkout after successful order creation
+      clear();
+
+      return order;
+    } catch (error) {
+      const errorMessage =
+        error instanceof Error
+          ? error.message
+          : "Unable to create order.";
+
+      toast.error(errorMessage);
+
+      return null;
+    }
   }
 
   // =========================

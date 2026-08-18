@@ -1,16 +1,18 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { CheckCircle2 } from "lucide-react";
 
 import AppButton from "@/components/common/AppButton";
 
 import type { CheckoutData } from "@/types/checkout";
+import type { Order } from "@/types/order/order";
 
 interface OrderReviewProps {
   checkout: CheckoutData | null;
   validateCheckout: () => boolean;
-  createOrder: () => CheckoutData | null;
+  createOrder: () => Promise<Order | null>;
   className?: string;
 }
 
@@ -21,6 +23,8 @@ export default function OrderReview({
   className,
 }: OrderReviewProps) {
   const router = useRouter();
+  const [isLoading, setIsLoading] =
+    useState(false);
 
   // =========================
   // Snapshot Data
@@ -68,29 +72,24 @@ export default function OrderReview({
   // Place Order
   // =========================
 
-  function handlePlaceOrder() {
+  async function handlePlaceOrder() {
     if (!validateCheckout()) {
       return;
     }
 
-    const order = createOrder();
+    setIsLoading(true);
 
-    if (!order) {
-      return;
+    try {
+      const order = await createOrder();
+
+      if (!order) {
+        return;
+      }
+
+      router.push("/checkout/success");
+    } finally {
+      setIsLoading(false);
     }
-
-    /*
-     * TODO:
-     *
-     * 1. Gửi order lên Backend
-     * 2. Backend tạo Order
-     * 3. Process payment
-     * 4. Clear checkout
-     * 5. Clear cart
-     * 6. Redirect success
-     */
-
-    router.push("/checkout/success");
   }
 
   return (
@@ -280,10 +279,12 @@ export default function OrderReview({
           text-base
           font-semibold
         "
-        disabled={!isValid}
+        disabled={!isValid || isLoading}
         onClick={handlePlaceOrder}
       >
-        Place Order
+        {isLoading
+          ? "Creating Order..."
+          : "Place Order"}
       </AppButton>
 
       {!isValid && (

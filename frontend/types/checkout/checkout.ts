@@ -1,5 +1,7 @@
 import type { MarketplaceTemplate } from "@/components/sections/marketplace/types";
 
+import type { Order } from "@/types/order/order";
+
 // =========================
 // Checkout Item
 // =========================
@@ -90,7 +92,7 @@ export interface CheckoutContextType {
 
   validateCheckout: () => boolean;
 
-  createOrder: () => CheckoutData | null;
+  createOrder: () => Promise<Order | null>;
 
   clear: () => void;
 }

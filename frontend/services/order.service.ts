@@ -2,170 +2,189 @@ import { orderRepository } from "@/repositories/order.repository";
 
 import type { CheckoutData } from "@/types/checkout";
 
-import type { CreateOrderDto } from "@/types/order/order.dto";
-
 import type {
+  CreateOrderData,
   Order,
   OrderItem,
+  OrderPaymentMethod,
+  OrderStatus,
+  UpdateOrderData,
 } from "@/types/order/order";
+
+// =========================
+// Order Service
+// =========================
 
 export const orderService = {
   // =========================
   // Query
   // =========================
 
-  getAll(): Order[] {
+  async getAll(): Promise<Order[]> {
     return orderRepository.getAll();
   },
 
-  getById(orderId: string): Order | null {
-    return orderRepository.getById(orderId);
+  async getById(
+    orderId: string,
+  ): Promise<Order | null> {
+    return orderRepository.getById(
+      orderId,
+    );
   },
 
-  getByUserId(userId: string): Order[] {
-    return orderRepository.getByUserId(userId);
+  async getByUserId(
+    userId: string,
+  ): Promise<Order[]> {
+    return orderRepository.getByUserId(
+      userId,
+    );
+  },
+
+  async getByStatus(
+    status: OrderStatus,
+  ): Promise<Order[]> {
+    return orderRepository.getByStatus(
+      status,
+    );
   },
 
   // =========================
-  // Checkout → Order DTO
+  // Checkout → Order
+  // =========================
+  //
+  // Chuyển dữ liệu CheckoutData
+  // thành payload mà backend
+  // POST /orders yêu cầu.
   // =========================
 
-  createFromCheckout(
+  async createFromCheckout(
     checkout: CheckoutData,
-    userId: string
-  ): Order | null {
+    userId: string,
+  ): Promise<Order> {
     if (
       !checkout ||
       checkout.order.items.length === 0
     ) {
-      return null;
+      throw new Error(
+        "Cannot create an order with an empty cart.",
+      );
     }
 
-    const dto =
-      this.toCreateOrderDto(checkout);
+    const data =
+      this.toCreateOrderData(
+        checkout,
+        userId,
+      );
 
-    return this.create(dto, userId);
+    return this.create(data);
   },
 
   // =========================
   // CheckoutData
-  // → CreateOrderDto
+  // → CreateOrderData
   // =========================
 
- toCreateOrderDto(
-  checkout: CheckoutData
-): CreateOrderDto {
-  return {
-    billing: {
-      firstName: checkout.billing.firstName,
-      lastName: checkout.billing.lastName,
-      email: checkout.billing.email,
-      phone: checkout.billing.phone,
-      address: checkout.billing.address,
-      city: checkout.billing.city,
-      country: checkout.billing.country,
-      postalCode: checkout.billing.postalCode,
-    },
-
-    paymentMethod: checkout.payment.method,
-
-    items: checkout.order.items.map(
-      (item) => ({
-        productId: item.template.id,
-        productName: item.template.title,
-        unitPrice: item.template.price,
-        originalPrice: item.template.originalPrice,
-        quantity: item.quantity,
-      })
-    ),
-  };
-},
-
-  // =========================
-  // Create Order
-  // =========================
-
-  create(
-    dto: CreateOrderDto,
-    userId: string
-  ): Order {
-    const now =
-      new Date().toISOString();
-
-    const orderId =
-      this.generateOrderId();
-
-    // =========================
-    // Create Order Items
-    // =========================
-
+  toCreateOrderData(
+    checkout: CheckoutData,
+    userId: string,
+  ): CreateOrderData {
     const items: OrderItem[] =
-      dto.items.map(
-        (item) => ({
-          id:
-            this.generateOrderItemId(),
+      checkout.order.items.map(
+        (item) => {
+          const unitPrice =
+            item.template.discountPrice ??
+            item.template.price;
 
-          orderId,
+          const originalPrice =
+            item.template.originalPrice ??
+            undefined;
 
-          productId:
-            item.productId,
+          return {
+            id:
+              this.generateOrderItemId(),
 
-          productName:
-            item.productName,
+            orderId:
+              "",
 
-          unitPrice:
-            item.unitPrice,
+            productId:
+              item.template.id,
 
-          quantity:
-            item.quantity,
+            productName:
+              item.template.title,
 
-          subtotal:
-            item.unitPrice *
-            item.quantity,
-        })
+            unitPrice,
+
+            originalPrice,
+
+            quantity:
+              item.quantity,
+
+            subtotal:
+              unitPrice *
+              item.quantity,
+          };
+        },
       );
 
     // =========================
-    // Calculate Order
+    // Calculate subtotal
     // =========================
 
     const subtotal =
       items.reduce(
         (sum, item) =>
           sum + item.subtotal,
-        0
+        0,
       );
 
-    /*
-     * Discount được tính từ
-     * product snapshot trong DTO.
-     *
-     * Khi chuyển sang NestJS +
-     * Prisma, backend sẽ tính /
-     * xác thực lại discount.
-     */
+    // =========================
+    // Calculate discount
+    // =========================
+
     const discount =
       Math.min(
-        this.calculateDiscount(dto),
-        subtotal
+        this.calculateDiscount(
+          items,
+        ),
+        subtotal,
       );
+
+    // =========================
+    // Calculate total
+    // =========================
 
     const total =
       subtotal - discount;
 
     // =========================
-    // Create Order
+    // Backend payment method
     // =========================
 
-    const order: Order = {
-      id: orderId,
+    const paymentMethod =
+      this.mapPaymentMethod(
+        checkout.payment.method,
+      );
 
+    return {
+      id:
+        this.generateOrderId(),
+
+      /*
+       * Backend OrderService sẽ
+       * thay userId này bằng:
+       *
+       * user.id
+       *
+       * lấy từ JWT.
+       *
+       * Tuy nhiên CreateOrderDto
+       * hiện tại vẫn yêu cầu field này.
+       */
       userId,
 
       status: "PENDING",
 
-      paymentMethod:
-        dto.paymentMethod,
+      paymentMethod,
 
       subtotal,
 
@@ -174,18 +193,82 @@ export const orderService = {
       total,
 
       billing: {
-        ...dto.billing,
+        firstName:
+          checkout.billing.firstName,
+
+        lastName:
+          checkout.billing.lastName,
+
+        email:
+          checkout.billing.email,
+
+        phone:
+          checkout.billing.phone,
+
+        address:
+          checkout.billing.address,
+
+        city:
+          checkout.billing.city,
+
+        country:
+          checkout.billing.country,
+
+        postalCode:
+          checkout.billing.postalCode,
       },
 
       items,
-
-      createdAt: now,
-
-      updatedAt: now,
     };
+  },
 
+  // =========================
+  // Payment Method Mapper
+  // =========================
+  //
+  // Backend:
+  //
+  // card
+  // paypal
+  // bank
+  //
+  // Nếu CheckoutData đang dùng
+  // đúng các giá trị này thì
+  // giữ nguyên.
+  // =========================
+
+  mapPaymentMethod(
+    method: string,
+  ): OrderPaymentMethod {
+    switch (method) {
+      case "card":
+        return "card";
+
+      case "paypal":
+        return "paypal";
+
+      case "bank":
+        return "bank";
+
+      default:
+        throw new Error(
+          `Unsupported payment method: ${method}`,
+        );
+    }
+  },
+
+  // =========================
+  // Create
+  // =========================
+  //
+  // POST /orders
+  // =========================
+
+  async create(
+    data: CreateOrderData,
+  ): Promise<Order> {
     return orderRepository.create(
-      order
+      data,
     );
   },
 
@@ -194,9 +277,9 @@ export const orderService = {
   // =========================
 
   calculateDiscount(
-    dto: CreateOrderDto
+    items: OrderItem[],
   ): number {
-    return dto.items.reduce(
+    return items.reduce(
       (sum, item) => {
         if (
           item.originalPrice ===
@@ -209,51 +292,56 @@ export const orderService = {
           item.originalPrice -
           item.unitPrice;
 
+        if (
+          discountPerItem <= 0
+        ) {
+          return sum;
+        }
+
         return (
           sum +
-          Math.max(
-            0,
-            discountPerItem
-          ) *
+          discountPerItem *
             item.quantity
         );
       },
-      0
+      0,
     );
   },
 
   // =========================
   // Update
   // =========================
+  //
+  // PATCH /orders/:id
+  //
+  // ADMIN ONLY
+  // =========================
 
-  update(
+  async update(
     orderId: string,
-    updates: Partial<Order>
-  ): Order | null {
+    updates: UpdateOrderData,
+  ): Promise<Order> {
     return orderRepository.update(
       orderId,
-      updates
+      updates,
     );
   },
 
   // =========================
   // Delete
   // =========================
+  //
+  // DELETE /orders/:id
+  //
+  // ADMIN ONLY
+  // =========================
 
-  delete(
-    orderId: string
-  ): boolean {
+  async delete(
+    orderId: string,
+  ): Promise<Order> {
     return orderRepository.delete(
-      orderId
+      orderId,
     );
-  },
-
-  // =========================
-  // Clear
-  // =========================
-
-  clear(): void {
-    orderRepository.clear();
   },
 
   // =========================
