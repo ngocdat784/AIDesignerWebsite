@@ -86,31 +86,34 @@ export class OrderService implements OrderServiceInterface {
   // ADMIN:
   //   được xem Order của bất kỳ user nào.
   async getByUserId(
-    userId: string,
-    user: CurrentUserPayload,
-  ) {
-    // USER không được xem Order của user khác
-    if (
-      user.role === "USER" &&
-      userId !== user.id
-    ) {
+  userId: string,
+  user: CurrentUserPayload,
+) {
+  // ADMIN được xem order của bất kỳ user nào
+  if (user.role === "ADMIN") {
+    return this.orderRepository.getByUserId(
+      userId,
+    );
+  }
+
+  // USER chỉ được xem order của chính mình
+  if (user.role === "USER") {
+    if (userId !== user.id) {
       throw new ForbiddenException(
         "You can only access your own orders.",
       );
     }
 
-    // ADMIN được xem bất kỳ userId
-    if (user.role === "ADMIN") {
-      return this.orderRepository.getByUserId(
-        userId,
-      );
-    }
-
-    throw new ForbiddenException(
-      "You do not have permission to access orders.",
+    return this.orderRepository.getByUserId(
+      user.id,
     );
   }
 
+  // CREATOR hoặc role không được phép
+  throw new ForbiddenException(
+    "You do not have permission to access orders.",
+  );
+}
   // ADMIN
   async getByStatus(status: OrderStatus) {
     return this.orderRepository.getByStatus(status);
