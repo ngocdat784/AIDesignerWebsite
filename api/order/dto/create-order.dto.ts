@@ -1,9 +1,6 @@
 import {
   IsArray,
   IsEnum,
-  IsNumber,
-  IsOptional,
-  IsString,
   ValidateNested,
 } from "class-validator";
 
@@ -11,6 +8,10 @@ import { Type } from "class-transformer";
 
 import { CreateOrderBillingDto } from "./create-order-billing.dto";
 import { CreateOrderItemDto } from "./create-order-item.dto";
+
+// =========================
+// Order Status
+// =========================
 
 export enum OrderStatus {
   PENDING = "PENDING",
@@ -21,34 +22,23 @@ export enum OrderStatus {
   FAILED = "FAILED",
 }
 
+// =========================
+// Payment Method
+// =========================
+
 export enum PaymentMethod {
   CARD = "card",
   PAYPAL = "paypal",
   BANK = "bank",
 }
 
+// =========================
+// Create Order DTO
+// =========================
+
 export class CreateOrderDto {
-  @IsString()
-  id!: string;
-
-  @IsString()
-  userId!: string;
-
-  @IsOptional()
-  @IsEnum(OrderStatus)
-  status?: OrderStatus;
-
   @IsEnum(PaymentMethod)
   paymentMethod!: PaymentMethod;
-
-  @IsNumber()
-  subtotal!: number;
-
-  @IsNumber()
-  discount!: number;
-
-  @IsNumber()
-  total!: number;
 
   @ValidateNested()
   @Type(() => CreateOrderBillingDto)

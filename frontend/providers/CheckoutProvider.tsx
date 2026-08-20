@@ -31,6 +31,7 @@ export default function CheckoutProvider({
   children,
 }: Props) {
   const auth = useAuth();
+
   const [checkout, setCheckout] =
     useState<CheckoutData | null>(null);
 
@@ -74,13 +75,13 @@ export default function CheckoutProvider({
 
     window.addEventListener(
       "storage",
-      handleStorage
+      handleStorage,
     );
 
     return () => {
       window.removeEventListener(
         "storage",
-        handleStorage
+        handleStorage,
       );
     };
   }, []);
@@ -90,18 +91,18 @@ export default function CheckoutProvider({
   // =========================
 
   function updateBilling(
-    billing: CheckoutBillingInfo
+    billing: CheckoutBillingInfo,
   ): void {
     const updated =
       checkoutService.updateBilling(
-        billing
+        billing,
       );
 
     setCheckout(updated);
 
     if (updated) {
       toast.success(
-        "Billing information updated."
+        "Billing information updated.",
       );
     }
   }
@@ -111,18 +112,18 @@ export default function CheckoutProvider({
   // =========================
 
   function updatePayment(
-    payment: CheckoutPaymentInfo
+    payment: CheckoutPaymentInfo,
   ): void {
     const updated =
       checkoutService.updatePayment(
-        payment
+        payment,
       );
 
     setCheckout(updated);
 
     if (updated) {
       toast.success(
-        "Payment method updated."
+        "Payment method updated.",
       );
     }
   }
@@ -148,52 +149,184 @@ export default function CheckoutProvider({
   // =========================
 
   async function createOrder(): Promise<Order | null> {
+    // =========================
+    // Debug
+    // =========================
+
+    console.log(
+      "========== CHECKOUT AUTH DEBUG ==========",
+    );
+
+    console.log(
+      "auth.user:",
+      auth.user,
+    );
+
+    console.log(
+      "auth.user?.id:",
+      auth.user?.id,
+    );
+
+    console.log(
+      "auth.user?.email:",
+      auth.user?.email,
+    );
+
+    console.log(
+      "auth.user?.role:",
+      auth.user?.role,
+    );
+
+    console.log(
+      "auth.isAuthenticated:",
+      auth.isAuthenticated,
+    );
+
+    console.log(
+      "auth.isLoading:",
+      auth.isLoading,
+    );
+
+    console.log(
+      "accessToken:",
+      typeof window !== "undefined"
+        ? localStorage.getItem(
+            "accessToken",
+          )
+        : null,
+    );
+
+    console.log(
+      "checkout:",
+      checkout,
+    );
+
+    console.log(
+      "=========================================",
+    );
+
+    // =========================
+    // Validate Checkout
+    // =========================
+
     const valid =
       checkoutService.validateCheckout();
 
     if (!valid) {
       toast.error(
-        "Please complete your checkout information."
+        "Please complete your checkout information.",
       );
 
       return null;
     }
+
+    // =========================
+    // Check Checkout
+    // =========================
 
     if (!checkout) {
       toast.error(
-        "No checkout data available."
+        "No checkout data available.",
       );
 
       return null;
     }
 
-    if (
-      !auth.user ||
-      !auth.user.id
-    ) {
+    // =========================
+    // Authentication
+    // =========================
+
+    /*
+     * AuthProvider restore session
+     * là một quá trình async.
+     *
+     * Vì vậy có thể xảy ra trường hợp:
+     *
+     * accessToken có tồn tại
+     * nhưng auth.user vẫn đang null.
+     *
+     * Khi đó thử restore session lại.
+     */
+
+    let currentUser = auth.user;
+
+    if (!currentUser?.id) {
+      console.log(
+        "AUTH: user missing, attempting to restore session...",
+      );
+
+      try {
+        currentUser =
+          await auth.refreshUser();
+
+        console.log(
+          "AUTH: restored user:",
+          currentUser,
+        );
+      } catch (error) {
+        console.error(
+          "AUTH: failed to restore session:",
+          error,
+        );
+
+        currentUser = null;
+      }
+    }
+
+    // =========================
+    // Authentication Failed
+    // =========================
+
+    if (!currentUser?.id) {
+      console.error(
+        "AUTH ERROR: Unable to restore authenticated user.",
+      );
+
       toast.error(
-        "You must be logged in to create an order."
+        "You must be logged in to create an order.",
       );
 
       return null;
     }
+
+    // =========================
+    // Create Order
+    // =========================
 
     try {
+      console.log(
+        "Creating order for user:",
+        currentUser.id,
+      );
+
       const order =
         await orderService.createFromCheckout(
           checkout,
-          auth.user.id
+          currentUser.id,
         );
 
-      toast.success(
-        "Order created successfully."
+      console.log(
+        "Order created:",
+        order,
       );
 
-      // Clear checkout after successful order creation
+      toast.success(
+        "Order created successfully.",
+      );
+
+      // =========================
+      // Clear Checkout
+      // =========================
+
       clear();
 
       return order;
     } catch (error) {
+      console.error(
+        "CREATE ORDER ERROR:",
+        error,
+      );
+
       const errorMessage =
         error instanceof Error
           ? error.message
@@ -215,7 +348,7 @@ export default function CheckoutProvider({
     setCheckout(null);
 
     toast.success(
-      "Checkout cleared."
+      "Checkout cleared.",
     );
   }
 
@@ -239,43 +372,45 @@ export default function CheckoutProvider({
   // Context Value
   // =========================
 
-  const value: CheckoutContextType = useMemo(
-  () => ({
-    checkout,
+  const value: CheckoutContextType =
+    useMemo(
+      () => ({
+        checkout,
 
-    items,
+        items,
 
-    billing:
-      checkout?.billing ?? null,
+        billing:
+          checkout?.billing ?? null,
 
-    payment:
-      checkout?.payment ?? null,
+        payment:
+          checkout?.payment ?? null,
 
-    subtotal,
-    discount,
-    total,
+        subtotal,
+        discount,
+        total,
 
-    initialize,
-    refresh,
+        initialize,
+        refresh,
 
-    updateBilling,
-    updatePayment,
+        updateBilling,
+        updatePayment,
 
-    validateBilling,
-    validatePayment,
-    validateCheckout,
+        validateBilling,
+        validatePayment,
+        validateCheckout,
 
-    createOrder,
-    clear,
-  }),
-  [
-    checkout,
-    items,
-    subtotal,
-    discount,
-    total,
-  ]
-);
+        createOrder,
+        clear,
+      }),
+      [
+        checkout,
+        items,
+        subtotal,
+        discount,
+        total,
+        auth.user,
+      ],
+    );
 
   return (
     <CheckoutContext.Provider

@@ -30,16 +30,20 @@ export class OrderService implements OrderServiceInterface {
   // Query
   // =========================
 
-  // ADMIN: xem tất cả Order
+  /**
+   * ADMIN: xem tất cả Order
+   */
   async getAll() {
     return this.orderRepository.getAll();
   }
 
-  // USER:
-  //   chỉ được xem Order của chính mình
-  //
-  // ADMIN:
-  //   được xem mọi Order
+  /**
+   * USER:
+   *   chỉ được xem Order của chính mình
+   *
+   * ADMIN:
+   *   được xem mọi Order
+   */
   async getById(
     id: string,
     user: CurrentUserPayload,
@@ -68,119 +72,234 @@ export class OrderService implements OrderServiceInterface {
       );
     }
 
-    /*
-     * CREATOR không nên tới được đây
-     * vì Controller đã chặn bằng RoleGuard.
-     *
-     * Nhưng vẫn giữ kiểm tra ở Service
-     * để bảo vệ business logic.
-     */
     throw new ForbiddenException(
       "You do not have permission to access this order.",
     );
   }
 
-  // USER:
-  //   chỉ được xem Order của chính mình.
-  //
-  // ADMIN:
-  //   được xem Order của bất kỳ user nào.
+  /**
+   * USER:
+   *   chỉ được xem Order của chính mình.
+   *
+   * ADMIN:
+   *   được xem Order của bất kỳ user nào.
+   */
   async getByUserId(
-  userId: string,
-  user: CurrentUserPayload,
-) {
-  // ADMIN được xem order của bất kỳ user nào
-  if (user.role === "ADMIN") {
-    return this.orderRepository.getByUserId(
-      userId,
-    );
-  }
-
-  // USER chỉ được xem order của chính mình
-  if (user.role === "USER") {
-    if (userId !== user.id) {
-      throw new ForbiddenException(
-        "You can only access your own orders.",
+    userId: string,
+    user: CurrentUserPayload,
+  ) {
+    // ADMIN được xem order của bất kỳ user nào
+    if (user.role === "ADMIN") {
+      return this.orderRepository.getByUserId(
+        userId,
       );
     }
 
-    return this.orderRepository.getByUserId(
-      user.id,
+    // USER chỉ được xem order của chính mình
+    if (user.role === "USER") {
+      if (userId !== user.id) {
+        throw new ForbiddenException(
+          "You can only access your own orders.",
+        );
+      }
+
+      return this.orderRepository.getByUserId(
+        user.id,
+      );
+    }
+
+    // CREATOR hoặc role không được phép
+    throw new ForbiddenException(
+      "You do not have permission to access orders.",
     );
   }
 
-  // CREATOR hoặc role không được phép
-  throw new ForbiddenException(
-    "You do not have permission to access orders.",
-  );
-}
-  // ADMIN
+  /**
+   * ADMIN: xem Order theo trạng thái
+   */
   async getByStatus(status: OrderStatus) {
-    return this.orderRepository.getByStatus(status);
+    return this.orderRepository.getByStatus(
+      status,
+    );
   }
 
   // =========================
   // Create
   // =========================
 
-  // USER tạo Order cho chính mình
+  /**
+   * USER tạo Order cho chính mình.
+   *
+   * Frontend chỉ được gửi:
+   * - paymentMethod
+   * - billing
+   * - items
+   *
+   * Backend tự quyết định:
+   * - id
+   * - userId
+   * - status
+   * - subtotal
+   * - discount
+   * - total
+   * - item.id
+   * - item.subtotal
+   */
   async create(
     dto: CreateOrderDto,
     user: CurrentUserPayload,
   ) {
+    // =========================
+    // Validate items
+    // =========================
+
+    if (
+      !dto.items ||
+      dto.items.length === 0
+    ) {
+      throw new ForbiddenException(
+        "Cannot create an order with no items.",
+      );
+    }
+
+    // =========================
+    // Create Order ID
+    // =========================
+
+    const orderId =
+      crypto.randomUUID();
+
+    // =========================
+    // Create Order Items
+    // =========================
+
+    const items = dto.items.map(
+      (item) => {
+        const subtotal =
+          item.unitPrice *
+          item.quantity;
+
+        return {
+          id: crypto.randomUUID(),
+
+          orderId,
+
+          productId:
+            item.productId,
+
+          productName:
+            item.productName,
+
+          unitPrice:
+            item.unitPrice,
+
+          quantity:
+            item.quantity,
+
+          subtotal,
+        };
+      },
+    );
+
+    // =========================
+    // Calculate subtotal
+    // =========================
+
+    const subtotal =
+      items.reduce(
+        (sum, item) =>
+          sum + item.subtotal,
+        0,
+      );
+
+    // =========================
+    // Calculate discount
+    // =========================
+
     /*
-     * Không tin userId do client gửi lên.
+     * originalPrice hiện tại chỉ
+     * tồn tại ở frontend DTO.
      *
-     * JWT
-     *   ↓
-     * CurrentUserPayload
-     *   ↓
-     * user.id
-     *   ↓
-     * Order.userId
+     * Backend CreateOrderItemDto
+     * hiện không có originalPrice.
+     *
+     * Vì vậy tạm thời discount = 0.
+     *
+     * Sau này nếu backend lấy được
+     * product/template từ database,
+     * discount nên được tính lại
+     * hoàn toàn ở backend.
      */
+    const discount = 0;
+
+    // =========================
+    // Calculate total
+    // =========================
+
+    const total =
+      Math.max(
+        0,
+        subtotal - discount,
+      );
+
+    // =========================
+    // Create Order Data
+    // =========================
 
     const data = {
-      ...dto,
+      id: orderId,
+
+      /*
+       * QUAN TRỌNG:
+       *
+       * Không lấy userId từ request body.
+       *
+       * userId phải lấy từ JWT.
+       */
       userId: user.id,
+
+      /*
+       * Order mới luôn bắt đầu
+       * ở trạng thái PENDING.
+       */
+      status: OrderStatus.PENDING,
+
+      paymentMethod:
+        dto.paymentMethod,
+
+      subtotal,
+
+      discount,
+
+      total,
+
+      billing: {
+        ...dto.billing,
+      },
+
+      items,
     };
 
-    /*
-     * Không bắt Prisma exception ở Service.
-     *
-     * P2002
-     *   ↓
-     * OrderRepository
-     *   ↓
-     * handlePrismaException()
-     *   ↓
-     * ConflictException
-     *
-     *
-     * P2003
-     *   ↓
-     * OrderRepository
-     *   ↓
-     * handlePrismaException()
-     *   ↓
-     * BadRequestException
-     */
+    // =========================
+    // Repository
+    // =========================
 
-    return this.orderRepository.create(data);
+    return this.orderRepository.create(
+      data,
+    );
   }
 
   // =========================
   // Update
   // =========================
 
-  // Chỉ ADMIN
+  /**
+   * Chỉ ADMIN
+   */
   async update(
     id: string,
     dto: UpdateOrderDto,
   ) {
-    /*
-     * Kiểm tra Order tồn tại trước khi update.
-     */
     await this.getOrderForAdmin(id);
 
     return this.orderRepository.update(
@@ -193,11 +312,10 @@ export class OrderService implements OrderServiceInterface {
   // Delete
   // =========================
 
-  // Chỉ ADMIN
+  /**
+   * Chỉ ADMIN
+   */
   async delete(id: string) {
-    /*
-     * Kiểm tra Order tồn tại trước khi delete.
-     */
     await this.getOrderForAdmin(id);
 
     return this.orderRepository.delete(id);
@@ -210,9 +328,12 @@ export class OrderService implements OrderServiceInterface {
   /**
    * Kiểm tra Order tồn tại.
    *
-   * Dùng cho các thao tác chỉ ADMIN được phép thực hiện.
+   * Dùng cho các thao tác chỉ ADMIN
+   * được phép thực hiện.
    */
-  private async getOrderForAdmin(id: string) {
+  private async getOrderForAdmin(
+    id: string,
+  ) {
     const order =
       await this.orderRepository.getById(id);
 

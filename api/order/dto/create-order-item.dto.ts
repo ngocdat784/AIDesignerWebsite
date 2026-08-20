@@ -1,9 +1,11 @@
-import { IsInt, IsNumber, IsString, Min } from "class-validator";
+import {
+  IsInt,
+  IsNumber,
+  IsString,
+  Min,
+} from "class-validator";
 
 export class CreateOrderItemDto {
-  @IsString()
-  id!: string;
-
   @IsString()
   productId!: string;
 
@@ -16,7 +18,4 @@ export class CreateOrderItemDto {
   @IsInt()
   @Min(1)
   quantity!: number;
-
-  @IsNumber()
-  subtotal!: number;
 }

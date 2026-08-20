@@ -36,12 +36,13 @@ export class OrderRepository
               updatedAt: true,
             },
           },
+
           billing: true,
           items: true,
         },
       });
     } catch (error) {
-      handlePrismaException(error);
+      throw handlePrismaException(error);
     }
   }
 
@@ -64,12 +65,13 @@ export class OrderRepository
               updatedAt: true,
             },
           },
+
           billing: true,
           items: true,
         },
       });
     } catch (error) {
-      handlePrismaException(error);
+      throw handlePrismaException(error);
     }
   }
 
@@ -90,7 +92,7 @@ export class OrderRepository
         },
       });
     } catch (error) {
-      handlePrismaException(error);
+      throw handlePrismaException(error);
     }
   }
 
@@ -119,7 +121,7 @@ export class OrderRepository
         },
       });
     } catch (error) {
-      handlePrismaException(error);
+      throw handlePrismaException(error);
     }
   }
 
@@ -129,6 +131,7 @@ export class OrderRepository
 
   async create(data: {
     id: string;
+
     userId: string;
 
     status?:
@@ -139,10 +142,15 @@ export class OrderRepository
       | "CANCELLED"
       | "FAILED";
 
-    paymentMethod: "card" | "paypal" | "bank";
+    paymentMethod:
+      | "card"
+      | "paypal"
+      | "bank";
 
     subtotal: number;
+
     discount: number;
+
     total: number;
 
     billing: {
@@ -169,28 +177,98 @@ export class OrderRepository
       return await this.database.order.create({
         data: {
           id: data.id,
+
           userId: data.userId,
 
-          status: data.status ?? "PENDING",
+          status:
+            data.status ?? "PENDING",
 
-          paymentMethod: data.paymentMethod,
+          paymentMethod:
+            data.paymentMethod,
 
           subtotal: data.subtotal,
+
           discount: data.discount,
+
           total: data.total,
 
+          // =========================
+          // Billing
+          // =========================
+
           billing: {
-            create: data.billing,
+            create: {
+              firstName:
+                data.billing.firstName,
+
+              lastName:
+                data.billing.lastName,
+
+              email:
+                data.billing.email,
+
+              phone:
+                data.billing.phone,
+
+              address:
+                data.billing.address,
+
+              city:
+                data.billing.city,
+
+              country:
+                data.billing.country,
+
+              postalCode:
+                data.billing.postalCode,
+            },
           },
 
+          // =========================
+          // Order Items
+          // =========================
+          //
+          // KHÔNG truyền orderId ở đây.
+          //
+          // Prisma tự tạo quan hệ:
+          //
+          // Order
+          //   ↓
+          // items.create
+          //   ↓
+          // OrderItem.orderId
+          //
+          // =========================
+
           items: {
-            create: data.items,
+            create: data.items.map(
+              (item) => ({
+                id: item.id,
+
+                productId:
+                  item.productId,
+
+                productName:
+                  item.productName,
+
+                unitPrice:
+                  item.unitPrice,
+
+                quantity:
+                  item.quantity,
+
+                subtotal:
+                  item.subtotal,
+              }),
+            ),
           },
         },
 
         include: {
           billing: true,
+
           items: true,
+
           user: {
             select: {
               id: true,
@@ -205,7 +283,7 @@ export class OrderRepository
         },
       });
     } catch (error) {
-      handlePrismaException(error);
+      throw handlePrismaException(error);
     }
   }
 
@@ -224,10 +302,15 @@ export class OrderRepository
         | "CANCELLED"
         | "FAILED";
 
-      paymentMethod?: "card" | "paypal" | "bank";
+      paymentMethod?:
+        | "card"
+        | "paypal"
+        | "bank";
 
       subtotal?: number;
+
       discount?: number;
+
       total?: number;
     },
   ) {
@@ -241,7 +324,9 @@ export class OrderRepository
 
         include: {
           billing: true,
+
           items: true,
+
           user: {
             select: {
               id: true,
@@ -256,7 +341,7 @@ export class OrderRepository
         },
       });
     } catch (error) {
-      handlePrismaException(error);
+      throw handlePrismaException(error);
     }
   }
 
@@ -272,7 +357,7 @@ export class OrderRepository
         },
       });
     } catch (error) {
-      handlePrismaException(error);
+      throw handlePrismaException(error);
     }
   }
 }

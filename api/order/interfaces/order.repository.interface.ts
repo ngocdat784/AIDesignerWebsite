@@ -1,9 +1,4 @@
-import {
-  CreateOrderDto,
-  OrderStatus,
-} from "../dto/create-order.dto";
-
-import { UpdateOrderDto } from "../dto/update-order.dto";
+import { OrderStatus } from "../dto/create-order.dto";
 
 export interface OrderRepositoryInterface {
   // =========================
@@ -12,9 +7,13 @@ export interface OrderRepositoryInterface {
 
   getAll(): Promise<any[]>;
 
-  getById(id: string): Promise<any | null>;
+  getById(
+    id: string,
+  ): Promise<any | null>;
 
-  getByUserId(userId: string): Promise<any[]>;
+  getByUserId(
+    userId: string,
+  ): Promise<any[]>;
 
   getByStatus(
     status: OrderStatus,
@@ -25,7 +24,44 @@ export interface OrderRepositoryInterface {
   // =========================
 
   create(
-    data: CreateOrderDto,
+    data: {
+      id: string;
+
+      userId: string;
+
+      status?: OrderStatus;
+
+      paymentMethod:
+        | "card"
+        | "paypal"
+        | "bank";
+
+      subtotal: number;
+
+      discount: number;
+
+      total: number;
+
+      billing: {
+        firstName: string;
+        lastName: string;
+        email: string;
+        phone: string;
+        address: string;
+        city: string;
+        country: string;
+        postalCode: string;
+      };
+
+      items: {
+        id: string;
+        productId: string;
+        productName: string;
+        unitPrice: number;
+        quantity: number;
+        subtotal: number;
+      }[];
+    },
   ): Promise<any>;
 
   // =========================
@@ -34,12 +70,33 @@ export interface OrderRepositoryInterface {
 
   update(
     id: string,
-    data: UpdateOrderDto,
+    data: {
+      status?:
+        | "PENDING"
+        | "PAID"
+        | "PROCESSING"
+        | "COMPLETED"
+        | "CANCELLED"
+        | "FAILED";
+
+      paymentMethod?:
+        | "card"
+        | "paypal"
+        | "bank";
+
+      subtotal?: number;
+
+      discount?: number;
+
+      total?: number;
+    },
   ): Promise<any>;
 
   // =========================
   // Delete
   // =========================
 
-  delete(id: string): Promise<any>;
+  delete(
+    id: string,
+  ): Promise<any>;
 }
