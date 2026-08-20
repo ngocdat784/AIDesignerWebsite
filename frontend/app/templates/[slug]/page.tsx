@@ -10,16 +10,12 @@ import TemplatePriceCard from "@/components/sections/template-detail/TemplatePri
 import TemplateDescription from "@/components/sections/template-detail/TemplateDescription";
 import TemplateTechStack from "@/components/sections/template-detail/TemplateTechStack";
 import TemplateIncludedFiles from "@/components/sections/template-detail/TemplateIncludedFiles";
-import TemplateFeatures from "@/components/sections/template-detail/TemplateFeatures";
 import TemplateInstallation from "@/components/sections/template-detail/TemplateInstallation";
 import TemplateRequirements from "@/components/sections/template-detail/TemplateRequirements";
 import TemplateChangelog from "@/components/sections/template-detail/TemplateChangelog";
 import TemplateActions from "@/components/sections/template-detail/TemplateActions";
 import RelatedTemplates from "@/components/sections/template-detail/RelatedTemplates";
 import TemplateFeatures from "@/components/sections/template-detail/TemplateFeatures";
-import TemplateInstallation from "@/components/sections/template-detail/TemplateInstallation";
-import TemplateRequirements from "@/components/sections/template-detail/TemplateRequirements";
-import TemplateChangelog from "@/components/sections/template-detail/TemplateChangelog";
 
 interface Props {
   params: Promise<{
