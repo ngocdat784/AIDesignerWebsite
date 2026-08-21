@@ -7,15 +7,16 @@ import TemplateGallery from "@/components/sections/template-detail/TemplateGalle
 import TemplateHeader from "@/components/sections/template-detail/TemplateHeader";
 import TemplateStatistics from "@/components/sections/template-detail/TemplateStatistics";
 import TemplatePriceCard from "@/components/sections/template-detail/TemplatePriceCard";
-import TemplateDescription from "@/components/sections/template-detail/TemplateDescription";
+import TemplateActions from "@/components/sections/template-detail/TemplateActions";
 import TemplateTechStack from "@/components/sections/template-detail/TemplateTechStack";
 import TemplateIncludedFiles from "@/components/sections/template-detail/TemplateIncludedFiles";
 import TemplateInstallation from "@/components/sections/template-detail/TemplateInstallation";
 import TemplateRequirements from "@/components/sections/template-detail/TemplateRequirements";
 import TemplateChangelog from "@/components/sections/template-detail/TemplateChangelog";
-import TemplateActions from "@/components/sections/template-detail/TemplateActions";
 import RelatedTemplates from "@/components/sections/template-detail/RelatedTemplates";
 import TemplateFeatures from "@/components/sections/template-detail/TemplateFeatures";
+
+import Overview from "@/components/sections/template-detail/description/Overview";
 
 interface Props {
   params: Promise<{
@@ -66,143 +67,127 @@ export default async function TemplateDetailPage({
         lg:px-8
       "
     >
-      {/* =================================================== */}
-      {/* Breadcrumb */}
-      {/* =================================================== */}
+      {/* ===================================================
+          1. Breadcrumb
+         =================================================== */}
 
-      <Breadcrumb />
+      <Breadcrumb
+        currentLabel={template.title}
+      />
 
-      {/* =================================================== */}
-      {/* Gallery */}
-      {/* */}
-      {/* coverImage */}
-      {/* gallery */}
-      {/* images */}
-      {/* =================================================== */}
+      {/* ===================================================
+          2. Gallery
+         =================================================== */}
 
       <TemplateGallery
         template={template}
       />
 
-      {/* =================================================== */}
-      {/* Header */}
-      {/* */}
-      {/* title */}
-      {/* slug */}
-      {/* category */}
-      {/* author */}
-      {/* premium */}
-      {/* version */}
-      {/* =================================================== */}
+      {/* ===================================================
+          3. Header
+         =================================================== */}
 
       <TemplateHeader
         template={template}
       />
 
-      {/* =================================================== */}
-      {/* Statistics */}
-      {/* */}
-      {/* rating */}
-      {/* reviews */}
-      {/* downloads */}
-      {/* favorites */}
-      {/* views */}
-      {/* =================================================== */}
+      {/* ===================================================
+          4. Statistics
+         =================================================== */}
 
       <TemplateStatistics
         template={template}
       />
 
-      {/* =================================================== */}
-      {/* Price */}
-      {/* */}
-      {/* price */}
-      {/* originalPrice */}
-      {/* discountPrice */}
-      {/* stock */}
-      {/* =================================================== */}
+      {/* ===================================================
+          5. Price + Actions
+         =================================================== */}
 
-      <TemplatePriceCard
+      <div
+        className="
+          grid
+          gap-6
+          lg:grid-cols-2
+          lg:items-start
+        "
+      >
+        {/* Price */}
+
+        <TemplatePriceCard
+          template={template}
+        />
+
+        {/* Actions */}
+
+        <TemplateActions
+          template={template}
+        />
+      </div>
+
+      {/* ===================================================
+          6. Overview
+         =================================================== */}
+
+      <Overview
         template={template}
       />
 
-      {/* =================================================== */}
-      {/* Actions */}
-      {/* */}
-      {/* Preview */}
-      {/* Add to cart */}
-      {/* Demo */}
-      {/* =================================================== */}
-
-      <TemplateActions
-        template={template}
-      />
-
-      {/* =================================================== */}
-      {/* Description */}
-      {/* =================================================== */}
-
-      <TemplateDescription
-        template={template}
-      />
-
-      {/* =================================================== */}
-      {/* Features */}
-      {/* =================================================== */}
+      {/* ===================================================
+          7. Features
+         =================================================== */}
 
       <TemplateFeatures
         template={template}
       />
 
-      {/* =================================================== */}
-      {/* Technology */}
-      {/* =================================================== */}
+      {/* ===================================================
+          8. Tech Stack
+         =================================================== */}
 
       <TemplateTechStack
         template={template}
       />
 
-      {/* =================================================== */}
-      {/* Included Files */}
-      {/* =================================================== */}
+      {/* ===================================================
+          9. Included Files
+         =================================================== */}
 
       <TemplateIncludedFiles
         template={template}
       />
 
-      {/* =================================================== */}
-      {/* Installation */}
-      {/* =================================================== */}
+      {/* ===================================================
+          10. Installation
+         =================================================== */}
 
       <TemplateInstallation
         template={template}
       />
 
-      {/* =================================================== */}
-      {/* Requirements */}
-      {/* =================================================== */}
+      {/* ===================================================
+          11. Requirements
+         =================================================== */}
 
       <TemplateRequirements
         template={template}
       />
 
-      {/* =================================================== */}
-      {/* Changelog */}
-      {/* =================================================== */}
+      {/* ===================================================
+          12. Changelog
+         =================================================== */}
 
       <TemplateChangelog
         template={template}
       />
 
-      {/* =================================================== */}
-      {/* Related Templates */}
-      {/* =================================================== */}
+      {/* ===================================================
+          13. Related Templates
+         =================================================== */}
 
       <RelatedTemplates
         template={template}
         templates={relatedTemplates}
       />
-      
     </main>
   );
 }
