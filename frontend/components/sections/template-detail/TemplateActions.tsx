@@ -1,5 +1,7 @@
 "use client";
 
+import Link from "next/link";
+
 import type { Template } from "@/types/template/template";
 import type { TemplatePreviewStyle } from "./preview/types";
 
@@ -21,6 +23,7 @@ const variantStyles: Record<
     section: string;
     title: string;
     grid: string;
+    demoButton: string;
   }
 > = {
   modern: {
@@ -32,6 +35,9 @@ const variantStyles: Record<
 
     grid:
       "grid gap-3",
+
+    demoButton:
+      "flex w-full items-center justify-center rounded-xl bg-indigo-600 px-4 py-3 text-sm font-semibold text-white transition-all duration-200 hover:bg-indigo-500 hover:shadow-lg hover:shadow-indigo-600/20",
   },
 
   minimal: {
@@ -43,6 +49,9 @@ const variantStyles: Record<
 
     grid:
       "grid gap-2",
+
+    demoButton:
+      "flex w-full items-center justify-center rounded-lg bg-stone-900 px-4 py-3 text-sm font-medium text-white transition-colors hover:bg-stone-800",
   },
 
   dark: {
@@ -54,6 +63,9 @@ const variantStyles: Record<
 
     grid:
       "grid gap-3",
+
+    demoButton:
+      "flex w-full items-center justify-center rounded-xl bg-indigo-500 px-4 py-3 text-sm font-semibold text-white transition-all duration-200 hover:bg-indigo-400 hover:shadow-lg hover:shadow-indigo-500/20",
   },
 
   glass: {
@@ -65,6 +77,9 @@ const variantStyles: Record<
 
     grid:
       "grid gap-3",
+
+    demoButton:
+      "flex w-full items-center justify-center rounded-xl border border-white/20 bg-white/20 px-4 py-3 text-sm font-semibold text-white backdrop-blur-xl transition-all duration-200 hover:bg-white/30",
   },
 };
 
@@ -84,6 +99,15 @@ export default function TemplateActions({
       </h2>
 
       <div className={styles.grid}>
+        {/* Live Demo */}
+        <Link
+          href={`/demo/${template.slug}`}
+          className={styles.demoButton}
+        >
+          Live Demo
+        </Link>
+
+        {/* Existing actions */}
         <WishlistButton />
         <ShareButton />
         <CopyLinkButton />
