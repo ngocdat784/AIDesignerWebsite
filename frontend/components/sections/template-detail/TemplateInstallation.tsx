@@ -1,3 +1,11 @@
+"use client";
+
+import {
+  Check,
+  Terminal,
+  ArrowRight,
+} from "lucide-react";
+
 import type { Template } from "@/types/template/template";
 
 interface TemplateInstallationProps {
@@ -15,70 +23,326 @@ export default function TemplateInstallation({
   }
 
   return (
-    <section className="space-y-5">
-      {/* Header */}
+    <section
+      className="
+        overflow-hidden
+        rounded-3xl
+        border
+        border-slate-200
+        bg-white
+        shadow-sm
+        transition-all
+        duration-300
+        hover:shadow-md
+      "
+    >
+      {/* =====================================================
+          HEADER
+         ===================================================== */}
 
-      <div>
-        <h2 className="text-2xl font-semibold tracking-tight">
-          Installation
-        </h2>
+      <div
+        className="
+          border-b
+          border-slate-200
+          bg-gradient-to-br
+          from-slate-50
+          via-white
+          to-blue-50/50
+          px-6
+          py-7
+          sm:px-8
+        "
+      >
+        <div
+          className="
+            flex
+            flex-col
+            gap-4
+            sm:flex-row
+            sm:items-center
+            sm:justify-between
+          "
+        >
+          <div>
+            <div
+              className="
+                mb-2
+                inline-flex
+                items-center
+                gap-2
+                rounded-full
+                bg-blue-50
+                px-3
+                py-1
+                text-xs
+                font-semibold
+                text-blue-600
+              "
+            >
+              <Terminal className="h-3.5 w-3.5" />
 
-        <p className="mt-1 text-sm text-muted-foreground">
-          Follow these steps to install and run the template.
-        </p>
-      </div>
+              Setup Guide
+            </div>
 
-      {/* Steps */}
+            <h2
+              className="
+                text-2xl
+                font-bold
+                tracking-tight
+                text-slate-900
+                sm:text-3xl
+              "
+            >
+              Installation
+            </h2>
 
-      <div className="space-y-4">
-        {steps.map((step, index) => (
+            <p
+              className="
+                mt-2
+                max-w-2xl
+                text-sm
+                leading-6
+                text-slate-500
+              "
+            >
+              Follow these steps to install,
+              configure and run this template.
+            </p>
+          </div>
+
+          {/* Step count */}
+
           <div
-            key={`${step}-${index}`}
             className="
               flex
-              items-start
-              gap-4
+              shrink-0
+              items-center
+              gap-2
               rounded-xl
               border
-              bg-card
-              p-4
+              border-slate-200
+              bg-white
+              px-4
+              py-3
+              shadow-sm
             "
           >
-            {/* Step number */}
-
             <div
               className="
                 flex
-                h-9
-                w-9
-                shrink-0
+                h-8
+                w-8
                 items-center
                 justify-center
-                rounded-full
-                bg-primary
+                rounded-lg
+                bg-slate-900
                 text-sm
-                font-semibold
-                text-primary-foreground
+                font-bold
+                text-white
               "
             >
-              {index + 1}
+              {steps.length}
             </div>
 
-            {/* Step content */}
+            <div>
+              <p className="text-xs text-slate-400">
+                Total
+              </p>
 
-            <div className="min-w-0 pt-1">
-              <p
-                className="
-                  text-sm
-                  font-medium
-                  leading-6
-                "
-              >
-                {step}
+              <p className="text-sm font-semibold text-slate-900">
+                {steps.length === 1
+                  ? "Step"
+                  : "Steps"}
               </p>
             </div>
           </div>
-        ))}
+        </div>
+      </div>
+
+      {/* =====================================================
+          STEPS
+         ===================================================== */}
+
+      <div className="p-6 sm:p-8">
+        <div className="relative space-y-6">
+          {steps.map((step, index) => {
+            const isLast =
+              index === steps.length - 1;
+
+            return (
+              <div
+                key={`${step}-${index}`}
+                className="relative flex gap-4 sm:gap-5"
+              >
+                {/* =================================================
+                    CONNECTOR
+                   ================================================= */}
+
+                {!isLast && (
+                  <div
+                    className="
+                      absolute
+                      left-[19px]
+                      top-12
+                      h-[calc(100%+1.5rem)]
+                      w-px
+                      bg-gradient-to-b
+                      from-blue-200
+                      to-slate-200
+                    "
+                  />
+                )}
+
+                {/* =================================================
+                    STEP NUMBER
+                   ================================================= */}
+
+                <div
+                  className="
+                    relative
+                    z-10
+                    flex
+                    h-10
+                    w-10
+                    shrink-0
+                    items-center
+                    justify-center
+                    rounded-xl
+                    bg-gradient-to-br
+                    from-blue-600
+                    to-indigo-600
+                    text-sm
+                    font-bold
+                    text-white
+                    shadow-md
+                    shadow-blue-600/20
+                  "
+                >
+                  {isLast ? (
+                    <Check className="h-5 w-5" />
+                  ) : (
+                    index + 1
+                  )}
+                </div>
+
+                {/* =================================================
+                    STEP CONTENT
+                   ================================================= */}
+
+                <div
+                  className="
+                    min-w-0
+                    flex-1
+                    rounded-2xl
+                    border
+                    border-slate-200
+                    bg-slate-50/70
+                    p-5
+                    transition-all
+                    duration-300
+                    hover:border-blue-200
+                    hover:bg-blue-50/30
+                    hover:shadow-sm
+                  "
+                >
+                  <div
+                    className="
+                      flex
+                      flex-col
+                      gap-3
+                      sm:flex-row
+                      sm:items-start
+                      sm:justify-between
+                    "
+                  >
+                    <div>
+                      <p
+                        className="
+                          text-xs
+                          font-semibold
+                          uppercase
+                          tracking-wider
+                          text-blue-600
+                        "
+                      >
+                        Step {index + 1}
+                      </p>
+
+                      <p
+                        className="
+                          mt-1
+                          text-base
+                          font-semibold
+                          leading-7
+                          text-slate-900
+                        "
+                      >
+                        {step}
+                      </p>
+                    </div>
+
+                    <div
+                      className="
+                        hidden
+                        shrink-0
+                        items-center
+                        gap-1
+                        text-xs
+                        font-medium
+                        text-slate-400
+                        sm:flex
+                      "
+                    >
+                      {isLast ? (
+                        <>
+                          Complete
+                          <Check className="h-3.5 w-3.5 text-green-500" />
+                        </>
+                      ) : (
+                        <>
+                          Next
+                          <ArrowRight className="h-3.5 w-3.5" />
+                        </>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* =====================================================
+          FOOTER
+         ===================================================== */}
+
+      <div
+        className="
+          border-t
+          border-slate-200
+          bg-slate-50/70
+          px-6
+          py-4
+          sm:px-8
+        "
+      >
+        <div
+          className="
+            flex
+            items-center
+            gap-2
+            text-sm
+            text-slate-500
+          "
+        >
+          <Check className="h-4 w-4 text-green-500" />
+
+          <span>
+            Complete all steps to get your template
+            running.
+          </span>
+        </div>
       </div>
     </section>
   );

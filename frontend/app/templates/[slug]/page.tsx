@@ -59,11 +59,10 @@ export default async function TemplateDetailPage({
       className="
         container
         mx-auto
-        space-y-10
         px-4
-        py-8
+        py-6
         sm:px-6
-        sm:py-10
+        sm:py-8
         lg:px-8
       "
     >
@@ -71,33 +70,41 @@ export default async function TemplateDetailPage({
           1. Breadcrumb
          =================================================== */}
 
-      <Breadcrumb
-        currentLabel={template.title}
-      />
+      <div className="mb-5 sm:mb-6">
+        <Breadcrumb
+          currentLabel={template.title}
+        />
+      </div>
 
       {/* ===================================================
           2. Gallery
          =================================================== */}
 
-      <TemplateGallery
-        template={template}
-      />
+      <div className="mb-6 sm:mb-8">
+        <TemplateGallery
+          template={template}
+        />
+      </div>
 
       {/* ===================================================
           3. Header
          =================================================== */}
 
-      <TemplateHeader
-        template={template}
-      />
+      <div className="mb-5 sm:mb-6">
+        <TemplateHeader
+          template={template}
+        />
+      </div>
 
       {/* ===================================================
           4. Statistics
          =================================================== */}
 
-      <TemplateStatistics
-        template={template}
-      />
+      <div className="mb-6 sm:mb-8">
+        <TemplateStatistics
+          template={template}
+        />
+      </div>
 
       {/* ===================================================
           5. Price + Actions
@@ -105,6 +112,7 @@ export default async function TemplateDetailPage({
 
       <div
         className="
+          mb-10
           grid
           gap-6
           lg:grid-cols-2
@@ -128,57 +136,71 @@ export default async function TemplateDetailPage({
           6. Overview
          =================================================== */}
 
-      <Overview
-        template={template}
-      />
+      <div className="mb-8 sm:mb-10">
+        <Overview
+          template={template}
+        />
+      </div>
 
       {/* ===================================================
           7. Features
          =================================================== */}
 
-      <TemplateFeatures
-        template={template}
-      />
+      <div className="mb-8 sm:mb-10">
+        <TemplateFeatures
+          template={template}
+        />
+      </div>
 
       {/* ===================================================
           8. Tech Stack
          =================================================== */}
 
-      <TemplateTechStack
-        template={template}
-      />
+      <div className="mb-8 sm:mb-10">
+        <TemplateTechStack
+          template={template}
+        />
+      </div>
 
       {/* ===================================================
           9. Included Files
          =================================================== */}
 
-      <TemplateIncludedFiles
-        template={template}
-      />
+      <div className="mb-8 sm:mb-10">
+        <TemplateIncludedFiles
+          template={template}
+        />
+      </div>
 
       {/* ===================================================
           10. Installation
          =================================================== */}
 
-      <TemplateInstallation
-        template={template}
-      />
+      <div className="mb-8 sm:mb-10">
+        <TemplateInstallation
+          template={template}
+        />
+      </div>
 
       {/* ===================================================
           11. Requirements
          =================================================== */}
 
-      <TemplateRequirements
-        template={template}
-      />
+      <div className="mb-8 sm:mb-10">
+        <TemplateRequirements
+          template={template}
+        />
+      </div>
 
       {/* ===================================================
           12. Changelog
          =================================================== */}
 
-      <TemplateChangelog
-        template={template}
-      />
+      <div className="mb-10 sm:mb-12">
+        <TemplateChangelog
+          template={template}
+        />
+      </div>
 
       {/* ===================================================
           13. Related Templates
