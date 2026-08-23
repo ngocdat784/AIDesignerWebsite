@@ -4,7 +4,6 @@ import type { TemplateDetailProps } from "./types";
 
 import GalleryControls from "./gallery/GalleryControls";
 import GalleryThumbnail from "./gallery/GalleryThumbnail";
-
 import { useGallery } from "./gallery/useGallery";
 
 export type TemplateGalleryVariant =
@@ -13,8 +12,7 @@ export type TemplateGalleryVariant =
   | "dark"
   | "glass";
 
-interface TemplateGalleryProps
-  extends TemplateDetailProps {
+interface TemplateGalleryProps extends TemplateDetailProps {
   variant?: TemplateGalleryVariant;
 }
 
@@ -24,10 +22,10 @@ const variantStyles = {
       "rounded-3xl border border-slate-200 bg-white shadow-sm",
 
     stage:
-      "bg-gradient-to-br from-slate-50 via-white to-blue-50",
+      "bg-[radial-gradient(circle_at_top,rgba(99,102,241,0.10),transparent_45%)]",
 
     browser:
-      "border-slate-200 bg-white shadow-2xl",
+      "border-slate-200 bg-white shadow-2xl shadow-slate-900/10",
 
     browserBar:
       "border-slate-200 bg-slate-50",
@@ -38,38 +36,11 @@ const variantStyles = {
     content:
       "bg-white",
 
-    logo:
-      "bg-slate-900",
-
-    nav:
-      "bg-slate-100",
-
-    hero:
-      "bg-gradient-to-br from-blue-50 via-white to-indigo-50",
-
-    heroTitle:
-      "bg-slate-900",
-
-    heroText:
-      "bg-slate-200",
-
-    button:
-      "bg-slate-900",
-
-    buttonSecondary:
-      "bg-slate-100",
-
-    card:
-      "border-slate-200 bg-white",
-
-    cardMuted:
-      "bg-slate-100",
-
     info:
       "border-slate-200 bg-white",
 
     infoTitle:
-      "text-slate-900",
+      "text-slate-950",
 
     infoText:
       "text-slate-500",
@@ -77,7 +48,7 @@ const variantStyles = {
 
   minimal: {
     section:
-      "rounded-3xl border border-stone-200 bg-stone-50",
+      "rounded-3xl border border-stone-200 bg-white",
 
     stage:
       "bg-stone-50",
@@ -94,38 +65,11 @@ const variantStyles = {
     content:
       "bg-white",
 
-    logo:
-      "bg-stone-900",
-
-    nav:
-      "bg-stone-100",
-
-    hero:
-      "bg-stone-50",
-
-    heroTitle:
-      "bg-stone-900",
-
-    heroText:
-      "bg-stone-200",
-
-    button:
-      "bg-stone-900",
-
-    buttonSecondary:
-      "bg-stone-100",
-
-    card:
-      "border-stone-200 bg-white",
-
-    cardMuted:
-      "bg-stone-100",
-
     info:
       "border-stone-200 bg-white",
 
     infoTitle:
-      "text-stone-900",
+      "text-stone-950",
 
     infoText:
       "text-stone-500",
@@ -136,7 +80,7 @@ const variantStyles = {
       "rounded-3xl border border-white/10 bg-[#06070a] text-white shadow-2xl",
 
     stage:
-      "bg-[radial-gradient(circle_at_top,#182033_0%,#06070a_60%)]",
+      "bg-[radial-gradient(circle_at_top,rgba(99,102,241,0.18),transparent_45%)]",
 
     browser:
       "border-white/10 bg-[#0d0f14] shadow-2xl",
@@ -150,35 +94,8 @@ const variantStyles = {
     content:
       "bg-[#0d0f14]",
 
-    logo:
-      "bg-white",
-
-    nav:
-      "bg-white/5",
-
-    hero:
-      "bg-[radial-gradient(circle_at_top,#172033_0%,#0d0f14_70%)]",
-
-    heroTitle:
-      "bg-white",
-
-    heroText:
-      "bg-white/10",
-
-    button:
-      "bg-white",
-
-    buttonSecondary:
-      "bg-white/5",
-
-    card:
-      "border-white/10 bg-white/[0.04]",
-
-    cardMuted:
-      "bg-white/5",
-
     info:
-      "border-white/10 bg-white/[0.04] backdrop-blur-xl",
+      "border-white/10 bg-white/[0.03]",
 
     infoTitle:
       "text-white",
@@ -192,55 +109,28 @@ const variantStyles = {
       "rounded-3xl border border-white/20 bg-white/10 shadow-2xl backdrop-blur-xl",
 
     stage:
-      "bg-[radial-gradient(circle_at_15%_20%,rgba(99,102,241,0.22),transparent_30%),radial-gradient(circle_at_85%_80%,rgba(236,72,153,0.18),transparent_30%)]",
+      "bg-[radial-gradient(circle_at_15%_20%,rgba(99,102,241,0.25),transparent_30%),radial-gradient(circle_at_85%_80%,rgba(236,72,153,0.18),transparent_30%)]",
 
     browser:
-      "border-white/20 bg-white/20 shadow-2xl backdrop-blur-xl",
+      "border-white/20 bg-white/10 shadow-2xl backdrop-blur-2xl",
 
     browserBar:
-      "border-white/20 bg-white/20",
+      "border-white/10 bg-white/10",
 
     browserAddress:
-      "bg-white/20",
+      "bg-white/10",
 
     content:
-      "bg-white/10",
-
-    logo:
-      "bg-slate-900",
-
-    nav:
-      "bg-white/20",
-
-    hero:
-      "bg-white/10",
-
-    heroTitle:
-      "bg-slate-900",
-
-    heroText:
-      "bg-slate-400/30",
-
-    button:
-      "bg-slate-900",
-
-    buttonSecondary:
-      "bg-white/20",
-
-    card:
-      "border-white/20 bg-white/20",
-
-    cardMuted:
-      "bg-white/20",
+      "bg-white/5",
 
     info:
-      "border-white/20 bg-white/20 backdrop-blur-xl",
+      "border-white/10 bg-white/10 backdrop-blur-xl",
 
     infoTitle:
-      "text-slate-900",
+      "text-white",
 
     infoText:
-      "text-slate-600",
+      "text-white/60",
   },
 };
 
@@ -258,6 +148,17 @@ export default function TemplateGallery({
 
   const styles = variantStyles[variant];
 
+  /*
+   * Nếu gallery không có ảnh thì dùng fallback.
+   */
+  const currentImage =
+    images[current] ||
+    template.coverImage ||
+    template.images?.[0] ||
+    template.gallery?.[0] ||
+    template.thumbnail ||
+    null;
+
   return (
     <section
       className={`
@@ -270,7 +171,7 @@ export default function TemplateGallery({
     >
       {/* =====================================================
           PREVIEW STAGE
-         ===================================================== */}
+      ===================================================== */}
 
       <div
         className={`
@@ -282,7 +183,7 @@ export default function TemplateGallery({
           lg:p-10
         `}
       >
-        {/* Decorative Background */}
+        {/* Decorative background */}
 
         <div
           className="
@@ -293,7 +194,7 @@ export default function TemplateGallery({
             h-96
             w-96
             rounded-full
-            bg-primary/10
+            bg-indigo-500/10
             blur-3xl
           "
         />
@@ -307,14 +208,14 @@ export default function TemplateGallery({
             h-96
             w-96
             rounded-full
-            bg-indigo-500/10
+            bg-violet-500/10
             blur-3xl
           "
         />
 
         {/* =================================================
             BROWSER MOCKUP
-           ================================================= */}
+        ================================================= */}
 
         <div
           className={`
@@ -343,7 +244,7 @@ export default function TemplateGallery({
               py-3
             `}
           >
-            {/* Browser Controls */}
+            {/* Browser controls */}
 
             <div className="flex gap-1.5">
               <span className="h-2.5 w-2.5 rounded-full bg-red-400" />
@@ -351,7 +252,7 @@ export default function TemplateGallery({
               <span className="h-2.5 w-2.5 rounded-full bg-green-400" />
             </div>
 
-            {/* Address */}
+            {/* Fake address bar */}
 
             <div
               className={`
@@ -368,295 +269,93 @@ export default function TemplateGallery({
           </div>
 
           {/* =================================================
-              WEBSITE CONTENT
-             ================================================= */}
+              REAL TEMPLATE IMAGE
+          ================================================= */}
 
           <div
             className={`
               ${styles.content}
               relative
+              overflow-hidden
             `}
           >
-            {/* =================================================
-                NAVIGATION
-               ================================================= */}
-
-            <div
-              className="
-                flex
-                items-center
-                justify-between
-                px-5
-                py-5
-                sm:px-8
-              "
-            >
-              {/* Logo */}
-
-              <div className="flex items-center gap-3">
-                <div
-                  className={`
-                    ${styles.logo}
-                    h-9
-                    w-9
-                    rounded-xl
-                  `}
+            {currentImage ? (
+              <div className="relative">
+                <img
+                  src={currentImage}
+                  alt={`${template.title} preview`}
+                  className="
+                    block
+                    h-auto
+                    max-h-[720px]
+                    w-full
+                    object-cover
+                    object-top
+                  "
                 />
 
-                <div className="hidden space-y-1 sm:block">
-                  <div
-                    className={`
-                      ${styles.nav}
-                      h-3
-                      w-24
-                      rounded
-                    `}
-                  />
+                {/* Bottom gradient */}
 
-                  <div
-                    className={`
-                      ${styles.nav}
-                      h-2
-                      w-16
-                      rounded
-                    `}
-                  />
-                </div>
+                <div
+                  className="
+                    pointer-events-none
+                    absolute
+                    inset-x-0
+                    bottom-0
+                    h-24
+                    bg-gradient-to-t
+                    from-black/10
+                    to-transparent
+                  "
+                />
               </div>
-
-              {/* Desktop Navigation */}
-
+            ) : (
               <div
                 className="
-                  hidden
+                  flex
+                  min-h-[420px]
                   items-center
-                  gap-4
-                  md:flex
+                  justify-center
+                  bg-slate-100
                 "
               >
-                <div
-                  className={`${styles.nav} h-3 w-12 rounded`}
-                />
-
-                <div
-                  className={`${styles.nav} h-3 w-14 rounded`}
-                />
-
-                <div
-                  className={`${styles.nav} h-3 w-12 rounded`}
-                />
-
-                <div
-                  className={`
-                    ${styles.button}
-                    h-8
-                    w-20
-                    rounded-lg
-                  `}
-                />
-              </div>
-
-              {/* Mobile Navigation */}
-
-              <div
-                className={`
-                  ${styles.nav}
-                  h-8
-                  w-8
-                  rounded-lg
-                  md:hidden
-                `}
-              />
-            </div>
-
-            {/* =================================================
-                HERO
-               ================================================= */}
-
-            <div
-              className={`
-                ${styles.hero}
-                px-6
-                py-14
-                sm:px-10
-                sm:py-20
-              `}
-            >
-              <div className="mx-auto max-w-3xl text-center">
-                {/* Badge */}
-
-                <div
-                  className={`
-                    ${styles.nav}
-                    mx-auto
-                    mb-5
-                    h-7
-                    w-28
-                    rounded-full
-                  `}
-                />
-
-                {/* Title */}
-
-                <div className="space-y-3">
+                <div className="text-center">
                   <div
-                    className={`
-                      ${styles.heroTitle}
+                    className="
                       mx-auto
-                      h-8
-                      w-[85%]
-                      max-w-2xl
-                      rounded-lg
-                    `}
-                  />
-
-                  <div
-                    className={`
-                      ${styles.heroTitle}
-                      mx-auto
-                      h-8
-                      w-[60%]
-                      max-w-xl
-                      rounded-lg
-                      opacity-80
-                    `}
-                  />
-                </div>
-
-                {/* Description */}
-
-                <div
-                  className="
-                    mx-auto
-                    mt-6
-                    max-w-xl
-                    space-y-2
-                  "
-                >
-                  <div
-                    className={`
-                      ${styles.heroText}
-                      mx-auto
-                      h-3
-                      w-full
-                      rounded
-                    `}
-                  />
-
-                  <div
-                    className={`
-                      ${styles.heroText}
-                      mx-auto
-                      h-3
-                      w-[80%]
-                      rounded
-                    `}
-                  />
-                </div>
-
-                {/* Buttons */}
-
-                <div
-                  className="
-                    mt-8
-                    flex
-                    justify-center
-                    gap-3
-                  "
-                >
-                  <div
-                    className={`
-                      ${styles.button}
-                      h-11
-                      w-28
-                      rounded-xl
-                    `}
-                  />
-
-                  <div
-                    className={`
-                      ${styles.buttonSecondary}
-                      h-11
-                      w-28
-                      rounded-xl
-                    `}
-                  />
-                </div>
-              </div>
-            </div>
-
-            {/* =================================================
-                FEATURE CARDS
-               ================================================= */}
-
-            <div
-              className="
-                grid
-                gap-4
-                p-6
-                sm:grid-cols-3
-                sm:p-8
-              "
-            >
-              {[1, 2, 3].map((item) => (
-                <div
-                  key={item}
-                  className={`
-                    ${styles.card}
-                    rounded-2xl
-                    border
-                    p-5
-                    transition-all
-                    duration-500
-                  `}
-                >
-                  <div
-                    className={`
-                      ${styles.cardMuted}
-                      mb-5
-                      h-10
-                      w-10
-                      rounded-xl
-                    `}
-                  />
-
-                  <div className="space-y-3">
-                    <div
-                      className={`
-                        ${styles.nav}
-                        h-4
-                        w-28
-                        rounded
-                      `}
-                    />
-
-                    <div
-                      className={`
-                        ${styles.nav}
-                        h-3
-                        w-full
-                        rounded
-                      `}
-                    />
-
-                    <div
-                      className={`
-                        ${styles.nav}
-                        h-3
-                        w-4/5
-                        rounded
-                      `}
-                    />
+                      flex
+                      h-20
+                      w-20
+                      items-center
+                      justify-center
+                      rounded-2xl
+                      bg-indigo-600
+                      text-xl
+                      font-bold
+                      text-white
+                    "
+                  >
+                    {template.title
+                      .slice(0, 2)
+                      .toUpperCase()}
                   </div>
+
+                  <p className="mt-4 text-sm font-semibold text-slate-900">
+                    {template.title}
+                  </p>
+
+                  <p className="mt-1 text-xs text-slate-500">
+                    Template Preview
+                  </p>
                 </div>
-              ))}
-            </div>
+              </div>
+            )}
           </div>
         </div>
 
         {/* =====================================================
             TEMPLATE INFORMATION
-           ===================================================== */}
+        ===================================================== */}
 
         <div
           className={`
@@ -684,7 +383,7 @@ export default function TemplateGallery({
               sm:justify-between
             "
           >
-            <div className="space-y-2">
+            <div className="min-w-0 space-y-2">
               <div
                 className="
                   flex
@@ -697,12 +396,12 @@ export default function TemplateGallery({
                   <span
                     className="
                       rounded-full
-                      bg-primary/10
+                      bg-indigo-500/10
                       px-3
                       py-1
                       text-xs
                       font-semibold
-                      text-primary
+                      text-indigo-600
                     "
                   >
                     {template.category}
@@ -712,12 +411,12 @@ export default function TemplateGallery({
                 <span
                   className="
                     rounded-full
-                    bg-muted
+                    bg-slate-100
                     px-3
                     py-1
                     text-xs
                     font-medium
-                    text-muted-foreground
+                    text-slate-500
                   "
                 >
                   Live Preview
@@ -727,6 +426,7 @@ export default function TemplateGallery({
               <h2
                 className={`
                   ${styles.infoTitle}
+                  truncate
                   text-xl
                   font-bold
                 `}
@@ -774,7 +474,7 @@ export default function TemplateGallery({
 
         {/* =====================================================
             GALLERY CONTROLS
-           ===================================================== */}
+        ===================================================== */}
 
         {images.length > 1 && (
           <div
@@ -803,7 +503,7 @@ export default function TemplateGallery({
 
         {/* =====================================================
             THUMBNAILS
-           ===================================================== */}
+        ===================================================== */}
 
         {images.length > 1 && (
           <div

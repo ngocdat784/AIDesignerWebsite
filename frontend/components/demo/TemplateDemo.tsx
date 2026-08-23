@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useMemo, useState } from "react";
@@ -8,16 +9,25 @@ import {
   FileCode2,
   Folder,
   FolderOpen,
-  Layers3,
   Rocket,
-  Settings2,
+  ShieldCheck,
+  Star,
+  Download,
+  Heart,
+  Eye,
+  ExternalLink,
+  Crown,
+  Clock3,
+  Package,
 } from "lucide-react";
 
-import type { TemplateDetailProps } from "@/components/sections/template-detail/types";
+import type { Template } from "@/types/template/template";
 
 type DemoStyle = "modern" | "minimal" | "dark" | "glass";
 
-interface Props extends TemplateDetailProps {}
+interface Props {
+  template: Template;
+}
 
 const styles: {
   id: DemoStyle;
@@ -51,6 +61,10 @@ export default function TemplateDemo({ template }: Props) {
 
   const currentStyle = getStyleConfig(style);
 
+  // =========================================================
+  // DATA
+  // =========================================================
+
   const previewImage =
     template.coverImage ||
     template.images?.[0] ||
@@ -62,6 +76,22 @@ export default function TemplateDemo({ template }: Props) {
   const includedFiles = template.includedFiles ?? [];
   const installationSteps = template.installationSteps ?? [];
   const requirements = template.requirements ?? [];
+  const changelog = template.changelog ?? [];
+  const tags = template.tags ?? [];
+
+  const reviewCount =
+    template.reviews ?? template.reviewCount ?? 0;
+
+  const effectiveDiscountPrice =
+    template.discountPrice ?? null;
+
+  const hasDiscount =
+    template.originalPrice != null &&
+    effectiveDiscountPrice != null &&
+    template.originalPrice > effectiveDiscountPrice;
+
+  const displayPrice =
+    effectiveDiscountPrice ?? template.price;
 
   const fileGroups = useMemo(() => {
     const folders = includedFiles.filter(
@@ -81,6 +111,10 @@ export default function TemplateDemo({ template }: Props) {
       files,
     };
   }, [includedFiles]);
+
+  // =========================================================
+  // RENDER
+  // =========================================================
 
   return (
     <main
@@ -159,10 +193,43 @@ export default function TemplateDemo({ template }: Props) {
           ================================================= */}
 
           <div className="mx-auto max-w-4xl text-center">
-            <div
-              className={`mb-6 inline-flex items-center rounded-full border px-4 py-2 text-xs font-medium ${currentStyle.badge}`}
-            >
-              {template.category}
+            {/* Badges */}
+
+            <div className="mb-6 flex flex-wrap items-center justify-center gap-2">
+              {template.category && (
+                <span
+                  className={`inline-flex items-center rounded-full border px-4 py-2 text-xs font-medium ${currentStyle.badge}`}
+                >
+                  {template.category}
+                </span>
+              )}
+
+              {template.isPremium && (
+                <span
+                  className={`inline-flex items-center gap-1.5 rounded-full border px-4 py-2 text-xs font-semibold ${currentStyle.premiumBadge}`}
+                >
+                  <Crown className="h-3.5 w-3.5" />
+                  Premium
+                </span>
+              )}
+
+              {template.featured && (
+                <span
+                  className={`inline-flex items-center gap-1.5 rounded-full border px-4 py-2 text-xs font-semibold ${currentStyle.featuredBadge}`}
+                >
+                  <Star className="h-3.5 w-3.5" />
+                  Featured
+                </span>
+              )}
+
+              {template.newest && (
+                <span
+                  className={`inline-flex items-center gap-1.5 rounded-full border px-4 py-2 text-xs font-semibold ${currentStyle.newBadge}`}
+                >
+                  <Clock3 className="h-3.5 w-3.5" />
+                  New
+                </span>
+              )}
             </div>
 
             <h2
@@ -177,9 +244,11 @@ export default function TemplateDemo({ template }: Props) {
               {template.description}
             </p>
 
-            {template.tags?.length > 0 && (
+            {/* Tags */}
+
+            {tags.length > 0 && (
               <div className="mt-6 flex flex-wrap justify-center gap-2">
-                {template.tags.map((tag) => (
+                {tags.map((tag) => (
                   <span
                     key={tag}
                     className={`rounded-full border px-3 py-1 text-xs ${currentStyle.tag}`}
@@ -190,20 +259,56 @@ export default function TemplateDemo({ template }: Props) {
               </div>
             )}
 
+            {/* Price */}
+
+            <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
+              {hasDiscount ? (
+                <>
+                  <span
+                    className={`text-3xl font-bold ${currentStyle.price}`}
+                  >
+                    {formatPrice(displayPrice)}
+                  </span>
+
+                  <span
+                    className={`text-lg line-through ${currentStyle.muted}`}
+                  >
+                    {formatPrice(template.originalPrice!)}
+                  </span>
+                </>
+              ) : (
+                <span
+                  className={`text-3xl font-bold ${currentStyle.price}`}
+                >
+                  {template.price === 0
+                    ? "Free"
+                    : formatPrice(template.price)}
+                </span>
+              )}
+            </div>
+
+            {/* Actions */}
+
             <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
               <button
                 type="button"
-                className={`rounded-xl px-6 py-3 text-sm font-semibold transition-all duration-300 ${currentStyle.primaryButton}`}
+                className={`inline-flex items-center justify-center gap-2 rounded-xl px-6 py-3 text-sm font-semibold transition-all duration-300 ${currentStyle.primaryButton}`}
               >
+                <Rocket className="h-4 w-4" />
                 Get Started
               </button>
 
-              <button
-                type="button"
-                className={`rounded-xl border px-6 py-3 text-sm font-semibold transition-all duration-300 ${currentStyle.secondaryButton}`}
-              >
-                View Template
-              </button>
+              {template.demoUrl && (
+                <a
+                  href={template.demoUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`inline-flex items-center justify-center gap-2 rounded-xl border px-6 py-3 text-sm font-semibold transition-all duration-300 ${currentStyle.secondaryButton}`}
+                >
+                  <ExternalLink className="h-4 w-4" />
+                  Open Demo
+                </a>
+              )}
             </div>
           </div>
 
@@ -241,7 +346,9 @@ export default function TemplateDemo({ template }: Props) {
                     <div
                       className={`mx-auto flex h-20 w-20 items-center justify-center rounded-2xl text-2xl font-bold ${currentStyle.icon}`}
                     >
-                      {template.title.slice(0, 2).toUpperCase()}
+                      {template.title
+                        .slice(0, 2)
+                        .toUpperCase()}
                     </div>
 
                     <p
@@ -250,7 +357,9 @@ export default function TemplateDemo({ template }: Props) {
                       {template.title}
                     </p>
 
-                    <p className={`mt-1 text-xs ${currentStyle.muted}`}>
+                    <p
+                      className={`mt-1 text-xs ${currentStyle.muted}`}
+                    >
                       Template Preview
                     </p>
                   </div>
@@ -265,30 +374,84 @@ export default function TemplateDemo({ template }: Props) {
 
           <div className="mt-16 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             <InfoCard
+              icon={<Package className="h-4 w-4" />}
               label="Author"
-              value={template.author?.name ?? "Unknown Author"}
+              value={
+                template.author?.name ??
+                "Unknown Author"
+              }
+              extra={
+                template.author?.verified ? (
+                  <span
+                    className={`inline-flex items-center gap-1 text-xs ${currentStyle.verified}`}
+                  >
+                    <ShieldCheck className="h-3.5 w-3.5" />
+                    Verified
+                  </span>
+                ) : null
+              }
               style={currentStyle}
             />
 
             <InfoCard
+              icon={<Clock3 className="h-4 w-4" />}
               label="Version"
               value={template.version ?? "Latest"}
               style={currentStyle}
             />
 
             <InfoCard
+              icon={<Star className="h-4 w-4" />}
               label="Rating"
               value={
                 template.rating
                   ? `${template.rating.toFixed(1)} / 5`
                   : "No rating"
               }
+              extra={
+                reviewCount > 0
+                  ? `${formatNumber(reviewCount)} reviews`
+                  : undefined
+              }
               style={currentStyle}
             />
 
             <InfoCard
+              icon={<Download className="h-4 w-4" />}
               label="Downloads"
               value={formatNumber(template.downloads)}
+              extra={
+                template.views > 0
+                  ? `${formatNumber(template.views)} views`
+                  : undefined
+              }
+              style={currentStyle}
+            />
+          </div>
+
+          {/* =================================================
+              QUICK STATS
+          ================================================= */}
+
+          <div className="mt-5 grid gap-5 sm:grid-cols-3">
+            <StatCard
+              icon={<Heart className="h-5 w-5" />}
+              label="Favorites"
+              value={formatNumber(template.favorites)}
+              style={currentStyle}
+            />
+
+            <StatCard
+              icon={<Eye className="h-5 w-5" />}
+              label="Views"
+              value={formatNumber(template.views)}
+              style={currentStyle}
+            />
+
+            <StatCard
+              icon={<Package className="h-5 w-5" />}
+              label="Status"
+              value={template.status}
               style={currentStyle}
             />
           </div>
@@ -327,7 +490,8 @@ export default function TemplateDemo({ template }: Props) {
                     <p
                       className={`mt-3 text-sm leading-7 ${currentStyle.description}`}
                     >
-                      Included as part of the {template.title} template.
+                      Included as part of the{" "}
+                      {template.title} template.
                     </p>
                   </div>
                 ))}
@@ -378,8 +542,6 @@ export default function TemplateDemo({ template }: Props) {
                 <div
                   className={`overflow-hidden rounded-3xl border ${currentStyle.filePanel}`}
                 >
-                  {/* Explorer Header */}
-
                   <div
                     className={`flex items-center justify-between border-b px-5 py-4 ${currentStyle.fileHeader}`}
                   >
@@ -411,8 +573,6 @@ export default function TemplateDemo({ template }: Props) {
                   </div>
 
                   <div className="p-3 sm:p-5">
-                    {/* Folders */}
-
                     {fileGroups.folders.length > 0 && (
                       <div>
                         <p
@@ -422,25 +582,27 @@ export default function TemplateDemo({ template }: Props) {
                         </p>
 
                         <div className="grid gap-2 sm:grid-cols-2">
-                          {fileGroups.folders.map((folder, index) => (
-                            <FileExplorerItem
-                              key={`${folder.name}-${index}`}
-                              name={folder.name}
-                              type={folder.type}
-                              isFolder
-                              style={currentStyle}
-                            />
-                          ))}
+                          {fileGroups.folders.map(
+                            (folder, index) => (
+                              <FileExplorerItem
+                                key={`${folder.name}-${index}`}
+                                name={folder.name}
+                                type={folder.type}
+                                isFolder
+                                style={currentStyle}
+                              />
+                            ),
+                          )}
                         </div>
                       </div>
                     )}
 
-                    {/* Files */}
-
                     {fileGroups.files.length > 0 && (
                       <div
                         className={
-                          fileGroups.folders.length > 0 ? "mt-7" : ""
+                          fileGroups.folders.length > 0
+                            ? "mt-7"
+                            : ""
                         }
                       >
                         <p
@@ -450,14 +612,16 @@ export default function TemplateDemo({ template }: Props) {
                         </p>
 
                         <div className="grid gap-2 sm:grid-cols-2">
-                          {fileGroups.files.map((file, index) => (
-                            <FileExplorerItem
-                              key={`${file.name}-${index}`}
-                              name={file.name}
-                              type={file.type}
-                              style={currentStyle}
-                            />
-                          ))}
+                          {fileGroups.files.map(
+                            (file, index) => (
+                              <FileExplorerItem
+                                key={`${file.name}-${index}`}
+                                name={file.name}
+                                type={file.type}
+                                style={currentStyle}
+                              />
+                            ),
+                          )}
                         </div>
                       </div>
                     )}
@@ -487,36 +651,38 @@ export default function TemplateDemo({ template }: Props) {
                   />
 
                   <div className="space-y-5">
-                    {installationSteps.map((step, index) => (
-                      <div
-                        key={`${step}-${index}`}
-                        className={`relative flex gap-5 rounded-2xl border p-5 transition-all duration-300 ${currentStyle.card}`}
-                      >
+                    {installationSteps.map(
+                      (step, index) => (
                         <div
-                          className={`relative z-10 flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-sm font-bold ${currentStyle.icon}`}
+                          key={`${step}-${index}`}
+                          className={`relative flex gap-5 rounded-2xl border p-5 transition-all duration-300 ${currentStyle.card}`}
                         >
-                          {index + 1}
-                        </div>
-
-                        <div className="min-w-0 pt-1">
-                          <p
-                            className={`text-xs font-semibold uppercase tracking-wider ${currentStyle.accent}`}
+                          <div
+                            className={`relative z-10 flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-sm font-bold ${currentStyle.icon}`}
                           >
-                            Step {index + 1}
-                          </p>
+                            {index + 1}
+                          </div>
 
-                          <p
-                            className={`mt-2 text-sm leading-7 ${currentStyle.description}`}
-                          >
-                            {step}
-                          </p>
+                          <div className="min-w-0 pt-1">
+                            <p
+                              className={`text-xs font-semibold uppercase tracking-wider ${currentStyle.accent}`}
+                            >
+                              Step {index + 1}
+                            </p>
+
+                            <p
+                              className={`mt-2 text-sm leading-7 ${currentStyle.description}`}
+                            >
+                              {step}
+                            </p>
+                          </div>
+
+                          <ChevronRight
+                            className={`ml-auto hidden h-5 w-5 shrink-0 sm:block ${currentStyle.muted}`}
+                          />
                         </div>
-
-                        <ChevronRight
-                          className={`ml-auto hidden h-5 w-5 shrink-0 sm:block ${currentStyle.muted}`}
-                        />
-                      </div>
-                    ))}
+                      ),
+                    )}
                   </div>
                 </div>
               </div>
@@ -537,37 +703,148 @@ export default function TemplateDemo({ template }: Props) {
               />
 
               <div className="mx-auto mt-10 grid max-w-5xl gap-4 md:grid-cols-2">
-                {requirements.map((requirement, index) => (
-                  <div
-                    key={`${requirement}-${index}`}
-                    className={`group relative overflow-hidden rounded-2xl border p-6 transition-all duration-300 ${currentStyle.card}`}
-                  >
-                    <div className="flex gap-4">
-                      <div
-                        className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${currentStyle.requirementIcon}`}
-                      >
-                        <Check className="h-5 w-5" />
-                      </div>
-
-                      <div className="min-w-0">
-                        <p
-                          className={`text-xs font-semibold uppercase tracking-wider ${currentStyle.accent}`}
+                {requirements.map(
+                  (requirement, index) => (
+                    <div
+                      key={`${requirement}-${index}`}
+                      className={`group relative overflow-hidden rounded-2xl border p-6 transition-all duration-300 ${currentStyle.card}`}
+                    >
+                      <div className="flex gap-4">
+                        <div
+                          className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${currentStyle.requirementIcon}`}
                         >
-                          Requirement {String(index + 1).padStart(2, "0")}
-                        </p>
+                          <Check className="h-5 w-5" />
+                        </div>
 
-                        <p
-                          className={`mt-2 text-sm leading-7 ${currentStyle.description}`}
-                        >
-                          {requirement}
-                        </p>
+                        <div className="min-w-0">
+                          <p
+                            className={`text-xs font-semibold uppercase tracking-wider ${currentStyle.accent}`}
+                          >
+                            Requirement{" "}
+                            {String(index + 1).padStart(
+                              2,
+                              "0",
+                            )}
+                          </p>
+
+                          <p
+                            className={`mt-2 text-sm leading-7 ${currentStyle.description}`}
+                          >
+                            {requirement}
+                          </p>
+                        </div>
                       </div>
                     </div>
+                  ),
+                )}
+              </div>
+            </section>
+          )}
+
+          {/* =================================================
+              CHANGELOG
+          ================================================= */}
+
+          {changelog.length > 0 && (
+            <section className="mt-28">
+              <SectionHeader
+                eyebrow="Changelog"
+                title="Version history"
+                description={`Recent updates and changes for ${template.title}.`}
+                style={currentStyle}
+              />
+
+              <div className="mx-auto mt-10 max-w-4xl space-y-5">
+                {changelog.map((entry, index) => (
+                  <div
+                    key={`${entry.version}-${entry.date}-${index}`}
+                    className={`rounded-2xl border p-6 ${currentStyle.card}`}
+                  >
+                    <div className="flex flex-wrap items-center justify-between gap-3">
+                      <div>
+                        <p
+                          className={`text-lg font-semibold ${currentStyle.text}`}
+                        >
+                          Version {entry.version}
+                        </p>
+
+                        <p
+                          className={`mt-1 text-xs ${currentStyle.muted}`}
+                        >
+                          {formatDate(entry.date)}
+                        </p>
+                      </div>
+
+                      <span
+                        className={`rounded-full px-3 py-1 text-xs font-medium ${currentStyle.fileCount}`}
+                      >
+                        Update
+                      </span>
+                    </div>
+
+                    {entry.changes?.length > 0 && (
+                      <ul className="mt-5 space-y-3">
+                        {entry.changes.map(
+                          (change, changeIndex) => (
+                            <li
+                              key={`${change}-${changeIndex}`}
+                              className={`flex gap-3 text-sm leading-7 ${currentStyle.description}`}
+                            >
+                              <Check
+                                className={`mt-1 h-4 w-4 shrink-0 ${currentStyle.accent}`}
+                              />
+
+                              <span>{change}</span>
+                            </li>
+                          ),
+                        )}
+                      </ul>
+                    )}
                   </div>
                 ))}
               </div>
             </section>
           )}
+
+          {/* =================================================
+              LICENSE / PACKAGE
+          ================================================= */}
+
+          <section className="mt-28">
+            <SectionHeader
+              eyebrow="License & Package"
+              title="Template details"
+              description={`Important information about the ${template.title} package.`}
+              style={currentStyle}
+            />
+
+            <div className="mx-auto mt-10 grid max-w-5xl gap-5 md:grid-cols-3">
+              <InfoCard
+                icon={<ShieldCheck className="h-4 w-4" />}
+                label="License"
+                value={template.license ?? "Not specified"}
+                style={currentStyle}
+              />
+
+              <InfoCard
+                icon={<Package className="h-4 w-4" />}
+                label="Stock"
+                value={
+                  template.stock == null
+                    ? "Unlimited"
+                    : String(template.stock)
+                }
+                style={currentStyle}
+              />
+
+              <InfoCard
+                icon={<Clock3 className="h-4 w-4" />}
+                label="Last Updated"
+                value={formatDate(template.updatedAt)}
+                style={currentStyle}
+              />
+            </div>
+          </section>
 
           {/* =================================================
               CTA
@@ -594,12 +871,26 @@ export default function TemplateDemo({ template }: Props) {
               Start building your next project with this template.
             </p>
 
-            <button
-              type="button"
-              className={`mt-7 rounded-xl px-6 py-3 text-sm font-semibold ${currentStyle.primaryButton}`}
-            >
-              Get Started
-            </button>
+            <div className="mt-7 flex flex-col justify-center gap-3 sm:flex-row">
+              <button
+                type="button"
+                className={`rounded-xl px-6 py-3 text-sm font-semibold ${currentStyle.primaryButton}`}
+              >
+                Get Started
+              </button>
+
+              {template.demoUrl && (
+                <a
+                  href={template.demoUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`inline-flex items-center justify-center gap-2 rounded-xl border px-6 py-3 text-sm font-semibold ${currentStyle.secondaryButton}`}
+                >
+                  Open Demo
+                  <ExternalLink className="h-4 w-4" />
+                </a>
+              )}
+            </div>
           </div>
         </div>
       </section>
@@ -630,11 +921,15 @@ function SectionHeader({
         {eyebrow}
       </p>
 
-      <h3 className={`mt-3 text-3xl font-bold ${style.heading}`}>
+      <h3
+        className={`mt-3 text-3xl font-bold ${style.heading}`}
+      >
         {title}
       </h3>
 
-      <p className={`mt-4 ${style.description}`}>{description}</p>
+      <p className={`mt-4 ${style.description}`}>
+        {description}
+      </p>
     </div>
   );
 }
@@ -644,25 +939,87 @@ function SectionHeader({
 ========================================================= */
 
 function InfoCard({
+  icon,
+  label,
+  value,
+  extra,
+  style,
+}: {
+  icon?: React.ReactNode;
+  label: string;
+  value: string;
+  extra?: React.ReactNode;
+  style: ReturnType<typeof getStyleConfig>;
+}) {
+  return (
+    <div className={`rounded-2xl border p-5 ${style.card}`}>
+      <div className="flex items-center gap-2">
+        {icon && (
+          <span className={style.accent}>
+            {icon}
+          </span>
+        )}
+
+        <p
+          className={`text-xs font-medium uppercase tracking-wider ${style.muted}`}
+        >
+          {label}
+        </p>
+      </div>
+
+      <p
+        className={`mt-2 truncate text-base font-semibold ${style.text}`}
+      >
+        {value}
+      </p>
+
+      {extra && (
+        <div className={`mt-2 text-xs ${style.muted}`}>
+          {extra}
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* =========================================================
+   STAT CARD
+========================================================= */
+
+function StatCard({
+  icon,
   label,
   value,
   style,
 }: {
+  icon: React.ReactNode;
   label: string;
   value: string;
   style: ReturnType<typeof getStyleConfig>;
 }) {
   return (
-    <div className={`rounded-2xl border p-5 ${style.card}`}>
-      <p
-        className={`text-xs font-medium uppercase tracking-wider ${style.muted}`}
+    <div
+      className={`flex items-center gap-4 rounded-2xl border p-5 ${style.card}`}
+    >
+      <div
+        className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl ${style.icon}`}
       >
-        {label}
-      </p>
+        {icon}
+      </div>
 
-      <p className={`mt-2 truncate text-base font-semibold ${style.text}`}>
-        {value}
-      </p>
+      <div className="min-w-0">
+        <p
+          className={`text-xs font-medium uppercase tracking-wider ${style.muted}`}
+        >
+          {label}
+        </p>
+
+        <p
+          className={`mt-1 text-lg font-semibold ${style.text}`}
+        >
+          {value}
+        </p>
+      </div>
     </div>
   );
 }
@@ -696,6 +1053,11 @@ function FileExplorerItem({
       "json",
       "html",
       "py",
+      "vue",
+      "php",
+      "java",
+      "cpp",
+      "c",
     ].includes(normalizedType);
 
   return (
@@ -757,6 +1119,36 @@ function formatNumber(value: number) {
   }).format(value);
 }
 
+function formatPrice(value: number) {
+  if (value === 0) {
+    return "Free";
+  }
+
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    maximumFractionDigits: 2,
+  }).format(value);
+}
+
+function formatDate(value?: string | null) {
+  if (!value) {
+    return "Unknown";
+  }
+
+  const date = new Date(value);
+
+  if (Number.isNaN(date.getTime())) {
+    return value;
+  }
+
+  return new Intl.DateTimeFormat("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  }).format(date);
+}
+
 /* =========================================================
    STYLE CONFIGURATION
 ========================================================= */
@@ -767,9 +1159,11 @@ function getStyleConfig(style: DemoStyle) {
       return {
         page: "bg-white text-gray-900",
 
-        toolbar: "border-gray-200 bg-white/90",
+        toolbar:
+          "border-gray-200 bg-white/90",
 
-        selectorWrapper: "border-gray-200 bg-white",
+        selectorWrapper:
+          "border-gray-200 bg-white",
 
         background:
           "bg-gradient-to-b from-white via-gray-50 to-white",
@@ -784,8 +1178,21 @@ function getStyleConfig(style: DemoStyle) {
 
         accent: "text-gray-900",
 
+        price: "text-gray-950",
+
+        verified: "text-blue-600",
+
         badge:
           "border-gray-200 bg-gray-50 text-gray-700",
+
+        premiumBadge:
+          "border-amber-200 bg-amber-50 text-amber-700",
+
+        featuredBadge:
+          "border-purple-200 bg-purple-50 text-purple-700",
+
+        newBadge:
+          "border-blue-200 bg-blue-50 text-blue-700",
 
         tag:
           "border-gray-200 bg-gray-50 text-gray-600",
@@ -838,12 +1245,6 @@ function getStyleConfig(style: DemoStyle) {
         fileIcon:
           "bg-gray-100 text-gray-700",
 
-        fileRow:
-          "border-gray-200",
-
-        fileType:
-          "bg-gray-100 text-gray-600",
-
         requirementIcon:
           "bg-gray-100 text-gray-700",
 
@@ -877,8 +1278,21 @@ function getStyleConfig(style: DemoStyle) {
 
         accent: "text-indigo-400",
 
+        price: "text-white",
+
+        verified: "text-blue-400",
+
         badge:
           "border-indigo-400/20 bg-indigo-400/10 text-indigo-300",
+
+        premiumBadge:
+          "border-amber-400/20 bg-amber-400/10 text-amber-300",
+
+        featuredBadge:
+          "border-purple-400/20 bg-purple-400/10 text-purple-300",
+
+        newBadge:
+          "border-blue-400/20 bg-blue-400/10 text-blue-300",
 
         tag:
           "border-white/10 bg-white/5 text-white/70",
@@ -931,12 +1345,6 @@ function getStyleConfig(style: DemoStyle) {
         fileIcon:
           "bg-indigo-500/10 text-indigo-300",
 
-        fileRow:
-          "border-white/10",
-
-        fileType:
-          "bg-white/5 text-white/60",
-
         requirementIcon:
           "bg-indigo-500/10 text-indigo-300",
 
@@ -970,8 +1378,21 @@ function getStyleConfig(style: DemoStyle) {
 
         accent: "text-cyan-300",
 
+        price: "text-white",
+
+        verified: "text-blue-300",
+
         badge:
           "border-white/20 bg-white/10 text-white/80 backdrop-blur-xl",
+
+        premiumBadge:
+          "border-amber-300/30 bg-amber-300/10 text-amber-200 backdrop-blur-xl",
+
+        featuredBadge:
+          "border-purple-300/30 bg-purple-300/10 text-purple-200 backdrop-blur-xl",
+
+        newBadge:
+          "border-blue-300/30 bg-blue-300/10 text-blue-200 backdrop-blur-xl",
 
         tag:
           "border-white/20 bg-white/10 text-white/70 backdrop-blur-xl",
@@ -1024,12 +1445,6 @@ function getStyleConfig(style: DemoStyle) {
         fileIcon:
           "bg-white/10 text-cyan-300",
 
-        fileRow:
-          "border-white/10",
-
-        fileType:
-          "bg-white/10 text-white/60",
-
         requirementIcon:
           "bg-white/10 text-cyan-300",
 
@@ -1070,8 +1485,23 @@ function getStyleConfig(style: DemoStyle) {
         accent:
           "text-indigo-600",
 
+        price:
+          "text-slate-950",
+
+        verified:
+          "text-blue-600",
+
         badge:
           "border-indigo-200 bg-indigo-50 text-indigo-700",
+
+        premiumBadge:
+          "border-amber-200 bg-amber-50 text-amber-700",
+
+        featuredBadge:
+          "border-purple-200 bg-purple-50 text-purple-700",
+
+        newBadge:
+          "border-blue-200 bg-blue-50 text-blue-700",
 
         tag:
           "border-slate-200 bg-white text-slate-600",
@@ -1124,12 +1554,6 @@ function getStyleConfig(style: DemoStyle) {
         fileIcon:
           "bg-indigo-50 text-indigo-600",
 
-        fileRow:
-          "border-slate-200",
-
-        fileType:
-          "bg-slate-100 text-slate-600",
-
         requirementIcon:
           "bg-emerald-50 text-emerald-600",
 
@@ -1141,3 +1565,4 @@ function getStyleConfig(style: DemoStyle) {
       };
   }
 }
+
