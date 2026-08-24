@@ -178,9 +178,12 @@ export default function TemplateGallery({
           ${styles.stage}
           relative
           overflow-hidden
-          p-4
-          sm:p-6
-          lg:p-10
+          px-3
+          py-4
+          sm:px-5
+          sm:py-5
+          lg:px-7
+          lg:py-7
         `}
       >
         {/* Decorative background */}
@@ -191,8 +194,8 @@ export default function TemplateGallery({
             absolute
             -right-32
             -top-32
-            h-96
-            w-96
+            h-80
+            w-80
             rounded-full
             bg-indigo-500/10
             blur-3xl
@@ -205,8 +208,8 @@ export default function TemplateGallery({
             absolute
             -bottom-32
             -left-32
-            h-96
-            w-96
+            h-80
+            w-80
             rounded-full
             bg-violet-500/10
             blur-3xl
@@ -241,7 +244,7 @@ export default function TemplateGallery({
               gap-3
               border-b
               px-4
-              py-3
+              py-2.5
             `}
           >
             {/* Browser controls */}
@@ -258,7 +261,7 @@ export default function TemplateGallery({
               className={`
                 ${styles.browserAddress}
                 mx-auto
-                h-7
+                h-6
                 max-w-md
                 flex-1
                 rounded-lg
@@ -280,18 +283,25 @@ export default function TemplateGallery({
             `}
           >
             {currentImage ? (
-              <div className="relative">
+              <div
+                className="relative"
+                style={{
+                  maxHeight: "520px",
+                }}
+              >
                 <img
                   src={currentImage}
                   alt={`${template.title} preview`}
                   className="
                     block
-                    h-auto
-                    max-h-[720px]
                     w-full
                     object-cover
                     object-top
                   "
+                  style={{
+                    height: "min(520px, 48vw)",
+                    minHeight: "320px",
+                  }}
                 />
 
                 {/* Bottom gradient */}
@@ -302,7 +312,7 @@ export default function TemplateGallery({
                     absolute
                     inset-x-0
                     bottom-0
-                    h-24
+                    h-20
                     bg-gradient-to-t
                     from-black/10
                     to-transparent
@@ -313,7 +323,7 @@ export default function TemplateGallery({
               <div
                 className="
                   flex
-                  min-h-[420px]
+                  min-h-[320px]
                   items-center
                   justify-center
                   bg-slate-100
@@ -324,13 +334,13 @@ export default function TemplateGallery({
                     className="
                       mx-auto
                       flex
-                      h-20
-                      w-20
+                      h-16
+                      w-16
                       items-center
                       justify-center
                       rounded-2xl
                       bg-indigo-600
-                      text-xl
+                      text-lg
                       font-bold
                       text-white
                     "
@@ -340,11 +350,21 @@ export default function TemplateGallery({
                       .toUpperCase()}
                   </div>
 
-                  <p className="mt-4 text-sm font-semibold text-slate-900">
+                  <p
+                    className="text-sm font-semibold text-slate-900"
+                    style={{
+                      marginTop: "14px",
+                    }}
+                  >
                     {template.title}
                   </p>
 
-                  <p className="mt-1 text-xs text-slate-500">
+                  <p
+                    className="text-xs text-slate-500"
+                    style={{
+                      marginTop: "4px",
+                    }}
+                  >
                     Template Preview
                   </p>
                 </div>
@@ -363,27 +383,29 @@ export default function TemplateGallery({
             relative
             z-10
             mx-auto
-            mt-6
             max-w-6xl
             rounded-2xl
             border
-            p-5
+            p-4
             transition-all
             duration-500
-            sm:p-6
+            sm:p-5
           `}
+          style={{
+            marginTop: "20px",
+          }}
         >
           <div
             className="
               flex
               flex-col
-              gap-5
+              gap-4
               sm:flex-row
               sm:items-center
               sm:justify-between
             "
           >
-            <div className="min-w-0 space-y-2">
+            <div className="min-w-0">
               <div
                 className="
                   flex
@@ -430,6 +452,9 @@ export default function TemplateGallery({
                   text-xl
                   font-bold
                 `}
+                style={{
+                  marginTop: "10px",
+                }}
               >
                 {template.title}
               </h2>
@@ -441,6 +466,9 @@ export default function TemplateGallery({
                   text-sm
                   leading-6
                 `}
+                style={{
+                  marginTop: "5px",
+                }}
               >
                 {template.description}
               </p>
@@ -459,10 +487,12 @@ export default function TemplateGallery({
               <p
                 className={`
                   ${styles.infoTitle}
-                  mt-1
                   text-lg
                   font-bold
                 `}
+                style={{
+                  marginTop: "3px",
+                }}
               >
                 {template.rating
                   ? `${template.rating.toFixed(1)} / 5`
@@ -482,13 +512,15 @@ export default function TemplateGallery({
               relative
               z-10
               mx-auto
-              mt-5
               flex
               max-w-6xl
               items-center
               justify-between
               gap-4
             "
+            style={{
+              marginTop: "16px",
+            }}
           >
             <GalleryControls
               onNext={next}
@@ -511,7 +543,6 @@ export default function TemplateGallery({
               relative
               z-10
               mx-auto
-              mt-4
               grid
               max-w-6xl
               grid-cols-3
@@ -520,6 +551,9 @@ export default function TemplateGallery({
               md:grid-cols-5
               lg:grid-cols-6
             "
+            style={{
+              marginTop: "12px",
+            }}
           >
             {images.map((image, index) => (
               <GalleryThumbnail

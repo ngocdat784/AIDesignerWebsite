@@ -291,8 +291,10 @@ function StatisticsCard({
         </p>
 
         <p
+          style={{
+            marginTop: "4px",
+          }}
           className={`
-            mt-1
             truncate
             ${styles.value}
           `}
@@ -302,10 +304,10 @@ function StatisticsCard({
 
         {secondary && (
           <p
-            className={`
-              mt-1
-              ${styles.secondary}
-            `}
+            style={{
+              marginTop: "4px",
+            }}
+            className={styles.secondary}
           >
             {secondary}
           </p>

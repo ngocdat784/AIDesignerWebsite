@@ -450,182 +450,209 @@ export default function TemplatePriceCard({
         `}
       />
 
-      <div className="space-y-6 pt-2">
+     <div className="pt-2">
+  {/* ===================================================
+      PREMIUM BADGE
+     =================================================== */}
 
-        {/* ===================================================
-            PREMIUM BADGE
-           =================================================== */}
+  {template.isPremium && (
+    <div
+      className={`
+        mb-5
+        inline-flex
+        items-center
+        gap-2
+        rounded-full
+        border
+        px-3
+        py-1.5
+        text-xs
+        font-semibold
+        ${styles.premium}
+        ${styles.badge}
+      `}
+    >
+      <Crown className="h-3.5 w-3.5" />
 
-        {template.isPremium && (
-          <div
-            className={`
-              inline-flex
-              items-center
-              gap-2
-              rounded-full
-              border
-              px-3
-              py-1.5
-              text-xs
-              font-semibold
-              ${styles.premium}
-              ${styles.badge}
-            `}
-          >
-            <Crown className="h-3.5 w-3.5" />
+      Premium Template
+    </div>
+  )}
 
-            Premium Template
-          </div>
-        )}
+  {/* ===================================================
+      PRICE
+     =================================================== */}
 
-        {/* ===================================================
-            PRICE
-           =================================================== */}
+  <div
+    className={`
+      mb-6
+      rounded-2xl
+      border
+      p-5
+      ${styles.priceArea}
+    `}
+  >
+    <p
+      className={`
+        text-xs
+        font-semibold
+        uppercase
+        tracking-wider
+        ${styles.priceLabel}
+      `}
+    >
+      Template Price
+    </p>
 
-        <div
+    <div className="mt-3 flex flex-wrap items-end gap-3">
+      <PriceTag
+        price={template.price}
+        discountPrice={
+          template.discountPrice ??
+          undefined
+        }
+      />
+
+      {hasDiscount && (
+        <span
           className={`
-            rounded-2xl
-            border
-            p-5
-            ${styles.priceArea}
+            pb-1
+            text-sm
+            line-through
+            ${styles.muted}
           `}
         >
-          <p
-            className={`
-              text-xs
-              font-semibold
-              uppercase
-              tracking-wider
-              ${styles.priceLabel}
-            `}
-          >
-            Template Price
-          </p>
+          ${template.originalPrice}
+        </span>
+      )}
+    </div>
 
-          <div className="mt-3 flex flex-wrap items-end gap-3">
-            <PriceTag
-              price={template.price}
-              discountPrice={
-                template.discountPrice ??
-                undefined
-              }
-            />
+    {hasDiscount && (
+      <div
+        className={`
+          mt-3
+          inline-flex
+          rounded-full
+          bg-emerald-500/10
+          px-2.5
+          py-1
+          text-xs
+          font-semibold
+          text-emerald-600
+        `}
+      >
+        Save{" "}
+        {Math.round(
+          (1 -
+            template.discountPrice! /
+              template.originalPrice!) *
+            100,
+        )}
+        %
+      </div>
+    )}
+  </div>
 
-            {hasDiscount && (
-              <span
-                className={`
-                  pb-1
-                  text-sm
-                  line-through
-                  ${styles.muted}
-                `}
-              >
-                ${template.originalPrice}
-              </span>
-            )}
-          </div>
+  {/* ===================================================
+      BENEFITS
+     =================================================== */}
 
-          {hasDiscount && (
-            <div
-              className={`
-                mt-3
-                inline-flex
-                rounded-full
-                bg-emerald-500/10
-                px-2.5
-                py-1
-                text-xs
-                font-semibold
-                text-emerald-600
-              `}
-            >
-              Save{" "}
-              {Math.round(
-                (1 -
-                  (template.discountPrice! /
-                    template.originalPrice!)) *
-                  100,
-              )}
-              %
-            </div>
-          )}
-        </div>
+  <div className="mb-6">
+    <p
+      className={`
+        mb-4
+        text-xs
+        font-semibold
+        uppercase
+        tracking-wider
+        ${styles.muted}
+      `}
+    >
+      What's included
+    </p>
 
-        {/* ===================================================
-            BENEFITS
-           =================================================== */}
+    <div>
+      <Benefit
+        icon={
+          <RefreshCw className="h-4 w-4" />
+        }
+        text="Lifetime updates"
+        styles={styles}
+      />
 
-        <div>
-          <p
-            className={`
-              mb-4
-              text-xs
-              font-semibold
-              uppercase
-              tracking-wider
-              ${styles.muted}
-            `}
-          >
-            What's included
-          </p>
+      <Benefit
+        icon={
+          <Headphones className="h-4 w-4" />
+        }
+        text="Premium support"
+        styles={styles}
+      />
 
-          <div className="space-y-3">
-            <Benefit
-              icon={
-                <RefreshCw className="h-4 w-4" />
-              }
-              text="Lifetime updates"
-              styles={styles}
-            />
+      <Benefit
+        icon={
+          <Download className="h-4 w-4" />
+        }
+        text="Instant download"
+        styles={styles}
+      />
 
-            <Benefit
-              icon={
-                <Headphones className="h-4 w-4" />
-              }
-              text="Premium support"
-              styles={styles}
-            />
+      <Benefit
+        icon={
+          <ShieldCheck className="h-4 w-4" />
+        }
+        text={
+          template.license ??
+          "Standard License"
+        }
+        styles={styles}
+      />
+    </div>
+  </div>
 
-            <Benefit
-              icon={
-                <Download className="h-4 w-4" />
-              }
-              text="Instant download"
-              styles={styles}
-            />
+  {/* ===================================================
+      DIVIDER
+     =================================================== */}
 
-            <Benefit
-              icon={
-                <ShieldCheck className="h-4 w-4" />
-              }
-              text={
-                template.license ??
-                "Standard License"
-              }
-              styles={styles}
-            />
-          </div>
-        </div>
+  <div
+    className={`
+      mb-6
+      border-t
+      ${styles.divider}
+    `}
+  />
 
-        {/* ===================================================
-            DIVIDER
-           =================================================== */}
+  {/* ===================================================
+      ACTIONS
+     =================================================== */}
 
-        <div
-          className={`
-            border-t
-            ${styles.divider}
-          `}
-        />
+  <div>
+    {/* Buy Now */}
 
-        {/* ===================================================
-            ACTIONS
-           =================================================== */}
+    <AppButton
+      className={`
+        mb-3
+        w-full
+        min-h-12
+        rounded-xl
+        transition-all
+        duration-300
+        hover:scale-[1.02]
+        active:scale-[0.98]
+        ${styles.primaryButton}
+      `}
+    >
+      <CreditCard className="mr-2 h-4 w-4" />
 
-        <div className="space-y-3">
+      Buy Now
+    </AppButton>
 
-          {/* Buy Now */}
+    {/* Cart */}
 
+    {added ? (
+      <>
+        <Link
+          href="/cart"
+          className="mb-3 block"
+        >
           <AppButton
             className={`
               w-full
@@ -635,247 +662,218 @@ export default function TemplatePriceCard({
               duration-300
               hover:scale-[1.02]
               active:scale-[0.98]
-              ${styles.primaryButton}
+              ${styles.secondaryButton}
             `}
           >
-            <CreditCard className="mr-2 h-4 w-4" />
+            <Check className="mr-2 h-4 w-4" />
 
-            Buy Now
+            View Cart
           </AppButton>
+        </Link>
 
-          {/* Cart */}
-
-          {added ? (
-            <>
-              <Link
-                href="/cart"
-                className="block"
-              >
-                <AppButton
-                  className={`
-                    w-full
-                    min-h-12
-                    rounded-xl
-                    transition-all
-                    duration-300
-                    hover:scale-[1.02]
-                    active:scale-[0.98]
-                    ${styles.secondaryButton}
-                  `}
-                >
-                  <Check className="mr-2 h-4 w-4" />
-
-                  View Cart
-                </AppButton>
-              </Link>
-
-              {/* Cart summary */}
-
-              <div
-                className={`
-                  space-y-4
-                  rounded-2xl
-                  border
-                  p-4
-                  animate-in
-                  fade-in
-                  slide-in-from-top-2
-                  duration-300
-                  ${styles.cartSummary}
-                `}
-              >
-                <div
-                  className={`
-                    flex
-                    items-center
-                    gap-2
-                    text-sm
-                    font-semibold
-                    ${styles.success}
-                  `}
-                >
-                  <Check className="h-4 w-4" />
-
-                  Added to your cart
-                </div>
-
-                <div className="space-y-2 text-sm">
-                  <div
-                    className={`
-                      flex
-                      justify-between
-                      ${styles.summaryText}
-                    `}
-                  >
-                    <span>Items</span>
-
-                    <span>
-                      {itemCount}
-                    </span>
-                  </div>
-
-                  <div
-                    className={`
-                      flex
-                      justify-between
-                      font-semibold
-                      ${styles.text}
-                    `}
-                  >
-                    <span>Subtotal</span>
-
-                    <span>
-                      ${subtotal}
-                    </span>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-2 gap-3">
-                  <Link href="/cart">
-                    <AppButton
-                      variant="outline"
-                      className={`
-                        w-full
-                        ${styles.secondaryButton}
-                      `}
-                    >
-                      View Cart
-                    </AppButton>
-                  </Link>
-
-                  <Link href="/checkout">
-                    <AppButton
-                      className={`
-                        w-full
-                        ${styles.primaryButton}
-                      `}
-                    >
-                      Checkout
-                    </AppButton>
-                  </Link>
-                </div>
-
-                <Link
-                  href="/marketplace"
-                  className={`
-                    block
-                    text-center
-                    text-xs
-                    transition-colors
-                    hover:text-primary
-                    ${styles.muted}
-                  `}
-                >
-                  Continue Shopping
-                </Link>
-              </div>
-            </>
-          ) : (
-            <AppButton
-              variant="outline"
-              className={`
-                w-full
-                min-h-12
-                rounded-xl
-                transition-all
-                duration-300
-                hover:scale-[1.02]
-                active:scale-[0.98]
-                ${styles.secondaryButton}
-              `}
-              onClick={() =>
-                add(
-                  marketplaceTemplate,
-                )
-              }
-            >
-              <ShoppingCart className="mr-2 h-4 w-4" />
-
-              Add to Cart
-            </AppButton>
-          )}
-
-          {/* Live Demo */}
-
-          {template.demoUrl && (
-            <a
-              href={template.demoUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="block"
-            >
-              <AppButton
-                variant="secondary"
-                className={`
-                  w-full
-                  min-h-11
-                  rounded-xl
-                  transition-all
-                  duration-300
-                  hover:scale-[1.02]
-                  active:scale-[0.98]
-                  ${styles.demoButton}
-                `}
-              >
-                <ExternalLink className="mr-2 h-4 w-4" />
-
-                Live Demo
-              </AppButton>
-            </a>
-          )}
-        </div>
-
-        {/* ===================================================
-            SECURITY
-           =================================================== */}
+        {/* Cart summary */}
 
         <div
           className={`
-            flex
-            items-start
-            gap-3
-            rounded-xl
+            mb-3
+            space-y-4
+            rounded-2xl
             border
-            p-3.5
-            ${styles.security}
+            p-4
+            animate-in
+            fade-in
+            slide-in-from-top-2
+            duration-300
+            ${styles.cartSummary}
           `}
         >
-          <ShieldCheck
+          <div
             className={`
-              mt-0.5
-              h-4
-              w-4
-              shrink-0
-              ${styles.securityIcon}
+              flex
+              items-center
+              gap-2
+              text-sm
+              font-semibold
+              ${styles.success}
             `}
-          />
+          >
+            <Check className="h-4 w-4" />
 
-          <div>
-            <p
+            Added to your cart
+          </div>
+
+          <div className="space-y-2 text-sm">
+            <div
               className={`
-                text-xs
+                flex
+                justify-between
+                ${styles.summaryText}
+              `}
+            >
+              <span>Items</span>
+
+              <span>{itemCount}</span>
+            </div>
+
+            <div
+              className={`
+                flex
+                justify-between
                 font-semibold
                 ${styles.text}
               `}
             >
-              Secure purchase
-            </p>
+              <span>Subtotal</span>
 
-            <p
-              className={`
-                mt-0.5
-                text-xs
-                leading-5
-                ${styles.muted}
-              `}
-            >
-              Secure payment and instant
-              access after purchase.
-            </p>
+              <span>${subtotal}</span>
+            </div>
           </div>
-        </div>
 
-      </div>
+          <div className="grid grid-cols-2 gap-3">
+            <Link href="/cart">
+              <AppButton
+                variant="outline"
+                className={`
+                  w-full
+                  ${styles.secondaryButton}
+                `}
+              >
+                View Cart
+              </AppButton>
+            </Link>
+
+            <Link href="/checkout">
+              <AppButton
+                className={`
+                  w-full
+                  ${styles.primaryButton}
+                `}
+              >
+                Checkout
+              </AppButton>
+            </Link>
+          </div>
+
+          <Link
+            href="/marketplace"
+            className={`
+              block
+              text-center
+              text-xs
+              transition-colors
+              hover:text-primary
+              ${styles.muted}
+            `}
+          >
+            Continue Shopping
+          </Link>
+        </div>
+      </>
+    ) : (
+      <AppButton
+        variant="outline"
+        className={`
+          mb-3
+          w-full
+          min-h-12
+          rounded-xl
+          transition-all
+          duration-300
+          hover:scale-[1.02]
+          active:scale-[0.98]
+          ${styles.secondaryButton}
+        `}
+        onClick={() =>
+          add(marketplaceTemplate)
+        }
+      >
+        <ShoppingCart className="mr-2 h-4 w-4" />
+
+        Add to Cart
+      </AppButton>
+    )}
+
+    {/* Live Demo */}
+
+    {template.demoUrl && (
+      <a
+        href={template.demoUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="block"
+      >
+        <AppButton
+          variant="secondary"
+          className={`
+            w-full
+            min-h-11
+            rounded-xl
+            transition-all
+            duration-300
+            hover:scale-[1.02]
+            active:scale-[0.98]
+            ${styles.demoButton}
+          `}
+        >
+          <ExternalLink className="mr-2 h-4 w-4" />
+
+          Live Demo
+        </AppButton>
+      </a>
+    )}
+  </div>
+
+  {/* ===================================================
+      SECURITY
+     =================================================== */}
+
+  <div
+    className={`
+      mt-6
+      flex
+      items-start
+      gap-3
+      rounded-xl
+      border
+      p-3.5
+      ${styles.security}
+    `}
+  >
+    <ShieldCheck
+      className={`
+        mt-0.5
+        h-4
+        w-4
+        shrink-0
+        ${styles.securityIcon}
+      `}
+    />
+
+    <div>
+      <p
+        className={`
+          text-xs
+          font-semibold
+          ${styles.text}
+        `}
+      >
+        Secure purchase
+      </p>
+
+      <p
+        className={`
+          mt-0.5
+          text-xs
+          leading-5
+          ${styles.muted}
+        `}
+      >
+        Secure payment and instant
+        access after purchase.
+      </p>
+    </div>
+  </div>
+</div>
     </aside>
   );
 }

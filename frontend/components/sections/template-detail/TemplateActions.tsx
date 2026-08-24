@@ -44,10 +44,6 @@ const variantStyles: Record<
     secondaryTitle: string;
   }
 > = {
-  // =========================================================
-  // MODERN
-  // =========================================================
-
   modern: {
     section:
       "relative overflow-hidden rounded-3xl border border-slate-200 bg-white p-6 shadow-xl shadow-slate-900/5 transition-all duration-500",
@@ -83,13 +79,9 @@ const variantStyles: Record<
       "text-xs font-semibold uppercase tracking-wider text-slate-400",
   },
 
-  // =========================================================
-  // MINIMAL
-  // =========================================================
-
   minimal: {
     section:
-      "relative space-y-6 bg-transparent px-1 py-4",
+      "relative bg-transparent px-1 py-4",
 
     accent:
       "bg-stone-900",
@@ -121,10 +113,6 @@ const variantStyles: Record<
     secondaryTitle:
       "text-xs font-medium uppercase tracking-wider text-stone-400",
   },
-
-  // =========================================================
-  // DARK
-  // =========================================================
 
   dark: {
     section:
@@ -160,10 +148,6 @@ const variantStyles: Record<
     secondaryTitle:
       "text-xs font-semibold uppercase tracking-wider text-white/30",
   },
-
-  // =========================================================
-  // GLASS
-  // =========================================================
 
   glass: {
     section:
@@ -214,7 +198,7 @@ export default function TemplateActions({
     >
       {/* ===================================================
           TOP ACCENT
-         =================================================== */}
+      =================================================== */}
 
       <div
         className={`
@@ -226,14 +210,14 @@ export default function TemplateActions({
         `}
       />
 
-      <div className="space-y-6 pt-1">
+      <div className="pt-1">
 
         {/* =================================================
             HEADER
-           ================================================= */}
+        ================================================= */}
 
-        <div className="space-y-1.5">
-          <div className="flex items-center justify-between gap-4">
+        <div className="mb-5">
+          <div className="mb-1.5 flex items-center justify-between gap-4">
             <h2 className={styles.title}>
               Actions
             </h2>
@@ -255,11 +239,14 @@ export default function TemplateActions({
 
         {/* =================================================
             PRIMARY ACTION
-           ================================================= */}
+        ================================================= */}
 
         <Link
           href={`/demo/${template.slug}`}
-          className={styles.demoButton}
+          className={`
+            ${styles.demoButton}
+            mb-5
+          `}
         >
           <ExternalLink
             className="
@@ -289,10 +276,11 @@ export default function TemplateActions({
 
         {/* =================================================
             QUICK ACTIONS
-           ================================================= */}
+        ================================================= */}
 
         <div
           className={`
+            mb-5
             border-t
             pt-5
             ${styles.divider}
@@ -362,7 +350,7 @@ export default function TemplateActions({
 
         {/* =================================================
             REPORT
-           ================================================= */}
+        ================================================= */}
 
         <div
           className={`
@@ -381,7 +369,6 @@ export default function TemplateActions({
             <ReportButton />
           </ActionWrapper>
         </div>
-
       </div>
     </section>
   );
@@ -407,7 +394,7 @@ function ActionWrapper({
       {/* Visual layer */}
 
       <div
-        className={`
+        className="
           pointer-events-none
           absolute
           inset-0
@@ -416,7 +403,7 @@ function ActionWrapper({
           gap-3
           rounded-xl
           px-3.5
-        `}
+        "
       >
         <span className={styles.actionIcon}>
           {icon}

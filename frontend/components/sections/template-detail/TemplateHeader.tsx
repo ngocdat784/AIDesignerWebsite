@@ -18,8 +18,7 @@ export type TemplateHeaderVariant =
   | "dark"
   | "glass";
 
-interface TemplateHeaderProps
-  extends TemplateDetailProps {
+interface TemplateHeaderProps extends TemplateDetailProps {
   variant?: TemplateHeaderVariant;
 }
 
@@ -48,7 +47,7 @@ const variantStyles: Record<
 
   modern: {
     section:
-      "space-y-7 rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition-all duration-500 sm:p-8",
+      "rounded-3xl border border-slate-200 bg-white p-6 shadow-sm transition-all duration-500 sm:p-8",
 
     title:
       "text-4xl font-bold tracking-tight text-slate-950 sm:text-5xl",
@@ -96,7 +95,7 @@ const variantStyles: Record<
 
   minimal: {
     section:
-      "space-y-8 bg-transparent px-2 py-6 transition-all duration-500 sm:py-8",
+      "bg-transparent px-2 py-6 transition-all duration-500 sm:py-8",
 
     title:
       "max-w-4xl text-4xl font-medium tracking-[-0.03em] text-stone-950 sm:text-5xl lg:text-6xl",
@@ -144,7 +143,7 @@ const variantStyles: Record<
 
   dark: {
     section:
-      "space-y-7 rounded-3xl border border-white/10 bg-[#08080c] p-6 text-white shadow-2xl shadow-black/30 transition-all duration-500 sm:p-8",
+      "rounded-3xl border border-white/10 bg-[#08080c] p-6 text-white shadow-2xl shadow-black/30 transition-all duration-500 sm:p-8",
 
     title:
       "text-4xl font-bold tracking-tight text-white sm:text-5xl",
@@ -192,7 +191,7 @@ const variantStyles: Record<
 
   glass: {
     section:
-      "space-y-7 rounded-3xl border border-white/20 bg-white/10 p-6 text-white shadow-2xl shadow-cyan-500/10 backdrop-blur-xl transition-all duration-500 sm:p-8",
+      "rounded-3xl border border-white/20 bg-white/10 p-6 text-white shadow-2xl shadow-cyan-500/10 backdrop-blur-xl transition-all duration-500 sm:p-8",
 
     title:
       "text-4xl font-bold tracking-tight text-white sm:text-5xl",
@@ -248,27 +247,39 @@ export default function TemplateHeader({
     >
       {/* =====================================================
           TITLE + DESCRIPTION
-         ===================================================== */}
+      ===================================================== */}
 
-      <div className="space-y-4">
+      <div
+        style={{
+          marginBottom: "28px",
+        }}
+      >
         <h1 className={styles.title}>
           {template.title}
         </h1>
 
-        <p className={styles.description}>
+        <p
+          className={styles.description}
+          style={{
+            marginTop: "12px",
+          }}
+        >
           {template.description}
         </p>
       </div>
 
       {/* =====================================================
           CATEGORY + STATUS + TAGS
-         ===================================================== */}
+      ===================================================== */}
 
-      <div className={styles.badges}>
+      <div
+        className={styles.badges}
+        style={{
+          marginBottom: "24px",
+        }}
+      >
         {template.category && (
-          <Badge
-            className={styles.categoryBadge}
-          >
+          <Badge className={styles.categoryBadge}>
             {template.category}
           </Badge>
         )}
@@ -313,7 +324,7 @@ export default function TemplateHeader({
 
       {/* =====================================================
           RATING + AUTHOR
-         ===================================================== */}
+      ===================================================== */}
 
       <div className={styles.meta}>
         <Rating

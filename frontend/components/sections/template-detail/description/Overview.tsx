@@ -9,7 +9,7 @@ export default function Overview({
       title="Overview"
       number="01"
     >
-      <div className="max-w-4xl">
+      <div className="mt-5 max-w-4xl">
         <p
           className="
             text-base

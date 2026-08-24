@@ -70,7 +70,11 @@ export default async function TemplateDetailPage({
           1. Breadcrumb
          =================================================== */}
 
-      <div className="mb-5 sm:mb-6">
+      <div
+        style={{
+          marginBottom: "24px",
+        }}
+      >
         <Breadcrumb
           currentLabel={template.title}
         />
@@ -80,7 +84,11 @@ export default async function TemplateDetailPage({
           2. Gallery
          =================================================== */}
 
-      <div className="mb-6 sm:mb-8">
+      <div
+        style={{
+          marginBottom: "32px",
+        }}
+      >
         <TemplateGallery
           template={template}
         />
@@ -90,7 +98,11 @@ export default async function TemplateDetailPage({
           3. Header
          =================================================== */}
 
-      <div className="mb-5 sm:mb-6">
+      <div
+        style={{
+          marginBottom: "24px",
+        }}
+      >
         <TemplateHeader
           template={template}
         />
@@ -100,7 +112,11 @@ export default async function TemplateDetailPage({
           4. Statistics
          =================================================== */}
 
-      <div className="mb-6 sm:mb-8">
+      <div
+        style={{
+          marginBottom: "32px",
+        }}
+      >
         <TemplateStatistics
           template={template}
         />
@@ -110,33 +126,35 @@ export default async function TemplateDetailPage({
           5. Price + Actions
          =================================================== */}
 
-      <div
-        className="
-          mb-10
-          grid
-          gap-6
-          lg:grid-cols-2
-          lg:items-start
-        "
-      >
-        {/* Price */}
+     <div
+  className="
+    grid
+    gap-6
+    lg:grid-cols-2
+    lg:items-start
+  "
+  style={{
+    marginBottom: "48px",
+  }}
+>
+  <TemplatePriceCard
+    template={template}
+  />
 
-        <TemplatePriceCard
-          template={template}
-        />
-
-        {/* Actions */}
-
-        <TemplateActions
-          template={template}
-        />
-      </div>
+  <TemplateActions
+    template={template}
+  />
+</div>
 
       {/* ===================================================
           6. Overview
          =================================================== */}
 
-      <div className="mb-8 sm:mb-10">
+      <div
+        style={{
+          marginBottom: "40px",
+        }}
+      >
         <Overview
           template={template}
         />
@@ -146,7 +164,11 @@ export default async function TemplateDetailPage({
           7. Features
          =================================================== */}
 
-      <div className="mb-8 sm:mb-10">
+      <div
+        style={{
+          marginBottom: "40px",
+        }}
+      >
         <TemplateFeatures
           template={template}
         />
@@ -156,7 +178,11 @@ export default async function TemplateDetailPage({
           8. Tech Stack
          =================================================== */}
 
-      <div className="mb-8 sm:mb-10">
+      <div
+        style={{
+          marginBottom: "40px",
+        }}
+      >
         <TemplateTechStack
           template={template}
         />
@@ -166,7 +192,11 @@ export default async function TemplateDetailPage({
           9. Included Files
          =================================================== */}
 
-      <div className="mb-8 sm:mb-10">
+      <div
+        style={{
+          marginBottom: "40px",
+        }}
+      >
         <TemplateIncludedFiles
           template={template}
         />
@@ -176,7 +206,11 @@ export default async function TemplateDetailPage({
           10. Installation
          =================================================== */}
 
-      <div className="mb-8 sm:mb-10">
+      <div
+        style={{
+          marginBottom: "40px",
+        }}
+      >
         <TemplateInstallation
           template={template}
         />
@@ -186,7 +220,11 @@ export default async function TemplateDetailPage({
           11. Requirements
          =================================================== */}
 
-      <div className="mb-8 sm:mb-10">
+      <div
+        style={{
+          marginBottom: "40px",
+        }}
+      >
         <TemplateRequirements
           template={template}
         />
@@ -196,7 +234,11 @@ export default async function TemplateDetailPage({
           12. Changelog
          =================================================== */}
 
-      <div className="mb-10 sm:mb-12">
+      <div
+        style={{
+          marginBottom: "48px",
+        }}
+      >
         <TemplateChangelog
           template={template}
         />
