@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { templateService } from "@/services/template.service";
 import TemplateDemo from "@/components/demo/TemplateDemo";
 
-interface Props {
+interface DemoPageProps {
   params: Promise<{
     slug: string;
   }>;
@@ -11,11 +11,10 @@ interface Props {
 
 export default async function DemoPage({
   params,
-}: Props) {
+}: DemoPageProps) {
   const { slug } = await params;
 
-  const template =
-    await templateService.getBySlug(slug);
+  const template = await templateService.getBySlug(slug);
 
   if (!template) {
     notFound();

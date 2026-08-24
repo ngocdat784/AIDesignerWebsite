@@ -1,24 +1,27 @@
-
 "use client";
-
-import { useMemo, useState } from "react";
 import {
+  useMemo,
+  useState,
+  type ReactNode,
+} from "react";
+import {
+  ArrowRight,
   Check,
   ChevronRight,
-  File,
-  FileCode2,
-  Folder,
-  FolderOpen,
+  CircleCheck,
+  Crown,
+  Cpu,
+  ExternalLink,
+  Globe2,
+  Layers3,
+  MessageSquare,
+  Play,
   Rocket,
   ShieldCheck,
+  Sparkles,
   Star,
-  Download,
-  Heart,
-  Eye,
-  ExternalLink,
-  Crown,
-  Clock3,
-  Package,
+  WandSparkles,
+  Zap,
 } from "lucide-react";
 
 import type { Template } from "@/types/template/template";
@@ -56,14 +59,14 @@ const styles: {
   },
 ];
 
-export default function TemplateDemo({ template }: Props) {
-  const [style, setStyle] = useState<DemoStyle>("modern");
+export default function TemplateDemo({
+  template,
+}: Props) {
+  const [style, setStyle] =
+    useState<DemoStyle>("modern");
 
-  const currentStyle = getStyleConfig(style);
-
-  // =========================================================
-  // DATA
-  // =========================================================
+  const currentStyle =
+    getStyleConfig(style);
 
   const previewImage =
     template.coverImage ||
@@ -73,52 +76,23 @@ export default function TemplateDemo({ template }: Props) {
 
   const features = template.features ?? [];
   const techStack = template.techStack ?? [];
-  const includedFiles = template.includedFiles ?? [];
-  const installationSteps = template.installationSteps ?? [];
-  const requirements = template.requirements ?? [];
-  const changelog = template.changelog ?? [];
-  const tags = template.tags ?? [];
-
   const reviewCount =
     template.reviews ?? template.reviewCount ?? 0;
 
-  const effectiveDiscountPrice =
-    template.discountPrice ?? null;
-
   const hasDiscount =
     template.originalPrice != null &&
-    effectiveDiscountPrice != null &&
-    template.originalPrice > effectiveDiscountPrice;
+    template.discountPrice != null &&
+    template.originalPrice >
+      template.discountPrice;
 
-  const displayPrice =
-    effectiveDiscountPrice ?? template.price;
-
-  const fileGroups = useMemo(() => {
-    const folders = includedFiles.filter(
-      (file) =>
-        file.type?.toLowerCase() === "folder" ||
-        file.type?.toLowerCase() === "directory",
-    );
-
-    const files = includedFiles.filter(
-      (file) =>
-        file.type?.toLowerCase() !== "folder" &&
-        file.type?.toLowerCase() !== "directory",
-    );
-
-    return {
-      folders,
-      files,
-    };
-  }, [includedFiles]);
-
-  // =========================================================
-  // RENDER
-  // =========================================================
+  const price =
+    template.discountPrice ??
+    template.price ??
+    0;
 
   return (
     <main
-      className={`min-h-screen transition-all duration-500 ${currentStyle.page}`}
+      className={`min-h-screen overflow-hidden transition-all duration-500 ${currentStyle.page}`}
     >
       {/* =====================================================
           DEMO TOOLBAR
@@ -127,12 +101,17 @@ export default function TemplateDemo({ template }: Props) {
       <div
         className={`sticky top-0 z-50 border-b backdrop-blur-xl ${currentStyle.toolbar}`}
       >
-        <div className="mx-auto flex max-w-7xl items-center justify-between gap-6 px-4 py-4 sm:px-6 lg:px-8">
+        <div
+          className="flex w-full max-w-7xl items-center justify-between gap-6 px-4 py-4 sm:px-6 lg:px-8"
+          style={{
+            margin: "0 auto",
+          }}
+        >
           <div className="min-w-0">
             <p
-              className={`text-xs font-medium uppercase tracking-wider ${currentStyle.muted}`}
+              className={`text-xs font-medium uppercase tracking-[0.18em] ${currentStyle.muted}`}
             >
-              Live Demo
+              AI SaaS Preview
             </p>
 
             <h1
@@ -152,7 +131,9 @@ export default function TemplateDemo({ template }: Props) {
                 <button
                   key={item.id}
                   type="button"
-                  onClick={() => setStyle(item.id)}
+                  onClick={() =>
+                    setStyle(item.id)
+                  }
                   title={item.description}
                   className={`
                     rounded-lg
@@ -179,344 +160,737 @@ export default function TemplateDemo({ template }: Props) {
       </div>
 
       {/* =====================================================
-          DEMO CONTENT
+          LANDING PAGE
       ===================================================== */}
 
-      <section className="relative overflow-hidden">
+      <section
+        className={`relative overflow-hidden ${currentStyle.background}`}
+      >
+        {/* Decorative background */}
+
         <div
-          className={`pointer-events-none absolute inset-0 ${currentStyle.background}`}
+          className="pointer-events-none absolute left-1/2 top-0 h-[520px] w-[900px] -translate-x-1/2 rounded-full blur-3xl"
+          style={{
+            background:
+              "radial-gradient(circle, rgba(99,102,241,0.16), transparent 65%)",
+          }}
         />
 
-        <div className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-28">
+        <div
+          className="pointer-events-none absolute left-1/2 top-[520px] h-[420px] w-[700px] -translate-x-1/2 rounded-full blur-3xl"
+          style={{
+            background:
+              "radial-gradient(circle, rgba(168,85,247,0.12), transparent 65%)",
+          }}
+        />
+
+        <div
+          className="relative w-full max-w-7xl px-4 sm:px-6 lg:px-8"
+          style={{
+            margin: "0 auto",
+            paddingTop: "34px",
+            paddingBottom: "110px",
+          }}
+        >
+          {/* =================================================
+              NAVBAR
+          ================================================= */}
+
+          <nav
+            className={`flex items-center justify-between rounded-2xl border px-5 py-4 backdrop-blur-xl ${currentStyle.navbar}`}
+          >
+            <div className="flex items-center gap-3">
+              <div
+                className={`flex h-10 w-10 items-center justify-center rounded-xl ${currentStyle.logo}`}
+              >
+                <Sparkles className="h-5 w-5" />
+              </div>
+
+              <span
+                className={`text-base font-bold tracking-tight ${currentStyle.text}`}
+              >
+                NeuralAI
+              </span>
+            </div>
+
+            <div
+              className={`hidden items-center gap-7 text-sm font-medium md:flex ${currentStyle.navLinks}`}
+            >
+              <a href="#features">Features</a>
+              <a href="#workflow">Workflow</a>
+              <a href="#pricing">Pricing</a>
+              <a href="#reviews">Reviews</a>
+            </div>
+
+            <div className="flex items-center gap-3">
+              <button
+                type="button"
+                className={`hidden rounded-xl px-4 py-2 text-sm font-semibold sm:inline-flex ${currentStyle.navLogin}`}
+              >
+                Sign in
+              </button>
+
+              <button
+                type="button"
+                className={`inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold ${currentStyle.primaryButton}`}
+              >
+                Start Free
+                <ArrowRight className="h-4 w-4" />
+              </button>
+            </div>
+          </nav>
+
           {/* =================================================
               HERO
           ================================================= */}
 
-          <div className="mx-auto max-w-4xl text-center">
-            {/* Badges */}
+          <div
+            className="mx-auto w-full max-w-5xl text-center"
+            style={{
+              marginTop: "105px",
+              marginBottom: "80px",
+            }}
+          >
+            {/* Announcement */}
 
-            <div className="mb-6 flex flex-wrap items-center justify-center gap-2">
-              {template.category && (
-                <span
-                  className={`inline-flex items-center rounded-full border px-4 py-2 text-xs font-medium ${currentStyle.badge}`}
-                >
-                  {template.category}
-                </span>
-              )}
+            <div
+              className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 text-xs font-semibold ${currentStyle.announcement}`}
+            >
+              <Sparkles className="h-3.5 w-3.5" />
 
-              {template.isPremium && (
-                <span
-                  className={`inline-flex items-center gap-1.5 rounded-full border px-4 py-2 text-xs font-semibold ${currentStyle.premiumBadge}`}
-                >
-                  <Crown className="h-3.5 w-3.5" />
-                  Premium
-                </span>
-              )}
+              <span>
+                The intelligent workspace for modern teams
+              </span>
 
-              {template.featured && (
-                <span
-                  className={`inline-flex items-center gap-1.5 rounded-full border px-4 py-2 text-xs font-semibold ${currentStyle.featuredBadge}`}
-                >
-                  <Star className="h-3.5 w-3.5" />
-                  Featured
-                </span>
-              )}
-
-              {template.newest && (
-                <span
-                  className={`inline-flex items-center gap-1.5 rounded-full border px-4 py-2 text-xs font-semibold ${currentStyle.newBadge}`}
-                >
-                  <Clock3 className="h-3.5 w-3.5" />
-                  New
-                </span>
-              )}
+              <ChevronRight className="h-3.5 w-3.5" />
             </div>
 
             <h2
-              className={`text-4xl font-bold tracking-tight sm:text-5xl lg:text-7xl ${currentStyle.heading}`}
+              className={`mx-auto max-w-5xl text-5xl font-bold tracking-[-0.045em] sm:text-6xl lg:text-8xl ${currentStyle.heroHeading}`}
+              style={{
+                marginTop: "30px",
+              }}
             >
-              {template.title}
+              Build faster with
+              <span
+                className={`block ${currentStyle.gradientText}`}
+              >
+                intelligent AI.
+              </span>
             </h2>
 
             <p
-              className={`mx-auto mt-6 max-w-2xl text-base leading-8 sm:text-lg ${currentStyle.description}`}
+              className={`mx-auto max-w-2xl text-base leading-8 sm:text-lg ${currentStyle.heroDescription}`}
+              style={{
+                marginTop: "28px",
+              }}
             >
-              {template.description}
+              {template.description ||
+                "A powerful AI platform that helps modern teams automate workflows, generate content, analyze data, and build better products faster."}
             </p>
 
-            {/* Tags */}
+            {/* Hero actions */}
 
-            {tags.length > 0 && (
-              <div className="mt-6 flex flex-wrap justify-center gap-2">
-                {tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className={`rounded-full border px-3 py-1 text-xs ${currentStyle.tag}`}
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            )}
-
-            {/* Price */}
-
-            <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-              {hasDiscount ? (
-                <>
-                  <span
-                    className={`text-3xl font-bold ${currentStyle.price}`}
-                  >
-                    {formatPrice(displayPrice)}
-                  </span>
-
-                  <span
-                    className={`text-lg line-through ${currentStyle.muted}`}
-                  >
-                    {formatPrice(template.originalPrice!)}
-                  </span>
-                </>
-              ) : (
-                <span
-                  className={`text-3xl font-bold ${currentStyle.price}`}
-                >
-                  {template.price === 0
-                    ? "Free"
-                    : formatPrice(template.price)}
-                </span>
-              )}
-            </div>
-
-            {/* Actions */}
-
-            <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
+            <div
+              className="flex flex-col items-center justify-center gap-3 sm:flex-row"
+              style={{
+                marginTop: "36px",
+              }}
+            >
               <button
                 type="button"
-                className={`inline-flex items-center justify-center gap-2 rounded-xl px-6 py-3 text-sm font-semibold transition-all duration-300 ${currentStyle.primaryButton}`}
+                className={`inline-flex min-w-[170px] items-center justify-center gap-2 rounded-xl px-6 py-3.5 text-sm font-semibold ${currentStyle.primaryButton}`}
               >
                 <Rocket className="h-4 w-4" />
-                Get Started
+                Start Building
+                <ArrowRight className="h-4 w-4" />
               </button>
 
-              {template.demoUrl && (
-                <a
-                  href={template.demoUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className={`inline-flex items-center justify-center gap-2 rounded-xl border px-6 py-3 text-sm font-semibold transition-all duration-300 ${currentStyle.secondaryButton}`}
-                >
-                  <ExternalLink className="h-4 w-4" />
-                  Open Demo
-                </a>
-              )}
+              <button
+                type="button"
+                className={`inline-flex min-w-[170px] items-center justify-center gap-2 rounded-xl border px-6 py-3.5 text-sm font-semibold ${currentStyle.secondaryButton}`}
+              >
+                <Play className="h-4 w-4" />
+                Watch Demo
+              </button>
+            </div>
+
+            {/* Trust */}
+
+            <div
+              className={`flex flex-wrap items-center justify-center gap-x-7 gap-y-3 text-xs ${currentStyle.muted}`}
+              style={{
+                marginTop: "28px",
+              }}
+            >
+              <span className="inline-flex items-center gap-1.5">
+                <CircleCheck className="h-3.5 w-3.5" />
+                No credit card required
+              </span>
+
+              <span className="inline-flex items-center gap-1.5">
+                <ShieldCheck className="h-3.5 w-3.5" />
+                Enterprise security
+              </span>
+
+              <span className="inline-flex items-center gap-1.5">
+                <Zap className="h-3.5 w-3.5" />
+                Setup in minutes
+              </span>
             </div>
           </div>
 
           {/* =================================================
-              TEMPLATE PREVIEW
+              AI PRODUCT PREVIEW
           ================================================= */}
 
           <div
-            className={`mx-auto mt-16 max-w-6xl overflow-hidden rounded-3xl border ${currentStyle.preview}`}
+            className={`mx-auto w-full max-w-6xl overflow-hidden rounded-[28px] border ${currentStyle.productPreview}`}
+            style={{
+              margin: "0 auto",
+            }}
           >
+            {/* Window header */}
+
             <div
-              className={`flex items-center gap-2 border-b px-5 py-4 ${currentStyle.previewHeader}`}
+              className={`flex items-center justify-between border-b px-5 py-4 ${currentStyle.previewHeader}`}
             >
-              <span className="h-3 w-3 rounded-full bg-red-400" />
-              <span className="h-3 w-3 rounded-full bg-yellow-400" />
-              <span className="h-3 w-3 rounded-full bg-green-400" />
+              <div className="flex items-center gap-2">
+                <span className="h-3 w-3 rounded-full bg-red-400" />
+                <span className="h-3 w-3 rounded-full bg-yellow-400" />
+                <span className="h-3 w-3 rounded-full bg-green-400" />
+              </div>
 
               <div
-                className={`ml-4 hidden h-6 flex-1 rounded-lg sm:block ${currentStyle.address}`}
+                className={`hidden h-7 max-w-md flex-1 rounded-lg sm:block ${currentStyle.address}`}
+                style={{
+                  marginLeft: "50px",
+                  marginRight: "50px",
+                }}
+              />
+
+              <div
+                className={`h-8 w-8 rounded-lg ${currentStyle.previewAvatar}`}
               />
             </div>
 
-            <div className="relative overflow-hidden">
-              {previewImage ? (
-                <img
-                  src={previewImage}
-                  alt={`${template.title} preview`}
-                  className="h-auto max-h-[700px] w-full object-cover object-top"
-                />
-              ) : (
+            {/* Application */}
+
+            <div className="grid min-h-[570px] lg:grid-cols-[220px_1fr]">
+              {/* Sidebar */}
+
+              <aside
+                className={`hidden border-r p-5 lg:block ${currentStyle.sidebar}`}
+              >
                 <div
-                  className={`flex min-h-[400px] items-center justify-center ${currentStyle.visual}`}
+                  className={`flex items-center gap-2 text-sm font-bold ${currentStyle.text}`}
                 >
-                  <div className="text-center">
+                  <Sparkles className="h-4 w-4" />
+                  NeuralAI
+                </div>
+
+                <div
+                  className="space-y-2"
+                  style={{
+                    marginTop: "28px",
+                  }}
+                >
+                  {[
+                    "Overview",
+                    "AI Assistant",
+                    "Automation",
+                    "Analytics",
+                    "Knowledge",
+                  ].map((item, index) => (
                     <div
-                      className={`mx-auto flex h-20 w-20 items-center justify-center rounded-2xl text-2xl font-bold ${currentStyle.icon}`}
+                      key={item}
+                      className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-xs font-medium ${
+                        index === 0
+                          ? currentStyle.sidebarActive
+                          : currentStyle.sidebarItem
+                      }`}
                     >
-                      {template.title
-                        .slice(0, 2)
-                        .toUpperCase()}
+                      <Layers3 className="h-3.5 w-3.5" />
+                      {item}
+                    </div>
+                  ))}
+                </div>
+
+                <div
+                  className={`rounded-2xl border p-4 ${currentStyle.sidebarCard}`}
+                  style={{
+                    marginTop: "170px",
+                  }}
+                >
+                  <div
+                    className={`flex h-9 w-9 items-center justify-center rounded-xl ${currentStyle.logo}`}
+                  >
+                    <Crown className="h-4 w-4" />
+                  </div>
+
+                  <p
+                    className={`text-xs font-semibold ${currentStyle.text}`}
+                    style={{
+                      marginTop: "12px",
+                    }}
+                  >
+                    Upgrade workspace
+                  </p>
+
+                  <p
+                    className={`text-[11px] leading-5 ${currentStyle.muted}`}
+                    style={{
+                      marginTop: "6px",
+                    }}
+                  >
+                    Unlock advanced AI agents.
+                  </p>
+                </div>
+              </aside>
+
+              {/* Dashboard */}
+
+              <div
+                className={`p-5 sm:p-7 ${currentStyle.dashboard}`}
+              >
+                <div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-center">
+                  <div>
+                    <p
+                      className={`text-xs font-medium uppercase tracking-wider ${currentStyle.muted}`}
+                    >
+                      AI Workspace
+                    </p>
+
+                    <h3
+                      className={`text-2xl font-bold ${currentStyle.text}`}
+                      style={{
+                        marginTop: "6px",
+                      }}
+                    >
+                      Good morning, Alex.
+                    </h3>
+                  </div>
+
+                  <button
+                    type="button"
+                    className={`inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-xs font-semibold ${currentStyle.primaryButton}`}
+                  >
+                    <WandSparkles className="h-3.5 w-3.5" />
+                    New AI Task
+                  </button>
+                </div>
+
+                {/* Metrics */}
+
+                <div
+                  className="grid gap-4 sm:grid-cols-3"
+                  style={{
+                    marginTop: "26px",
+                  }}
+                >
+                  <DashboardMetric
+                    label="AI Tasks"
+                    value="1,284"
+                    change="+24.8%"
+                    icon={<Cpu className="h-4 w-4" />}
+                    style={currentStyle}
+                  />
+
+                  <DashboardMetric
+                    label="Automation"
+                    value="92.4%"
+                    change="+8.2%"
+                    icon={<Zap className="h-4 w-4" />}
+                    style={currentStyle}
+                  />
+
+                  <DashboardMetric
+                    label="Time Saved"
+                    value="184h"
+                    change="+32.5%"
+                    icon={<ClockIcon />}
+                    style={currentStyle}
+                  />
+                </div>
+
+                {/* Main AI card */}
+
+                <div
+                  className={`grid gap-5 lg:grid-cols-[1.4fr_0.8fr]`}
+                  style={{
+                    marginTop: "20px",
+                  }}
+                >
+                  <div
+                    className={`rounded-2xl border p-5 ${currentStyle.dashboardCard}`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <p
+                          className={`text-sm font-semibold ${currentStyle.text}`}
+                        >
+                          AI Performance
+                        </p>
+
+                        <p
+                          className={`text-xs ${currentStyle.muted}`}
+                          style={{
+                            marginTop: "4px",
+                          }}
+                        >
+                          Productivity overview
+                        </p>
+                      </div>
+
+                      <span
+                        className={`rounded-full px-2.5 py-1 text-[10px] font-semibold ${currentStyle.successBadge}`}
+                      >
+                        +18.4%
+                      </span>
                     </div>
 
-                    <p
-                      className={`mt-4 text-sm font-medium ${currentStyle.text}`}
+                    <div
+                      className="flex h-52 items-end gap-2"
+                      style={{
+                        marginTop: "24px",
+                      }}
                     >
-                      {template.title}
-                    </p>
+                      {[38, 52, 46, 68, 61, 76, 71, 88, 79, 94, 84, 100].map(
+                        (height, index) => (
+                          <div
+                            key={index}
+                            className={`flex-1 rounded-t-lg ${currentStyle.chartBar}`}
+                            style={{
+                              height: `${height}%`,
+                            }}
+                          />
+                        ),
+                      )}
+                    </div>
 
-                    <p
-                      className={`mt-1 text-xs ${currentStyle.muted}`}
+                    <div
+                      className={`grid grid-cols-4 text-[10px] ${currentStyle.muted}`}
+                      style={{
+                        marginTop: "10px",
+                      }}
                     >
-                      Template Preview
-                    </p>
+                      <span>Mon</span>
+                      <span className="text-center">Wed</span>
+                      <span className="text-center">Fri</span>
+                      <span className="text-right">Sun</span>
+                    </div>
+                  </div>
+
+                  {/* AI Assistant */}
+
+                  <div
+                    className={`rounded-2xl border p-5 ${currentStyle.aiCard}`}
+                  >
+                    <div className="flex items-center gap-3">
+                      <div
+                        className={`flex h-10 w-10 items-center justify-center rounded-xl ${currentStyle.logo}`}
+                      >
+                        <MessageSquare className="h-4 w-4" />
+                      </div>
+
+                      <div>
+                        <p
+                          className={`text-sm font-semibold ${currentStyle.text}`}
+                        >
+                          AI Copilot
+                        </p>
+
+                        <p
+                          className={`text-[10px] ${currentStyle.muted}`}
+                        >
+                          Online
+                        </p>
+                      </div>
+                    </div>
+
+                    <div
+                      className={`rounded-xl p-3 text-xs leading-5 ${currentStyle.chatBubble}`}
+                      style={{
+                        marginTop: "22px",
+                      }}
+                    >
+                      I analyzed your workspace and found 4 opportunities to
+                      automate repetitive tasks.
+                    </div>
+
+                    <div
+                      className={`rounded-xl p-3 text-xs leading-5 ${currentStyle.chatBubbleAlt}`}
+                      style={{
+                        marginTop: "10px",
+                      }}
+                    >
+                      Want me to generate an automation workflow?
+                    </div>
+
+                    <button
+                      type="button"
+                      className={`w-full rounded-xl px-4 py-2.5 text-xs font-semibold ${currentStyle.aiButton}`}
+                      style={{
+                        marginTop: "18px",
+                      }}
+                    >
+                      Generate workflow
+                    </button>
                   </div>
                 </div>
-              )}
+
+                {/* Preview image */}
+
+                {previewImage && (
+                  <div
+                    className="relative overflow-hidden rounded-2xl"
+                    style={{
+                      marginTop: "20px",
+                      height: "130px",
+                    }}
+                  >
+                    <img
+                      src={previewImage}
+                      alt={`${template.title} preview`}
+                      className="h-full w-full object-cover object-top opacity-70"
+                    />
+
+                    <div
+                      className="absolute inset-0"
+                      style={{
+                        background:
+                          "linear-gradient(to top, rgba(0,0,0,0.55), transparent)",
+                      }}
+                    />
+
+                    <div className="absolute bottom-4 left-4">
+                      <p className="text-xs font-semibold text-white">
+                        AI SaaS Workspace
+                      </p>
+
+                      <p
+                        className="text-[10px] text-white/70"
+                        style={{
+                          marginTop: "3px",
+                        }}
+                      >
+                        Intelligent automation platform
+                      </p>
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
 
           {/* =================================================
-              TEMPLATE INFORMATION
+              TRUSTED BY
           ================================================= */}
 
-          <div className="mt-16 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            <InfoCard
-              icon={<Package className="h-4 w-4" />}
-              label="Author"
-              value={
-                template.author?.name ??
-                "Unknown Author"
-              }
-              extra={
-                template.author?.verified ? (
-                  <span
-                    className={`inline-flex items-center gap-1 text-xs ${currentStyle.verified}`}
-                  >
-                    <ShieldCheck className="h-3.5 w-3.5" />
-                    Verified
-                  </span>
-                ) : null
-              }
-              style={currentStyle}
-            />
+          <div
+            className="mx-auto max-w-5xl text-center"
+            style={{
+              marginTop: "90px",
+              marginBottom: "30px",
+            }}
+          >
+            <p
+              className={`text-xs font-semibold uppercase tracking-[0.18em] ${currentStyle.muted}`}
+            >
+              Trusted by forward-thinking teams
+            </p>
 
-            <InfoCard
-              icon={<Clock3 className="h-4 w-4" />}
-              label="Version"
-              value={template.version ?? "Latest"}
-              style={currentStyle}
-            />
-
-            <InfoCard
-              icon={<Star className="h-4 w-4" />}
-              label="Rating"
-              value={
-                template.rating
-                  ? `${template.rating.toFixed(1)} / 5`
-                  : "No rating"
-              }
-              extra={
-                reviewCount > 0
-                  ? `${formatNumber(reviewCount)} reviews`
-                  : undefined
-              }
-              style={currentStyle}
-            />
-
-            <InfoCard
-              icon={<Download className="h-4 w-4" />}
-              label="Downloads"
-              value={formatNumber(template.downloads)}
-              extra={
-                template.views > 0
-                  ? `${formatNumber(template.views)} views`
-                  : undefined
-              }
-              style={currentStyle}
-            />
-          </div>
-
-          {/* =================================================
-              QUICK STATS
-          ================================================= */}
-
-          <div className="mt-5 grid gap-5 sm:grid-cols-3">
-            <StatCard
-              icon={<Heart className="h-5 w-5" />}
-              label="Favorites"
-              value={formatNumber(template.favorites)}
-              style={currentStyle}
-            />
-
-            <StatCard
-              icon={<Eye className="h-5 w-5" />}
-              label="Views"
-              value={formatNumber(template.views)}
-              style={currentStyle}
-            />
-
-            <StatCard
-              icon={<Package className="h-5 w-5" />}
-              label="Status"
-              value={template.status}
-              style={currentStyle}
-            />
+            <div
+              className={`flex flex-wrap items-center justify-center gap-x-10 gap-y-5 text-sm font-bold ${currentStyle.trusted}`}
+              style={{
+                marginTop: "30px",
+              }}
+            >
+              <span>NOVA</span>
+              <span>VERTEX</span>
+              <span>QUANTUM</span>
+              <span>ORBIT</span>
+              <span>MONO</span>
+              <span>ARC</span>
+            </div>
           </div>
 
           {/* =================================================
               FEATURES
           ================================================= */}
 
-          {features.length > 0 && (
-            <section className="mt-28">
+          <section
+            id="features"
+            style={{
+              marginTop: "130px",
+            }}
+          >
+            <SectionHeader
+              eyebrow="Powerful AI"
+              title="Everything your AI team needs"
+              description="A complete AI SaaS experience designed to turn complex workflows into simple, intelligent actions."
+              style={currentStyle}
+            />
+
+            <div
+              className="mx-auto grid max-w-6xl gap-5 md:grid-cols-2 lg:grid-cols-3"
+              style={{
+                marginTop: "52px",
+              }}
+            >
+              {[
+                {
+                  icon: <WandSparkles className="h-5 w-5" />,
+                  title: "AI Copilot",
+                  description:
+                    "Work alongside an intelligent assistant that understands your context and helps you make better decisions.",
+                },
+                {
+                  icon: <Zap className="h-5 w-5" />,
+                  title: "Smart Automation",
+                  description:
+                    "Automate repetitive workflows with AI-powered agents that operate continuously in the background.",
+                },
+                {
+                  icon: <Cpu className="h-5 w-5" />,
+                  title: "AI Agents",
+                  description:
+                    "Create autonomous agents capable of analyzing information and executing complex multi-step tasks.",
+                },
+                {
+                  icon: <ShieldCheck className="h-5 w-5" />,
+                  title: "Enterprise Security",
+                  description:
+                    "Protect sensitive information with secure infrastructure, permissions, and enterprise-ready controls.",
+                },
+                {
+                  icon: <Globe2 className="h-5 w-5" />,
+                  title: "Global Infrastructure",
+                  description:
+                    "Deliver fast AI experiences to customers around the world with reliable cloud infrastructure.",
+                },
+                {
+                  icon: <Layers3 className="h-5 w-5" />,
+                  title: "One Unified Platform",
+                  description:
+                    "Bring your AI workflows, knowledge, analytics, and automation together in one workspace.",
+                },
+              ].map((feature) => (
+                <FeatureCard
+                  key={feature.title}
+                  icon={feature.icon}
+                  title={feature.title}
+                  description={feature.description}
+                  style={currentStyle}
+                />
+              ))}
+            </div>
+          </section>
+
+          {/* =================================================
+              WORKFLOW
+          ================================================= */}
+
+          <section
+            id="workflow"
+            style={{
+              marginTop: "140px",
+            }}
+          >
+            <div className="mx-auto max-w-3xl text-center">
               <SectionHeader
-                eyebrow="Features"
-                title="What this template includes"
-                description={`Everything included with ${template.title}.`}
+                eyebrow="Simple workflow"
+                title="From idea to execution in minutes"
+                description="Build intelligent workflows without complicated setup."
                 style={currentStyle}
               />
+            </div>
 
-              <div className="mt-10 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-                {features.map((feature, index) => (
+            <div
+              className="mx-auto grid max-w-6xl gap-5 md:grid-cols-3"
+              style={{
+                marginTop: "52px",
+              }}
+            >
+              {[
+                {
+                  number: "01",
+                  title: "Connect",
+                  description:
+                    "Connect your data, tools, APIs, and existing workflows.",
+                },
+                {
+                  number: "02",
+                  title: "Describe",
+                  description:
+                    "Tell the AI what you want to accomplish using natural language.",
+                },
+                {
+                  number: "03",
+                  title: "Automate",
+                  description:
+                    "Let intelligent agents execute and optimize the workflow automatically.",
+                },
+              ].map((step) => (
+                <div
+                  key={step.number}
+                  className={`relative rounded-2xl border p-7 text-center ${currentStyle.card}`}
+                >
                   <div
-                    key={`${feature}-${index}`}
-                    className={`group rounded-2xl border p-6 transition-all duration-300 ${currentStyle.card}`}
+                    className={`mx-auto flex h-12 w-12 items-center justify-center rounded-xl text-sm font-bold ${currentStyle.icon}`}
                   >
-                    <div
-                      className={`mb-5 flex h-11 w-11 items-center justify-center rounded-xl font-semibold ${currentStyle.icon}`}
-                    >
-                      {String(index + 1).padStart(2, "0")}
-                    </div>
-
-                    <h4
-                      className={`text-lg font-semibold ${currentStyle.text}`}
-                    >
-                      {feature}
-                    </h4>
-
-                    <p
-                      className={`mt-3 text-sm leading-7 ${currentStyle.description}`}
-                    >
-                      Included as part of the{" "}
-                      {template.title} template.
-                    </p>
+                    {step.number}
                   </div>
-                ))}
-              </div>
-            </section>
-          )}
+
+                  <h3
+                    className={`text-lg font-semibold ${currentStyle.text}`}
+                    style={{
+                      marginTop: "20px",
+                    }}
+                  >
+                    {step.title}
+                  </h3>
+
+                  <p
+                    className={`text-sm leading-7 ${currentStyle.description}`}
+                    style={{
+                      marginTop: "10px",
+                    }}
+                  >
+                    {step.description}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </section>
 
           {/* =================================================
               TECHNOLOGY
           ================================================= */}
 
           {techStack.length > 0 && (
-            <section className="mt-28">
+            <section
+              style={{
+                marginTop: "130px",
+              }}
+            >
               <SectionHeader
                 eyebrow="Technology"
-                title="Built with modern technologies"
-                description={`Technology stack used by ${template.title}.`}
+                title="Built for modern AI products"
+                description="Powered by technologies trusted by today's best development teams."
                 style={currentStyle}
               />
 
-              <div className="mx-auto mt-10 flex max-w-4xl flex-wrap justify-center gap-3">
+              <div
+                className="mx-auto flex max-w-4xl flex-wrap justify-center gap-3"
+                style={{
+                  marginTop: "42px",
+                }}
+              >
                 {techStack.map((tech) => (
                   <div
                     key={tech}
-                    className={`rounded-xl border px-5 py-3 text-sm font-medium transition-all duration-300 hover:-translate-y-0.5 ${currentStyle.tech}`}
+                    className={`rounded-xl border px-5 py-3 text-sm font-medium ${currentStyle.tech}`}
                   >
                     {tech}
                   </div>
@@ -526,357 +900,289 @@ export default function TemplateDemo({ template }: Props) {
           )}
 
           {/* =================================================
-              INCLUDED FILES
+              PRICING
           ================================================= */}
 
-          {includedFiles.length > 0 && (
-            <section className="mt-28">
-              <SectionHeader
-                eyebrow="Included Files"
-                title="Project structure"
-                description={`Everything included in the ${template.title} package.`}
-                style={currentStyle}
-              />
-
-              <div className="mx-auto mt-10 max-w-5xl">
-                <div
-                  className={`overflow-hidden rounded-3xl border ${currentStyle.filePanel}`}
-                >
-                  <div
-                    className={`flex items-center justify-between border-b px-5 py-4 ${currentStyle.fileHeader}`}
-                  >
-                    <div className="flex items-center gap-3">
-                      <FolderOpen
-                        className={`h-5 w-5 ${currentStyle.accent}`}
-                      />
-
-                      <div>
-                        <p
-                          className={`text-sm font-semibold ${currentStyle.text}`}
-                        >
-                          {template.title}
-                        </p>
-
-                        <p
-                          className={`mt-0.5 text-xs ${currentStyle.muted}`}
-                        >
-                          Project files
-                        </p>
-                      </div>
-                    </div>
-
-                    <span
-                      className={`rounded-full px-3 py-1 text-xs font-medium ${currentStyle.fileCount}`}
-                    >
-                      {includedFiles.length} items
-                    </span>
-                  </div>
-
-                  <div className="p-3 sm:p-5">
-                    {fileGroups.folders.length > 0 && (
-                      <div>
-                        <p
-                          className={`mb-3 px-2 text-xs font-semibold uppercase tracking-wider ${currentStyle.muted}`}
-                        >
-                          Folders
-                        </p>
-
-                        <div className="grid gap-2 sm:grid-cols-2">
-                          {fileGroups.folders.map(
-                            (folder, index) => (
-                              <FileExplorerItem
-                                key={`${folder.name}-${index}`}
-                                name={folder.name}
-                                type={folder.type}
-                                isFolder
-                                style={currentStyle}
-                              />
-                            ),
-                          )}
-                        </div>
-                      </div>
-                    )}
-
-                    {fileGroups.files.length > 0 && (
-                      <div
-                        className={
-                          fileGroups.folders.length > 0
-                            ? "mt-7"
-                            : ""
-                        }
-                      >
-                        <p
-                          className={`mb-3 px-2 text-xs font-semibold uppercase tracking-wider ${currentStyle.muted}`}
-                        >
-                          Files
-                        </p>
-
-                        <div className="grid gap-2 sm:grid-cols-2">
-                          {fileGroups.files.map(
-                            (file, index) => (
-                              <FileExplorerItem
-                                key={`${file.name}-${index}`}
-                                name={file.name}
-                                type={file.type}
-                                style={currentStyle}
-                              />
-                            ),
-                          )}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </section>
-          )}
-
-          {/* =================================================
-              INSTALLATION
-          ================================================= */}
-
-          {installationSteps.length > 0 && (
-            <section className="mt-28">
-              <SectionHeader
-                eyebrow="Installation"
-                title="Get started quickly"
-                description={`Follow these steps to start using ${template.title}.`}
-                style={currentStyle}
-              />
-
-              <div className="mx-auto mt-10 max-w-4xl">
-                <div className="relative">
-                  <div
-                    className={`absolute left-[19px] top-6 hidden h-[calc(100%-48px)] w-px sm:block ${currentStyle.timeline}`}
-                  />
-
-                  <div className="space-y-5">
-                    {installationSteps.map(
-                      (step, index) => (
-                        <div
-                          key={`${step}-${index}`}
-                          className={`relative flex gap-5 rounded-2xl border p-5 transition-all duration-300 ${currentStyle.card}`}
-                        >
-                          <div
-                            className={`relative z-10 flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-sm font-bold ${currentStyle.icon}`}
-                          >
-                            {index + 1}
-                          </div>
-
-                          <div className="min-w-0 pt-1">
-                            <p
-                              className={`text-xs font-semibold uppercase tracking-wider ${currentStyle.accent}`}
-                            >
-                              Step {index + 1}
-                            </p>
-
-                            <p
-                              className={`mt-2 text-sm leading-7 ${currentStyle.description}`}
-                            >
-                              {step}
-                            </p>
-                          </div>
-
-                          <ChevronRight
-                            className={`ml-auto hidden h-5 w-5 shrink-0 sm:block ${currentStyle.muted}`}
-                          />
-                        </div>
-                      ),
-                    )}
-                  </div>
-                </div>
-              </div>
-            </section>
-          )}
-
-          {/* =================================================
-              REQUIREMENTS
-          ================================================= */}
-
-          {requirements.length > 0 && (
-            <section className="mt-28">
-              <SectionHeader
-                eyebrow="Requirements"
-                title="Before you start"
-                description={`Everything you need before installing ${template.title}.`}
-                style={currentStyle}
-              />
-
-              <div className="mx-auto mt-10 grid max-w-5xl gap-4 md:grid-cols-2">
-                {requirements.map(
-                  (requirement, index) => (
-                    <div
-                      key={`${requirement}-${index}`}
-                      className={`group relative overflow-hidden rounded-2xl border p-6 transition-all duration-300 ${currentStyle.card}`}
-                    >
-                      <div className="flex gap-4">
-                        <div
-                          className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${currentStyle.requirementIcon}`}
-                        >
-                          <Check className="h-5 w-5" />
-                        </div>
-
-                        <div className="min-w-0">
-                          <p
-                            className={`text-xs font-semibold uppercase tracking-wider ${currentStyle.accent}`}
-                          >
-                            Requirement{" "}
-                            {String(index + 1).padStart(
-                              2,
-                              "0",
-                            )}
-                          </p>
-
-                          <p
-                            className={`mt-2 text-sm leading-7 ${currentStyle.description}`}
-                          >
-                            {requirement}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  ),
-                )}
-              </div>
-            </section>
-          )}
-
-          {/* =================================================
-              CHANGELOG
-          ================================================= */}
-
-          {changelog.length > 0 && (
-            <section className="mt-28">
-              <SectionHeader
-                eyebrow="Changelog"
-                title="Version history"
-                description={`Recent updates and changes for ${template.title}.`}
-                style={currentStyle}
-              />
-
-              <div className="mx-auto mt-10 max-w-4xl space-y-5">
-                {changelog.map((entry, index) => (
-                  <div
-                    key={`${entry.version}-${entry.date}-${index}`}
-                    className={`rounded-2xl border p-6 ${currentStyle.card}`}
-                  >
-                    <div className="flex flex-wrap items-center justify-between gap-3">
-                      <div>
-                        <p
-                          className={`text-lg font-semibold ${currentStyle.text}`}
-                        >
-                          Version {entry.version}
-                        </p>
-
-                        <p
-                          className={`mt-1 text-xs ${currentStyle.muted}`}
-                        >
-                          {formatDate(entry.date)}
-                        </p>
-                      </div>
-
-                      <span
-                        className={`rounded-full px-3 py-1 text-xs font-medium ${currentStyle.fileCount}`}
-                      >
-                        Update
-                      </span>
-                    </div>
-
-                    {entry.changes?.length > 0 && (
-                      <ul className="mt-5 space-y-3">
-                        {entry.changes.map(
-                          (change, changeIndex) => (
-                            <li
-                              key={`${change}-${changeIndex}`}
-                              className={`flex gap-3 text-sm leading-7 ${currentStyle.description}`}
-                            >
-                              <Check
-                                className={`mt-1 h-4 w-4 shrink-0 ${currentStyle.accent}`}
-                              />
-
-                              <span>{change}</span>
-                            </li>
-                          ),
-                        )}
-                      </ul>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </section>
-          )}
-
-          {/* =================================================
-              LICENSE / PACKAGE
-          ================================================= */}
-
-          <section className="mt-28">
+          <section
+            id="pricing"
+            style={{
+              marginTop: "140px",
+            }}
+          >
             <SectionHeader
-              eyebrow="License & Package"
-              title="Template details"
-              description={`Important information about the ${template.title} package.`}
+              eyebrow="Simple pricing"
+              title="Start free. Scale when ready."
+              description="Everything you need to launch your AI-powered product."
               style={currentStyle}
             />
 
-            <div className="mx-auto mt-10 grid max-w-5xl gap-5 md:grid-cols-3">
-              <InfoCard
-                icon={<ShieldCheck className="h-4 w-4" />}
-                label="License"
-                value={template.license ?? "Not specified"}
-                style={currentStyle}
-              />
+            <div
+              className="mx-auto max-w-md"
+              style={{
+                marginTop: "52px",
+              }}
+            >
+              <div
+                className={`rounded-3xl border p-8 text-center ${currentStyle.pricing}`}
+              >
+                <div
+                  className={`mx-auto flex h-12 w-12 items-center justify-center rounded-xl ${currentStyle.logo}`}
+                >
+                  <Sparkles className="h-5 w-5" />
+                </div>
 
-              <InfoCard
-                icon={<Package className="h-4 w-4" />}
-                label="Stock"
-                value={
-                  template.stock == null
-                    ? "Unlimited"
-                    : String(template.stock)
-                }
-                style={currentStyle}
-              />
+                <p
+                  className={`text-sm font-semibold ${currentStyle.text}`}
+                  style={{
+                    marginTop: "18px",
+                  }}
+                >
+                  AI Pro
+                </p>
 
-              <InfoCard
-                icon={<Clock3 className="h-4 w-4" />}
-                label="Last Updated"
-                value={formatDate(template.updatedAt)}
-                style={currentStyle}
-              />
+                <div
+                  className={`flex items-end justify-center gap-2 ${currentStyle.text}`}
+                  style={{
+                    marginTop: "14px",
+                  }}
+                >
+                  <span className="text-5xl font-bold">
+                    {price === 0
+                      ? "Free"
+                      : formatPrice(price)}
+                  </span>
+
+                  {price !== 0 && (
+                    <span
+                      className={`pb-1 text-sm ${currentStyle.muted}`}
+                    >
+                      / project
+                    </span>
+                  )}
+                </div>
+
+                {hasDiscount && (
+                  <p
+                    className={`text-sm line-through ${currentStyle.muted}`}
+                    style={{
+                      marginTop: "5px",
+                    }}
+                  >
+                    {formatPrice(
+                      template.originalPrice!,
+                    )}
+                  </p>
+                )}
+
+                <p
+                  className={`text-sm leading-7 ${currentStyle.description}`}
+                  style={{
+                    marginTop: "16px",
+                  }}
+                >
+                  Everything included to build and launch a
+                  modern AI SaaS product.
+                </p>
+
+                <div
+                  className="space-y-3 text-left"
+                  style={{
+                    marginTop: "28px",
+                  }}
+                >
+                  {[
+                    "Unlimited AI workflows",
+                    "AI Copilot",
+                    "Advanced automation",
+                    "Analytics dashboard",
+                    "Enterprise security",
+                  ].map((item) => (
+                    <div
+                      key={item}
+                      className={`flex items-center gap-3 text-sm ${currentStyle.description}`}
+                    >
+                      <Check
+                        className={`h-4 w-4 shrink-0 ${currentStyle.accent}`}
+                      />
+                      {item}
+                    </div>
+                  ))}
+                </div>
+
+                <button
+                  type="button"
+                  className={`w-full rounded-xl px-6 py-3.5 text-sm font-semibold ${currentStyle.primaryButton}`}
+                  style={{
+                    marginTop: "30px",
+                  }}
+                >
+                  Start Building
+                </button>
+              </div>
             </div>
           </section>
 
           {/* =================================================
-              CTA
+              REVIEWS
           ================================================= */}
 
-          <div
-            className={`mt-28 rounded-3xl border p-8 text-center sm:p-12 lg:p-16 ${currentStyle.cta}`}
+          <section
+            id="reviews"
+            style={{
+              marginTop: "140px",
+            }}
+          >
+            <SectionHeader
+              eyebrow="Loved by teams"
+              title="Built to make work feel effortless"
+              description="See why modern teams choose AI-powered workflows."
+              style={currentStyle}
+            />
+
+            <div
+              className="mx-auto grid max-w-6xl gap-5 md:grid-cols-3"
+              style={{
+                marginTop: "52px",
+              }}
+            >
+              {[
+                {
+                  quote:
+                    "NeuralAI completely changed how our team handles repetitive work. We save hours every week.",
+                  name: "Sarah Chen",
+                  role: "Product Lead",
+                },
+                {
+                  quote:
+                    "The AI workflows are incredibly intuitive. We went from idea to production in a single afternoon.",
+                  name: "Marcus Lee",
+                  role: "Founder",
+                },
+                {
+                  quote:
+                    "A beautiful combination of automation and intelligence. It feels like having an extra team member.",
+                  name: "Emma Wilson",
+                  role: "Operations",
+                },
+              ].map((review) => (
+                <div
+                  key={review.name}
+                  className={`rounded-2xl border p-7 ${currentStyle.card}`}
+                >
+                  <div className="flex gap-1">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <Star
+                        key={star}
+                        className={`h-4 w-4 fill-current ${currentStyle.star}`}
+                      />
+                    ))}
+                  </div>
+
+                  <p
+                    className={`text-sm leading-7 ${currentStyle.description}`}
+                    style={{
+                      marginTop: "20px",
+                    }}
+                  >
+                    “{review.quote}”
+                  </p>
+
+                  <div
+                    className="flex items-center gap-3"
+                    style={{
+                      marginTop: "24px",
+                    }}
+                  >
+                    <div
+                      className={`flex h-9 w-9 items-center justify-center rounded-full text-xs font-bold ${currentStyle.logo}`}
+                    >
+                      {review.name
+                        .slice(0, 1)
+                        .toUpperCase()}
+                    </div>
+
+                    <div>
+                      <p
+                        className={`text-sm font-semibold ${currentStyle.text}`}
+                      >
+                        {review.name}
+                      </p>
+
+                      <p
+                        className={`text-xs ${currentStyle.muted}`}
+                        style={{
+                          marginTop: "2px",
+                        }}
+                      >
+                        {review.role}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {reviewCount > 0 && (
+              <p
+                className={`text-center text-xs ${currentStyle.muted}`}
+                style={{
+                  marginTop: "24px",
+                }}
+              >
+                Rated {template.rating?.toFixed(1) ?? "5.0"} / 5
+                from {formatNumber(reviewCount)} reviews
+              </p>
+            )}
+          </section>
+
+          {/* =================================================
+              FINAL CTA
+          ================================================= */}
+
+          <section
+            className={`relative overflow-hidden rounded-[32px] border text-center ${currentStyle.cta}`}
+            style={{
+              marginTop: "150px",
+              padding: "72px 32px",
+            }}
           >
             <div
-              className={`mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-2xl ${currentStyle.icon}`}
+              className={`mx-auto flex h-14 w-14 items-center justify-center rounded-2xl ${currentStyle.logo}`}
             >
               <Rocket className="h-6 w-6" />
             </div>
 
             <h3
-              className={`text-3xl font-bold sm:text-4xl ${currentStyle.heading}`}
+              className={`mx-auto max-w-3xl text-4xl font-bold tracking-tight sm:text-5xl ${currentStyle.heroHeading}`}
+              style={{
+                marginTop: "24px",
+              }}
             >
-              Ready to use {template.title}?
+              Build the future with AI.
             </h3>
 
             <p
-              className={`mx-auto mt-4 max-w-xl leading-7 ${currentStyle.description}`}
+              className={`mx-auto max-w-xl text-base leading-7 ${currentStyle.description}`}
+              style={{
+                marginTop: "18px",
+              }}
             >
-              Start building your next project with this template.
+              Turn your ideas into intelligent products with
+              {` ${template.title || "this AI SaaS platform"}`}.
             </p>
 
-            <div className="mt-7 flex flex-col justify-center gap-3 sm:flex-row">
+            <div
+              className="flex flex-col justify-center gap-3 sm:flex-row"
+              style={{
+                marginTop: "30px",
+              }}
+            >
               <button
                 type="button"
-                className={`rounded-xl px-6 py-3 text-sm font-semibold ${currentStyle.primaryButton}`}
+                className={`inline-flex items-center justify-center gap-2 rounded-xl px-7 py-3.5 text-sm font-semibold ${currentStyle.primaryButton}`}
               >
-                Get Started
+                Start for free
+                <ArrowRight className="h-4 w-4" />
               </button>
 
               {template.demoUrl && (
@@ -884,14 +1190,52 @@ export default function TemplateDemo({ template }: Props) {
                   href={template.demoUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className={`inline-flex items-center justify-center gap-2 rounded-xl border px-6 py-3 text-sm font-semibold ${currentStyle.secondaryButton}`}
+                  className={`inline-flex items-center justify-center gap-2 rounded-xl border px-7 py-3.5 text-sm font-semibold ${currentStyle.secondaryButton}`}
                 >
-                  Open Demo
+                  View live demo
                   <ExternalLink className="h-4 w-4" />
                 </a>
               )}
             </div>
-          </div>
+          </section>
+
+          {/* =================================================
+              FOOTER
+          ================================================= */}
+
+          <footer
+            className={`text-center ${currentStyle.footer}`}
+            style={{
+              marginTop: "60px",
+            }}
+          >
+            <div
+              className="mx-auto flex h-10 w-10 items-center justify-center rounded-xl"
+              style={{
+                margin: "0 auto",
+              }}
+            >
+              <Sparkles className="h-5 w-5" />
+            </div>
+
+            <p
+              className={`text-sm font-semibold ${currentStyle.text}`}
+              style={{
+                marginTop: "12px",
+              }}
+            >
+              NeuralAI
+            </p>
+
+            <p
+              className={`text-xs ${currentStyle.muted}`}
+              style={{
+                marginTop: "6px",
+              }}
+            >
+              Intelligent software for modern teams.
+            </p>
+          </footer>
         </div>
       </section>
     </main>
@@ -914,20 +1258,33 @@ function SectionHeader({
   style: ReturnType<typeof getStyleConfig>;
 }) {
   return (
-    <div className="mx-auto max-w-2xl text-center">
+    <div
+      className="mx-auto max-w-2xl text-center"
+      style={{
+        margin: "0 auto",
+      }}
+    >
       <p
-        className={`text-sm font-semibold uppercase tracking-wider ${style.accent}`}
+        className={`text-sm font-semibold uppercase tracking-[0.18em] ${style.accent}`}
       >
         {eyebrow}
       </p>
 
       <h3
-        className={`mt-3 text-3xl font-bold ${style.heading}`}
+        className={`text-3xl font-bold tracking-tight sm:text-4xl ${style.heading}`}
+        style={{
+          marginTop: "12px",
+        }}
       >
         {title}
       </h3>
 
-      <p className={`mt-4 ${style.description}`}>
+      <p
+        className={`text-sm leading-7 sm:text-base ${style.description}`}
+        style={{
+          marginTop: "14px",
+        }}
+      >
         {description}
       </p>
     </div>
@@ -935,176 +1292,134 @@ function SectionHeader({
 }
 
 /* =========================================================
-   INFO CARD
+   FEATURE CARD
 ========================================================= */
 
-function InfoCard({
+function FeatureCard({
   icon,
-  label,
-  value,
-  extra,
+  title,
+  description,
   style,
 }: {
-  icon?: React.ReactNode;
-  label: string;
-  value: string;
-  extra?: React.ReactNode;
-  style: ReturnType<typeof getStyleConfig>;
-}) {
-  return (
-    <div className={`rounded-2xl border p-5 ${style.card}`}>
-      <div className="flex items-center gap-2">
-        {icon && (
-          <span className={style.accent}>
-            {icon}
-          </span>
-        )}
-
-        <p
-          className={`text-xs font-medium uppercase tracking-wider ${style.muted}`}
-        >
-          {label}
-        </p>
-      </div>
-
-      <p
-        className={`mt-2 truncate text-base font-semibold ${style.text}`}
-      >
-        {value}
-      </p>
-
-      {extra && (
-        <div className={`mt-2 text-xs ${style.muted}`}>
-          {extra}
-        </div>
-      )}
-    </div>
-  );
-}
-
-/* =========================================================
-   STAT CARD
-========================================================= */
-
-function StatCard({
-  icon,
-  label,
-  value,
-  style,
-}: {
-  icon: React.ReactNode;
-  label: string;
-  value: string;
+  icon: ReactNode;
+  title: string;
+  description: string;
   style: ReturnType<typeof getStyleConfig>;
 }) {
   return (
     <div
-      className={`flex items-center gap-4 rounded-2xl border p-5 ${style.card}`}
+      className={`rounded-2xl border p-7 text-center transition-all duration-300 ${style.card}`}
     >
       <div
-        className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl ${style.icon}`}
+        className={`mx-auto flex h-11 w-11 items-center justify-center rounded-xl ${style.icon}`}
       >
         {icon}
       </div>
 
-      <div className="min-w-0">
-        <p
-          className={`text-xs font-medium uppercase tracking-wider ${style.muted}`}
-        >
-          {label}
-        </p>
+      <h4
+        className={`text-lg font-semibold ${style.text}`}
+        style={{
+          marginTop: "20px",
+        }}
+      >
+        {title}
+      </h4>
 
-        <p
-          className={`mt-1 text-lg font-semibold ${style.text}`}
-        >
-          {value}
-        </p>
-      </div>
+      <p
+        className={`text-sm leading-7 ${style.description}`}
+        style={{
+          marginTop: "10px",
+        }}
+      >
+        {description}
+      </p>
+
+      <button
+        type="button"
+        className={`inline-flex items-center gap-1 text-xs font-semibold ${style.accent}`}
+        style={{
+          marginTop: "18px",
+        }}
+      >
+        Learn more
+        <ArrowRight className="h-3.5 w-3.5" />
+      </button>
     </div>
   );
 }
 
 /* =========================================================
-   FILE EXPLORER ITEM
+   DASHBOARD METRIC
 ========================================================= */
 
-function FileExplorerItem({
-  name,
-  type,
-  isFolder = false,
+function DashboardMetric({
+  label,
+  value,
+  change,
+  icon,
   style,
 }: {
-  name: string;
-  type: string;
-  isFolder?: boolean;
+  label: string;
+  value: string;
+  change: string;
+  icon: ReactNode;
   style: ReturnType<typeof getStyleConfig>;
 }) {
-  const normalizedType = type?.toLowerCase();
-
-  const isCodeFile =
-    !isFolder &&
-    [
-      "tsx",
-      "ts",
-      "jsx",
-      "js",
-      "css",
-      "scss",
-      "json",
-      "html",
-      "py",
-      "vue",
-      "php",
-      "java",
-      "cpp",
-      "c",
-    ].includes(normalizedType);
-
   return (
     <div
-      className={`
-        group
-        flex
-        items-center
-        gap-3
-        rounded-xl
-        border
-        px-4
-        py-3
-        transition-all
-        duration-200
-        ${style.fileItem}
-      `}
+      className={`rounded-2xl border p-4 ${style.dashboardMetric}`}
     >
-      <div
-        className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg ${style.fileIcon}`}
-      >
-        {isFolder ? (
-          <Folder className="h-4 w-4" />
-        ) : isCodeFile ? (
-          <FileCode2 className="h-4 w-4" />
-        ) : (
-          <File className="h-4 w-4" />
-        )}
-      </div>
-
-      <div className="min-w-0 flex-1">
-        <p
-          className={`truncate text-sm font-medium ${style.text}`}
-          title={name}
+      <div className="flex items-center justify-between">
+        <span
+          className={`flex h-8 w-8 items-center justify-center rounded-lg ${style.metricIcon}`}
         >
-          {name}
-        </p>
+          {icon}
+        </span>
 
-        <p className={`mt-0.5 text-xs ${style.muted}`}>
-          {isFolder ? "Folder" : type || "File"}
-        </p>
+        <span
+          className={`text-[10px] font-semibold ${style.successText}`}
+        >
+          {change}
+        </span>
       </div>
 
-      <ChevronRight
-        className={`h-4 w-4 shrink-0 opacity-0 transition-opacity duration-200 group-hover:opacity-100 ${style.muted}`}
-      />
+      <p
+        className={`text-xs ${style.muted}`}
+        style={{
+          marginTop: "14px",
+        }}
+      >
+        {label}
+      </p>
+
+      <p
+        className={`text-xl font-bold ${style.text}`}
+        style={{
+          marginTop: "4px",
+        }}
+      >
+        {value}
+      </p>
     </div>
+  );
+}
+
+/* =========================================================
+   CLOCK ICON
+========================================================= */
+
+function ClockIcon() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      className="h-4 w-4"
+    >
+      <circle cx="12" cy="12" r="9" />
+      <path d="M12 7v5l3 2" />
+    </svg>
   );
 }
 
@@ -1131,24 +1446,6 @@ function formatPrice(value: number) {
   }).format(value);
 }
 
-function formatDate(value?: string | null) {
-  if (!value) {
-    return "Unknown";
-  }
-
-  const date = new Date(value);
-
-  if (Number.isNaN(date.getTime())) {
-    return value;
-  }
-
-  return new Intl.DateTimeFormat("en-US", {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  }).format(date);
-}
-
 /* =========================================================
    STYLE CONFIGURATION
 ========================================================= */
@@ -1162,297 +1459,428 @@ function getStyleConfig(style: DemoStyle) {
         toolbar:
           "border-gray-200 bg-white/90",
 
+        navbar:
+          "border-gray-200 bg-white/80",
+
         selectorWrapper:
           "border-gray-200 bg-white",
-
-        background:
-          "bg-gradient-to-b from-white via-gray-50 to-white",
-
-        text: "text-gray-900",
-
-        heading: "text-gray-950",
-
-        muted: "text-gray-500",
-
-        description: "text-gray-600",
-
-        accent: "text-gray-900",
-
-        price: "text-gray-950",
-
-        verified: "text-blue-600",
-
-        badge:
-          "border-gray-200 bg-gray-50 text-gray-700",
-
-        premiumBadge:
-          "border-amber-200 bg-amber-50 text-amber-700",
-
-        featuredBadge:
-          "border-purple-200 bg-purple-50 text-purple-700",
-
-        newBadge:
-          "border-blue-200 bg-blue-50 text-blue-700",
-
-        tag:
-          "border-gray-200 bg-gray-50 text-gray-600",
-
         selector:
-          "text-gray-600 hover:bg-gray-100",
+  "text-gray-600 hover:bg-gray-100",
 
-        selectorActive:
+selectorActive:
+  "bg-gray-900 text-white",
+        background:
+          "bg-white",
+
+        text:
+          "text-gray-900",
+
+        heading:
+          "text-gray-950",
+
+        heroHeading:
+          "text-gray-950",
+
+        heroDescription:
+          "text-gray-500",
+
+        muted:
+          "text-gray-500",
+
+        description:
+          "text-gray-600",
+
+        accent:
+          "text-gray-900",
+
+        gradientText:
+          "text-gray-500",
+
+        logo:
           "bg-gray-900 text-white",
 
-        primaryButton:
-          "bg-gray-900 text-white hover:bg-gray-800",
+        navLinks:
+          "text-gray-500",
 
-        secondaryButton:
-          "border-gray-300 bg-white text-gray-900 hover:bg-gray-50",
+        navLogin:
+          "text-gray-600 hover:bg-gray-100",
 
-        preview:
+        announcement:
+          "border-gray-200 bg-gray-50 text-gray-700",
+
+        trusted:
+          "text-gray-400",
+
+        productPreview:
           "border-gray-200 bg-white shadow-sm",
 
         previewHeader:
           "border-gray-200 bg-gray-50",
 
+        previewAvatar:
+          "bg-gray-200",
+
         address:
           "bg-gray-200",
 
-        visual:
+        sidebar:
           "border-gray-200 bg-gray-50",
+
+        sidebarActive:
+          "bg-gray-900 text-white",
+
+        sidebarItem:
+          "text-gray-500 hover:bg-gray-100",
+
+        sidebarCard:
+          "border-gray-200 bg-white",
+
+        dashboard:
+          "bg-white",
+
+        dashboardCard:
+          "border-gray-200 bg-white",
+
+        aiCard:
+          "border-gray-200 bg-gray-50",
+
+        dashboardMetric:
+          "border-gray-200 bg-white",
+
+        metricIcon:
+          "bg-gray-100 text-gray-700",
+
+        chartBar:
+          "bg-gray-900",
+
+        chatBubble:
+          "bg-white border border-gray-200 text-gray-600",
+
+        chatBubbleAlt:
+          "bg-gray-900 text-white",
+
+        aiButton:
+          "bg-gray-900 text-white",
+
+        successBadge:
+          "bg-gray-100 text-gray-700",
+
+        successText:
+          "text-gray-600",
 
         icon:
           "bg-gray-900 text-white",
 
+        tech:
+          "border-gray-200 bg-gray-50 text-gray-700",
+
         card:
           "border-gray-200 bg-white hover:border-gray-300 hover:shadow-sm",
 
-        tech:
-          "border-gray-200 bg-gray-50 text-gray-800",
-
-        filePanel:
-          "border-gray-200 bg-white",
-
-        fileHeader:
-          "border-gray-200 bg-gray-50",
-
-        fileCount:
-          "bg-gray-100 text-gray-600",
-
-        fileItem:
-          "border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50",
-
-        fileIcon:
-          "bg-gray-100 text-gray-700",
-
-        requirementIcon:
-          "bg-gray-100 text-gray-700",
-
-        timeline:
-          "bg-gray-200",
+        pricing:
+          "border-gray-200 bg-white shadow-sm",
 
         cta:
           "border-gray-200 bg-gray-50",
+
+        secondaryButton:
+          "border-gray-300 bg-white text-gray-900 hover:bg-gray-50",
+
+        primaryButton:
+          "bg-gray-900 text-white hover:bg-gray-800",
+
+        footer:
+          "text-gray-500",
+
+        star:
+          "text-gray-900",
       };
 
     case "dark":
       return {
-        page: "bg-[#09090b] text-white",
+        page:
+          "bg-[#09090b] text-white",
 
         toolbar:
           "border-white/10 bg-[#09090b]/90",
+
+        navbar:
+          "border-white/10 bg-white/[0.03]",
 
         selectorWrapper:
           "border-white/10 bg-white/[0.03]",
 
         background:
-          "bg-[radial-gradient(circle_at_top,rgba(99,102,241,0.16),transparent_45%)]",
+          "bg-[#09090b]",
 
-        text: "text-white",
+        text:
+          "text-white",
 
-        heading: "text-white",
+        heading:
+          "text-white",
 
-        muted: "text-zinc-500",
+        heroHeading:
+          "text-white",
 
-        description: "text-zinc-400",
+        heroDescription:
+          "text-zinc-400",
 
-        accent: "text-indigo-400",
+        muted:
+          "text-zinc-500",
 
-        price: "text-white",
+        description:
+          "text-zinc-400",
 
-        verified: "text-blue-400",
+        accent:
+          "text-indigo-400",
 
-        badge:
-          "border-indigo-400/20 bg-indigo-400/10 text-indigo-300",
+        gradientText:
+          "bg-gradient-to-r from-indigo-400 via-violet-400 to-cyan-400 bg-clip-text text-transparent",
 
-        premiumBadge:
-          "border-amber-400/20 bg-amber-400/10 text-amber-300",
-
-        featuredBadge:
-          "border-purple-400/20 bg-purple-400/10 text-purple-300",
-
-        newBadge:
-          "border-blue-400/20 bg-blue-400/10 text-blue-300",
-
-        tag:
-          "border-white/10 bg-white/5 text-white/70",
-
-        selector:
-          "text-zinc-400 hover:bg-white/5",
-
-        selectorActive:
+        logo:
           "bg-indigo-500 text-white",
 
-        primaryButton:
-          "bg-indigo-500 text-white hover:bg-indigo-400",
+        navLinks:
+          "text-zinc-400",
 
-        secondaryButton:
-          "border-white/10 bg-white/5 text-white hover:bg-white/10",
+        navLogin:
+          "text-zinc-400 hover:bg-white/5",
 
-        preview:
+        announcement:
+          "border-indigo-400/20 bg-indigo-400/10 text-indigo-300",
+
+        trusted:
+          "text-zinc-600",
+
+        productPreview:
           "border-white/10 bg-zinc-950 shadow-2xl shadow-indigo-500/10",
 
         previewHeader:
           "border-white/10 bg-white/[0.03]",
 
+        previewAvatar:
+          "bg-white/10",
+
         address:
           "bg-white/5",
 
-        visual:
+        sidebar:
+          "border-white/10 bg-white/[0.02]",
+
+        sidebarActive:
+          "bg-indigo-500/15 text-indigo-300",
+
+        sidebarItem:
+          "text-zinc-500 hover:bg-white/5",
+
+        sidebarCard:
           "border-white/10 bg-white/[0.03]",
 
+        dashboard:
+          "bg-zinc-950",
+
+        dashboardCard:
+          "border-white/10 bg-white/[0.02]",
+
+        aiCard:
+          "border-white/10 bg-indigo-500/[0.04]",
+
+        dashboardMetric:
+          "border-white/10 bg-white/[0.03]",
+
+        metricIcon:
+          "bg-indigo-500/10 text-indigo-300",
+
+        chartBar:
+          "bg-indigo-500",
+
+        chatBubble:
+          "bg-white/[0.04] text-zinc-400",
+
+        chatBubbleAlt:
+          "bg-indigo-500/10 text-indigo-300",
+
+        aiButton:
+          "bg-indigo-500 text-white",
+
+        successBadge:
+          "bg-emerald-500/10 text-emerald-400",
+
+        successText:
+          "text-emerald-400",
+
         icon:
-          "bg-indigo-500/20 text-indigo-300",
+          "bg-indigo-500 text-white",
+
+        tech:
+          "border-white/10 bg-white/[0.03] text-zinc-300",
 
         card:
           "border-white/10 bg-white/[0.03] hover:bg-white/[0.05]",
 
-        tech:
-          "border-white/10 bg-white/5 text-white/80",
-
-        filePanel:
-          "border-white/10 bg-white/[0.03]",
-
-        fileHeader:
-          "border-white/10 bg-white/[0.04]",
-
-        fileCount:
-          "bg-white/5 text-white/60",
-
-        fileItem:
-          "border-white/10 bg-white/[0.02] hover:bg-white/[0.06]",
-
-        fileIcon:
-          "bg-indigo-500/10 text-indigo-300",
-
-        requirementIcon:
-          "bg-indigo-500/10 text-indigo-300",
-
-        timeline:
-          "bg-white/10",
+        pricing:
+          "border-indigo-500/30 bg-indigo-500/[0.05]",
 
         cta:
           "border-indigo-500/20 bg-indigo-500/10",
+
+        secondaryButton:
+          "border-white/10 bg-white/5 text-white hover:bg-white/10",
+
+        primaryButton:
+          "bg-indigo-500 text-white hover:bg-indigo-400",
+
+        footer:
+          "text-zinc-500",
+
+        star:
+          "text-yellow-400",
       };
 
     case "glass":
       return {
-        page: "bg-slate-950 text-white",
+        page:
+          "bg-slate-950 text-white",
 
         toolbar:
           "border-white/10 bg-white/10",
 
+        navbar:
+          "border-white/15 bg-white/10 backdrop-blur-xl",
+
         selectorWrapper:
-          "border-white/10 bg-white/10 backdrop-blur-xl",
+          "border-white/10 bg-white/10",
 
         background:
-          "bg-[radial-gradient(circle_at_20%_20%,rgba(59,130,246,0.35),transparent_30%),radial-gradient(circle_at_80%_30%,rgba(168,85,247,0.35),transparent_30%),linear-gradient(135deg,#020617,#0f172a)]",
+          "bg-slate-950",
 
-        text: "text-white",
+        text:
+          "text-white",
 
-        heading: "text-white",
+          selector:
+  "text-white/60 hover:bg-white/10",
 
-        muted: "text-white/50",
+selectorActive:
+  "bg-white/20 text-white backdrop-blur-xl",
+        heading:
+          "text-white",
 
-        description: "text-white/65",
+        heroHeading:
+          "text-white",
 
-        accent: "text-cyan-300",
+        heroDescription:
+          "text-white/60",
 
-        price: "text-white",
+        muted:
+          "text-white/50",
 
-        verified: "text-blue-300",
+        description:
+          "text-white/65",
 
-        badge:
-          "border-white/20 bg-white/10 text-white/80 backdrop-blur-xl",
+        accent:
+          "text-cyan-300",
 
-        premiumBadge:
-          "border-amber-300/30 bg-amber-300/10 text-amber-200 backdrop-blur-xl",
+        gradientText:
+          "bg-gradient-to-r from-cyan-300 via-blue-400 to-purple-400 bg-clip-text text-transparent",
 
-        featuredBadge:
-          "border-purple-300/30 bg-purple-300/10 text-purple-200 backdrop-blur-xl",
+        logo:
+          "bg-white/10 text-cyan-300 backdrop-blur-xl",
 
-        newBadge:
-          "border-blue-300/30 bg-blue-300/10 text-blue-200 backdrop-blur-xl",
+        navLinks:
+          "text-white/60",
 
-        tag:
-          "border-white/20 bg-white/10 text-white/70 backdrop-blur-xl",
-
-        selector:
+        navLogin:
           "text-white/60 hover:bg-white/10",
 
-        selectorActive:
-          "bg-white/20 text-white backdrop-blur-xl",
+        announcement:
+          "border-white/20 bg-white/10 text-white/80 backdrop-blur-xl",
 
-        primaryButton:
-          "bg-white text-slate-950 hover:bg-white/90",
+        trusted:
+          "text-white/30",
 
-        secondaryButton:
-          "border-white/20 bg-white/10 text-white hover:bg-white/20",
-
-        preview:
+        productPreview:
           "border-white/20 bg-white/10 shadow-2xl shadow-cyan-500/10 backdrop-blur-2xl",
 
         previewHeader:
           "border-white/10 bg-white/5",
 
+        previewAvatar:
+          "bg-white/10",
+
         address:
           "bg-white/10",
 
-        visual:
+        sidebar:
+          "border-white/10 bg-white/5",
+
+        sidebarActive:
+          "bg-white/10 text-cyan-300",
+
+        sidebarItem:
+          "text-white/50 hover:bg-white/10",
+
+        sidebarCard:
+          "border-white/10 bg-white/5",
+
+        dashboard:
+          "bg-white/[0.02]",
+
+        dashboardCard:
           "border-white/10 bg-white/5 backdrop-blur-xl",
 
-        icon:
-          "bg-white/10 text-cyan-300 backdrop-blur-xl",
+        aiCard:
+          "border-white/10 bg-cyan-500/[0.05]",
 
-        card:
-          "border-white/10 bg-white/5 backdrop-blur-xl hover:bg-white/10",
+        dashboardMetric:
+          "border-white/10 bg-white/5",
+
+        metricIcon:
+          "bg-white/10 text-cyan-300",
+
+        chartBar:
+          "bg-cyan-400",
+
+        chatBubble:
+          "bg-white/5 text-white/60",
+
+        chatBubbleAlt:
+          "bg-cyan-400/10 text-cyan-200",
+
+        aiButton:
+          "bg-white text-slate-950",
+
+        successBadge:
+          "bg-emerald-400/10 text-emerald-300",
+
+        successText:
+          "text-emerald-300",
+
+        icon:
+          "bg-white/10 text-cyan-300",
 
         tech:
           "border-white/20 bg-white/10 text-white/80 backdrop-blur-xl",
 
-        filePanel:
-          "border-white/10 bg-white/5 backdrop-blur-xl",
-
-        fileHeader:
-          "border-white/10 bg-white/5",
-
-        fileCount:
-          "bg-white/10 text-white/70",
-
-        fileItem:
+        card:
           "border-white/10 bg-white/5 backdrop-blur-xl hover:bg-white/10",
 
-        fileIcon:
-          "bg-white/10 text-cyan-300",
-
-        requirementIcon:
-          "bg-white/10 text-cyan-300",
-
-        timeline:
-          "bg-white/10",
+        pricing:
+          "border-white/20 bg-white/10 backdrop-blur-xl",
 
         cta:
           "border-white/10 bg-white/10 backdrop-blur-xl",
+
+        secondaryButton:
+          "border-white/20 bg-white/10 text-white hover:bg-white/20",
+
+        primaryButton:
+          "bg-white text-slate-950 hover:bg-white/90",
+
+        footer:
+          "text-white/50",
+
+        star:
+          "text-yellow-300",
       };
 
     case "modern":
@@ -1464,17 +1892,31 @@ function getStyleConfig(style: DemoStyle) {
         toolbar:
           "border-slate-200 bg-white/90",
 
+        navbar:
+          "border-slate-200 bg-white/80 shadow-sm",
+
         selectorWrapper:
           "border-slate-200 bg-white",
 
         background:
-          "bg-[radial-gradient(circle_at_top,rgba(99,102,241,0.12),transparent_40%)]",
+          "bg-slate-50",
 
         text:
           "text-slate-900",
 
+          selector:
+  "text-slate-600 hover:bg-slate-100",
+
+selectorActive:
+  "bg-indigo-600 text-white",
         heading:
           "text-slate-950",
+
+        heroHeading:
+          "text-slate-950",
+
+        heroDescription:
+          "text-slate-600",
 
         muted:
           "text-slate-500",
@@ -1485,84 +1927,107 @@ function getStyleConfig(style: DemoStyle) {
         accent:
           "text-indigo-600",
 
-        price:
-          "text-slate-950",
+        gradientText:
+          "bg-gradient-to-r from-indigo-600 via-violet-600 to-cyan-500 bg-clip-text text-transparent",
 
-        verified:
-          "text-blue-600",
-
-        badge:
-          "border-indigo-200 bg-indigo-50 text-indigo-700",
-
-        premiumBadge:
-          "border-amber-200 bg-amber-50 text-amber-700",
-
-        featuredBadge:
-          "border-purple-200 bg-purple-50 text-purple-700",
-
-        newBadge:
-          "border-blue-200 bg-blue-50 text-blue-700",
-
-        tag:
-          "border-slate-200 bg-white text-slate-600",
-
-        selector:
-          "text-slate-600 hover:bg-slate-100",
-
-        selectorActive:
+        logo:
           "bg-indigo-600 text-white",
 
-        primaryButton:
-          "bg-indigo-600 text-white shadow-lg shadow-indigo-600/20 hover:bg-indigo-500",
+        navLinks:
+          "text-slate-500",
 
-        secondaryButton:
-          "border-slate-200 bg-white text-slate-700 hover:bg-slate-50",
+        navLogin:
+          "text-slate-600 hover:bg-slate-100",
 
-        preview:
-          "border-slate-200 bg-white shadow-xl shadow-slate-900/5",
+        announcement:
+          "border-indigo-200 bg-indigo-50 text-indigo-700",
+
+        trusted:
+          "text-slate-400",
+
+        productPreview:
+          "border-slate-200 bg-white shadow-2xl shadow-slate-900/10",
 
         previewHeader:
           "border-slate-200 bg-slate-50",
 
+        previewAvatar:
+          "bg-slate-200",
+
         address:
           "bg-slate-200",
 
-        visual:
-          "border-indigo-100 bg-gradient-to-br from-indigo-50 to-violet-50",
+        sidebar:
+          "border-slate-200 bg-slate-50",
+
+        sidebarActive:
+          "bg-indigo-50 text-indigo-700",
+
+        sidebarItem:
+          "text-slate-500 hover:bg-slate-100",
+
+        sidebarCard:
+          "border-slate-200 bg-white",
+
+        dashboard:
+          "bg-white",
+
+        dashboardCard:
+          "border-slate-200 bg-white",
+
+        aiCard:
+          "border-indigo-100 bg-indigo-50/40",
+
+        dashboardMetric:
+          "border-slate-200 bg-white",
+
+        metricIcon:
+          "bg-indigo-50 text-indigo-600",
+
+        chartBar:
+          "bg-indigo-500",
+
+        chatBubble:
+          "bg-white border border-slate-200 text-slate-600",
+
+        chatBubbleAlt:
+          "bg-indigo-50 text-indigo-700",
+
+        aiButton:
+          "bg-indigo-600 text-white",
+
+        successBadge:
+          "bg-emerald-50 text-emerald-600",
+
+        successText:
+          "text-emerald-600",
 
         icon:
           "bg-indigo-600 text-white",
 
-        card:
-          "border-slate-200 bg-white shadow-sm hover:-translate-y-1 hover:shadow-lg",
-
         tech:
           "border-slate-200 bg-white text-slate-700 shadow-sm",
 
-        filePanel:
-          "border-slate-200 bg-white shadow-xl shadow-slate-900/5",
+        card:
+          "border-slate-200 bg-white shadow-sm hover:-translate-y-1 hover:shadow-lg",
 
-        fileHeader:
-          "border-slate-200 bg-slate-50",
-
-        fileCount:
-          "bg-indigo-50 text-indigo-600",
-
-        fileItem:
-          "border-slate-200 bg-white hover:border-indigo-200 hover:bg-indigo-50/40",
-
-        fileIcon:
-          "bg-indigo-50 text-indigo-600",
-
-        requirementIcon:
-          "bg-emerald-50 text-emerald-600",
-
-        timeline:
-          "bg-slate-200",
+        pricing:
+          "border-indigo-200 bg-white shadow-xl shadow-indigo-500/10",
 
         cta:
           "border-indigo-100 bg-gradient-to-br from-indigo-50 to-violet-50",
+
+        secondaryButton:
+          "border-slate-200 bg-white text-slate-700 hover:bg-slate-50",
+
+        primaryButton:
+          "bg-indigo-600 text-white shadow-lg shadow-indigo-600/20 hover:bg-indigo-500",
+
+        footer:
+          "text-slate-500",
+
+        star:
+          "text-yellow-500",
       };
   }
 }
-
