@@ -53,10 +53,10 @@ const variantStyles: Record<
       "text-4xl font-bold tracking-tight text-slate-950 sm:text-5xl",
 
     description:
-      "max-w-3xl text-base leading-8 text-slate-600 sm:text-lg",
+      "mx-auto max-w-3xl text-base leading-8 text-slate-600 sm:text-lg",
 
     badges:
-      "flex flex-wrap items-center gap-2",
+      "flex flex-wrap items-center justify-center gap-2",
 
     categoryBadge:
       "border-indigo-200 bg-indigo-50 text-indigo-700",
@@ -74,7 +74,7 @@ const variantStyles: Record<
       "border-slate-200 bg-white text-slate-600",
 
     meta:
-      "flex flex-wrap items-center gap-5",
+      "flex flex-wrap items-center justify-center gap-5",
 
     author:
       "text-sm text-slate-500",
@@ -95,16 +95,16 @@ const variantStyles: Record<
 
   minimal: {
     section:
-      "bg-transparent px-2 py-6 transition-all duration-500 sm:py-8",
+      "rounded-3xl bg-transparent px-2 py-6 transition-all duration-500 sm:py-8",
 
     title:
-      "max-w-4xl text-4xl font-medium tracking-[-0.03em] text-stone-950 sm:text-5xl lg:text-6xl",
+      "mx-auto max-w-4xl text-4xl font-medium tracking-[-0.03em] text-stone-950 sm:text-5xl lg:text-6xl",
 
     description:
-      "max-w-2xl text-base leading-8 text-stone-500 sm:text-lg",
+      "mx-auto max-w-2xl text-base leading-8 text-stone-500 sm:text-lg",
 
     badges:
-      "flex flex-wrap items-center gap-2",
+      "flex flex-wrap items-center justify-center gap-2",
 
     categoryBadge:
       "border-stone-200 bg-stone-50 text-stone-700",
@@ -122,7 +122,7 @@ const variantStyles: Record<
       "border-stone-200 bg-stone-50 text-stone-600",
 
     meta:
-      "flex flex-wrap items-center gap-5",
+      "flex flex-wrap items-center justify-center gap-5",
 
     author:
       "text-sm text-stone-500",
@@ -149,10 +149,10 @@ const variantStyles: Record<
       "text-4xl font-bold tracking-tight text-white sm:text-5xl",
 
     description:
-      "max-w-3xl text-base leading-8 text-zinc-400 sm:text-lg",
+      "mx-auto max-w-3xl text-base leading-8 text-zinc-400 sm:text-lg",
 
     badges:
-      "flex flex-wrap items-center gap-2",
+      "flex flex-wrap items-center justify-center gap-2",
 
     categoryBadge:
       "border-indigo-400/20 bg-indigo-400/10 text-indigo-300",
@@ -170,7 +170,7 @@ const variantStyles: Record<
       "border-white/10 bg-white/5 text-white/70",
 
     meta:
-      "flex flex-wrap items-center gap-5",
+      "flex flex-wrap items-center justify-center gap-5",
 
     author:
       "text-sm text-zinc-500",
@@ -197,10 +197,10 @@ const variantStyles: Record<
       "text-4xl font-bold tracking-tight text-white sm:text-5xl",
 
     description:
-      "max-w-3xl text-base leading-8 text-white/65 sm:text-lg",
+      "mx-auto max-w-3xl text-base leading-8 text-white/65 sm:text-lg",
 
     badges:
-      "flex flex-wrap items-center gap-2",
+      "flex flex-wrap items-center justify-center gap-2",
 
     categoryBadge:
       "border-white/20 bg-white/10 text-white/80 backdrop-blur-xl",
@@ -218,7 +218,7 @@ const variantStyles: Record<
       "border-white/20 bg-white/10 text-white/70 backdrop-blur-xl",
 
     meta:
-      "flex flex-wrap items-center gap-5",
+      "flex flex-wrap items-center justify-center gap-5",
 
     author:
       "text-sm text-white/60",
@@ -241,118 +241,158 @@ export default function TemplateHeader({
   const styles = variantStyles[variant];
 
   return (
-    <section
-      className={styles.section}
-      data-preview-variant={variant}
+  <section
+    className={`
+      ${styles.section}
+      text-center
+    `}
+    data-preview-variant={variant}
+  >
+    {/* =====================================================
+        TITLE + DESCRIPTION
+    ===================================================== */}
+
+    <div
+      style={{
+        marginBottom: "26px",
+        textAlign: "center",
+      }}
     >
-      {/* =====================================================
-          TITLE + DESCRIPTION
-      ===================================================== */}
+      <h1 className={styles.title}>
+        {template.title}
+      </h1>
 
-      <div
+      <p
+        className={styles.description}
         style={{
-          marginBottom: "28px",
+          marginTop: "12px",
+          marginLeft: "auto",
+          marginRight: "auto",
         }}
       >
-        <h1 className={styles.title}>
-          {template.title}
-        </h1>
+        {template.description}
+      </p>
+    </div>
 
-        <p
-          className={styles.description}
-          style={{
-            marginTop: "12px",
-          }}
+    {/* =====================================================
+        CATEGORY + STATUS + TAGS
+    ===================================================== */}
+
+    <div
+      className={styles.badges}
+      style={{
+        marginBottom: "22px",
+        marginLeft: "auto",
+        marginRight: "auto",
+        width: "fit-content",
+        maxWidth: "100%",
+      }}
+    >
+      {template.category && (
+        <Badge className={styles.categoryBadge}>
+          {template.category}
+        </Badge>
+      )}
+
+      {template.isPremium && (
+        <Badge
+          className={`
+            inline-flex
+            items-center
+            gap-1.5
+            ${styles.premiumBadge}
+          `}
         >
-          {template.description}
-        </p>
-      </div>
+          <Crown className="h-3.5 w-3.5" />
+          Premium
+        </Badge>
+      )}
 
-      {/* =====================================================
-          CATEGORY + STATUS + TAGS
-      ===================================================== */}
+      {template.featured && (
+        <Badge
+          className={`
+            inline-flex
+            items-center
+            gap-1.5
+            ${styles.featuredBadge}
+          `}
+        >
+          <Star className="h-3.5 w-3.5" />
+          Featured
+        </Badge>
+      )}
 
-      <div
-        className={styles.badges}
-        style={{
-          marginBottom: "24px",
-        }}
-      >
-        {template.category && (
-          <Badge className={styles.categoryBadge}>
-            {template.category}
-          </Badge>
-        )}
+      {template.newest && (
+        <Badge
+          className={`
+            inline-flex
+            items-center
+            gap-1.5
+            ${styles.newBadge}
+          `}
+        >
+          <Clock3 className="h-3.5 w-3.5" />
+          New
+        </Badge>
+      )}
 
-        {template.isPremium && (
-          <Badge
-            className={`inline-flex items-center gap-1.5 ${styles.premiumBadge}`}
-          >
-            <Crown className="h-3.5 w-3.5" />
-            Premium
-          </Badge>
-        )}
+      {(template.tags ?? []).map((tag) => (
+        <Badge
+          key={tag}
+          variant="outline"
+          className={styles.tagBadge}
+        >
+          {tag}
+        </Badge>
+      ))}
+    </div>
 
-        {template.featured && (
-          <Badge
-            className={`inline-flex items-center gap-1.5 ${styles.featuredBadge}`}
-          >
-            <Star className="h-3.5 w-3.5" />
-            Featured
-          </Badge>
-        )}
+    {/* =====================================================
+        RATING + AUTHOR
+    ===================================================== */}
 
-        {template.newest && (
-          <Badge
-            className={`inline-flex items-center gap-1.5 ${styles.newBadge}`}
-          >
-            <Clock3 className="h-3.5 w-3.5" />
-            New
-          </Badge>
-        )}
+    <div
+      className={styles.meta}
+      style={{
+        marginLeft: "auto",
+        marginRight: "auto",
+        width: "fit-content",
+        maxWidth: "100%",
+      }}
+    >
+      <Rating
+        value={template.rating ?? 0}
+        reviewCount={
+          template.reviews ??
+          template.reviewCount ??
+          0
+        }
+      />
 
-        {(template.tags ?? []).map((tag) => (
-          <Badge
-            key={tag}
-            variant="outline"
-            className={styles.tagBadge}
-          >
-            {tag}
-          </Badge>
-        ))}
-      </div>
+      <span className={styles.author}>
+        by{" "}
+        <strong className={styles.authorName}>
+          {template.author?.name ??
+            "Unknown Author"}
+        </strong>
+      </span>
 
-      {/* =====================================================
-          RATING + AUTHOR
-      ===================================================== */}
-
-      <div className={styles.meta}>
-        <Rating
-          value={template.rating ?? 0}
-          reviewCount={
-            template.reviews ??
-            template.reviewCount ??
-            0
-          }
-        />
-
-        <span className={styles.author}>
-          by{" "}
-          <strong className={styles.authorName}>
-            {template.author?.name ??
-              "Unknown Author"}
-          </strong>
+      {template.author?.verified && (
+        <span
+          className={`
+            inline-flex
+            items-center
+            gap-1.5
+            text-xs
+            font-medium
+            ${styles.verified}
+          `}
+        >
+          <ShieldCheck className="h-4 w-4" />
+          Verified Author
         </span>
-
-        {template.author?.verified && (
-          <span
-            className={`inline-flex items-center gap-1.5 text-xs font-medium ${styles.verified}`}
-          >
-            <ShieldCheck className="h-4 w-4" />
-            Verified Author
-          </span>
-        )}
-      </div>
-    </section>
-  );
+      )}
+    </div>
+  </section>
+);
 }

@@ -33,8 +33,7 @@ export default async function TemplateDetailPage({
   // Get template
   // =========================================================
 
-  const template =
-    await templateService.getBySlug(slug);
+  const template = await templateService.getBySlug(slug);
 
   // =========================================================
   // Not found
@@ -48,11 +47,10 @@ export default async function TemplateDetailPage({
   // Related templates
   // =========================================================
 
-  const relatedTemplates =
-    await templateService.getRelated(
-      template,
-      3,
-    );
+  const relatedTemplates = await templateService.getRelated(
+    template,
+    3,
+  );
 
   return (
     <main
@@ -126,25 +124,25 @@ export default async function TemplateDetailPage({
           5. Price + Actions
          =================================================== */}
 
-     <div
-  className="
-    grid
-    gap-6
-    lg:grid-cols-2
-    lg:items-start
-  "
-  style={{
-    marginBottom: "48px",
-  }}
->
-  <TemplatePriceCard
-    template={template}
-  />
+      <div
+        className="
+          grid
+          gap-6
+          lg:grid-cols-2
+          lg:items-start
+        "
+        style={{
+          marginBottom: "48px",
+        }}
+      >
+        <TemplatePriceCard
+          template={template}
+        />
 
-  <TemplateActions
-    template={template}
-  />
-</div>
+        <TemplateActions
+          template={template}
+        />
+      </div>
 
       {/* ===================================================
           6. Overview

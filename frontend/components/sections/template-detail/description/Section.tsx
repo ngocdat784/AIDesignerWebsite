@@ -47,7 +47,6 @@ export default function Section({
 
       <div
         className="
-          space-y-6
           p-6
           sm:p-8
           lg:p-10
@@ -98,7 +97,6 @@ export default function Section({
 
             <div
               className="
-                mt-3
                 h-1
                 w-12
                 rounded-full
@@ -107,6 +105,9 @@ export default function Section({
                 duration-300
                 group-hover:w-20
               "
+              style={{
+                marginTop: "12px",
+              }}
             />
           </div>
         </div>
@@ -117,6 +118,9 @@ export default function Section({
             text-slate-600
             leading-7
           "
+          style={{
+            marginTop: "24px",
+          }}
         >
           {children}
         </div>

@@ -35,20 +35,11 @@ const variantStyles = {
 
     content:
       "bg-white",
-
-    info:
-      "border-slate-200 bg-white",
-
-    infoTitle:
-      "text-slate-950",
-
-    infoText:
-      "text-slate-500",
   },
 
   minimal: {
     section:
-      "rounded-3xl border border-stone-200 bg-white",
+      "rounded-3xl border border-stone-200 bg-white shadow-sm",
 
     stage:
       "bg-stone-50",
@@ -64,15 +55,6 @@ const variantStyles = {
 
     content:
       "bg-white",
-
-    info:
-      "border-stone-200 bg-white",
-
-    infoTitle:
-      "text-stone-950",
-
-    infoText:
-      "text-stone-500",
   },
 
   dark: {
@@ -93,15 +75,6 @@ const variantStyles = {
 
     content:
       "bg-[#0d0f14]",
-
-    info:
-      "border-white/10 bg-white/[0.03]",
-
-    infoTitle:
-      "text-white",
-
-    infoText:
-      "text-white/50",
   },
 
   glass: {
@@ -122,15 +95,6 @@ const variantStyles = {
 
     content:
       "bg-white/5",
-
-    info:
-      "border-white/10 bg-white/10 backdrop-blur-xl",
-
-    infoTitle:
-      "text-white",
-
-    infoText:
-      "text-white/60",
   },
 };
 
@@ -149,7 +113,7 @@ export default function TemplateGallery({
   const styles = variantStyles[variant];
 
   /*
-   * Nếu gallery không có ảnh thì dùng fallback.
+   * Lấy ảnh hiện tại.
    */
   const currentImage =
     images[current] ||
@@ -163,11 +127,17 @@ export default function TemplateGallery({
     <section
       className={`
         ${styles.section}
+        w-full
         overflow-hidden
         transition-all
         duration-500
       `}
       data-preview-variant={variant}
+      style={{
+        marginLeft: "auto",
+        marginRight: "auto",
+        marginBottom: "40px",
+      }}
     >
       {/* =====================================================
           PREVIEW STAGE
@@ -186,7 +156,9 @@ export default function TemplateGallery({
           lg:py-7
         `}
       >
-        {/* Decorative background */}
+        {/* =====================================================
+            DECORATIVE BACKGROUND
+        ===================================================== */}
 
         <div
           className="
@@ -216,16 +188,15 @@ export default function TemplateGallery({
           "
         />
 
-        {/* =================================================
+        {/* =====================================================
             BROWSER MOCKUP
-        ================================================= */}
+        ===================================================== */}
 
         <div
           className={`
             ${styles.browser}
             relative
             z-10
-            mx-auto
             max-w-6xl
             overflow-hidden
             rounded-2xl
@@ -233,6 +204,10 @@ export default function TemplateGallery({
             transition-all
             duration-500
           `}
+          style={{
+            marginLeft: "auto",
+            marginRight: "auto",
+          }}
         >
           {/* Browser Header */}
 
@@ -260,20 +235,23 @@ export default function TemplateGallery({
             <div
               className={`
                 ${styles.browserAddress}
-                mx-auto
                 h-6
                 max-w-md
                 flex-1
                 rounded-lg
               `}
+              style={{
+                marginLeft: "auto",
+                marginRight: "auto",
+              }}
             />
 
             <div className="hidden w-16 sm:block" />
           </div>
 
-          {/* =================================================
-              REAL TEMPLATE IMAGE
-          ================================================= */}
+          {/* =====================================================
+              TEMPLATE IMAGE
+          ===================================================== */}
 
           <div
             className={`
@@ -329,7 +307,13 @@ export default function TemplateGallery({
                   bg-slate-100
                 "
               >
-                <div className="text-center">
+                <div
+                  className="text-center"
+                  style={{
+                    marginLeft: "auto",
+                    marginRight: "auto",
+                  }}
+                >
                   <div
                     className="
                       mx-auto
@@ -351,154 +335,20 @@ export default function TemplateGallery({
                   </div>
 
                   <p
-                    className="text-sm font-semibold text-slate-900"
+                    className="
+                      text-sm
+                      font-semibold
+                      text-slate-900
+                    "
                     style={{
                       marginTop: "14px",
                     }}
                   >
-                    {template.title}
-                  </p>
-
-                  <p
-                    className="text-xs text-slate-500"
-                    style={{
-                      marginTop: "4px",
-                    }}
-                  >
-                    Template Preview
+                    Preview unavailable
                   </p>
                 </div>
               </div>
             )}
-          </div>
-        </div>
-
-        {/* =====================================================
-            TEMPLATE INFORMATION
-        ===================================================== */}
-
-        <div
-          className={`
-            ${styles.info}
-            relative
-            z-10
-            mx-auto
-            max-w-6xl
-            rounded-2xl
-            border
-            p-4
-            transition-all
-            duration-500
-            sm:p-5
-          `}
-          style={{
-            marginTop: "20px",
-          }}
-        >
-          <div
-            className="
-              flex
-              flex-col
-              gap-4
-              sm:flex-row
-              sm:items-center
-              sm:justify-between
-            "
-          >
-            <div className="min-w-0">
-              <div
-                className="
-                  flex
-                  flex-wrap
-                  items-center
-                  gap-2
-                "
-              >
-                {template.category && (
-                  <span
-                    className="
-                      rounded-full
-                      bg-indigo-500/10
-                      px-3
-                      py-1
-                      text-xs
-                      font-semibold
-                      text-indigo-600
-                    "
-                  >
-                    {template.category}
-                  </span>
-                )}
-
-                <span
-                  className="
-                    rounded-full
-                    bg-slate-100
-                    px-3
-                    py-1
-                    text-xs
-                    font-medium
-                    text-slate-500
-                  "
-                >
-                  Live Preview
-                </span>
-              </div>
-
-              <h2
-                className={`
-                  ${styles.infoTitle}
-                  truncate
-                  text-xl
-                  font-bold
-                `}
-                style={{
-                  marginTop: "10px",
-                }}
-              >
-                {template.title}
-              </h2>
-
-              <p
-                className={`
-                  ${styles.infoText}
-                  max-w-2xl
-                  text-sm
-                  leading-6
-                `}
-                style={{
-                  marginTop: "5px",
-                }}
-              >
-                {template.description}
-              </p>
-            </div>
-
-            <div className="shrink-0 text-left sm:text-right">
-              <p
-                className={`
-                  ${styles.infoText}
-                  text-xs
-                `}
-              >
-                Rating
-              </p>
-
-              <p
-                className={`
-                  ${styles.infoTitle}
-                  text-lg
-                  font-bold
-                `}
-                style={{
-                  marginTop: "3px",
-                }}
-              >
-                {template.rating
-                  ? `${template.rating.toFixed(1)} / 5`
-                  : "No rating"}
-              </p>
-            </div>
           </div>
         </div>
 
@@ -511,7 +361,6 @@ export default function TemplateGallery({
             className="
               relative
               z-10
-              mx-auto
               flex
               max-w-6xl
               items-center
@@ -519,7 +368,9 @@ export default function TemplateGallery({
               gap-4
             "
             style={{
-              marginTop: "16px",
+              marginTop: "20px",
+              marginLeft: "auto",
+              marginRight: "auto",
             }}
           >
             <GalleryControls
@@ -527,7 +378,13 @@ export default function TemplateGallery({
               onPrevious={previous}
             />
 
-            <span className="text-xs text-muted-foreground">
+            <span
+              className="
+                text-xs
+                font-medium
+                text-muted-foreground
+              "
+            >
               Screenshot {current + 1} / {images.length}
             </span>
           </div>
@@ -542,7 +399,6 @@ export default function TemplateGallery({
             className="
               relative
               z-10
-              mx-auto
               grid
               max-w-6xl
               grid-cols-3
@@ -552,7 +408,9 @@ export default function TemplateGallery({
               lg:grid-cols-6
             "
             style={{
-              marginTop: "12px",
+              marginTop: "14px",
+              marginLeft: "auto",
+              marginRight: "auto",
             }}
           >
             {images.map((image, index) => (
