@@ -60,6 +60,69 @@ model User {
 }
 
 // =========================
+// Template Style
+// =========================
+
+model TemplateStyle {
+  // =========================
+  // Basic information
+  // =========================
+
+  id String @id
+
+  slug String @unique
+
+  name String
+
+  description String?
+
+  // =========================
+  // Theme configuration
+  // =========================
+
+  colors Json?
+
+  gradients Json?
+
+  typography Json?
+
+  layout Json?
+
+  // =========================
+  // Preview
+  // =========================
+
+  previewImage String?
+
+  // =========================
+  // Status
+  // =========================
+
+  isActive Boolean @default(true)
+
+  // =========================
+  // Templates using this style
+  // =========================
+
+  templates Template[]
+
+  // =========================
+  // Timestamps
+  // =========================
+
+  createdAt DateTime @default(now())
+
+  updatedAt DateTime @updatedAt
+
+  // =========================
+  // Indexes
+  // =========================
+
+  @@index([isActive])
+  @@index([createdAt])
+}
+
+// =========================
 // Template
 // =========================
 
@@ -113,6 +176,14 @@ model Template {
   // =========================
 
   techStack String[]
+
+  // =========================
+  // Template Style
+  // =========================
+
+  styleId String?
+
+  style TemplateStyle? @relation(fields: [styleId], references: [id], onDelete: SetNull)
 
   // =========================
   // Detail information
@@ -191,6 +262,7 @@ model Template {
   // =========================
 
   @@index([authorId])
+  @@index([styleId])
   @@index([category])
   @@index([status])
   @@index([featured])
@@ -279,14 +351,37 @@ model OrderItem {
 
   productName String
 
+  // =========================
+  // Style snapshot
+  // =========================
+
+  styleId String?
+
+  styleSlug String?
+
+  styleName String?
+
+  // =========================
+  // Pricing snapshot
+  // =========================
+
   unitPrice Float
 
   quantity Int
 
   subtotal Float
 
+  // =========================
+  // Timestamp
+  // =========================
+
   createdAt DateTime @default(now())
+
+  // =========================
+  // Indexes
+  // =========================
 
   @@index([orderId])
   @@index([productId])
+  @@index([styleId])
 }
