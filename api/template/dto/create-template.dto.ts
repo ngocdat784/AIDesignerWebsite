@@ -78,6 +78,14 @@ export class CreateTemplateDto {
   techStack?: string[];
 
   // =========================
+  // Template Style
+  // =========================
+
+  @IsOptional()
+  @IsString()
+  styleId?: string | null;
+
+  // =========================
   // Detail information
   // =========================
 

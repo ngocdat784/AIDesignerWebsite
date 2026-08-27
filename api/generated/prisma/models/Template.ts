@@ -59,6 +59,7 @@ export type TemplateMinAggregateOutputType = {
   coverImage: string | null
   category: string | null
   authorId: string | null
+  styleId: string | null
   rating: number | null
   reviews: number | null
   downloads: number | null
@@ -89,6 +90,7 @@ export type TemplateMaxAggregateOutputType = {
   coverImage: string | null
   category: string | null
   authorId: string | null
+  styleId: string | null
   rating: number | null
   reviews: number | null
   downloads: number | null
@@ -124,6 +126,7 @@ export type TemplateCountAggregateOutputType = {
   relatedTemplateIds: number
   authorId: number
   techStack: number
+  styleId: number
   includedFiles: number
   features: number
   installationSteps: number
@@ -185,6 +188,7 @@ export type TemplateMinAggregateInputType = {
   coverImage?: true
   category?: true
   authorId?: true
+  styleId?: true
   rating?: true
   reviews?: true
   downloads?: true
@@ -215,6 +219,7 @@ export type TemplateMaxAggregateInputType = {
   coverImage?: true
   category?: true
   authorId?: true
+  styleId?: true
   rating?: true
   reviews?: true
   downloads?: true
@@ -250,6 +255,7 @@ export type TemplateCountAggregateInputType = {
   relatedTemplateIds?: true
   authorId?: true
   techStack?: true
+  styleId?: true
   includedFiles?: true
   features?: true
   installationSteps?: true
@@ -377,6 +383,7 @@ export type TemplateGroupByOutputType = {
   relatedTemplateIds: string[]
   authorId: string
   techStack: string[]
+  styleId: string | null
   includedFiles: runtime.JsonValue | null
   features: string[]
   installationSteps: string[]
@@ -440,6 +447,7 @@ export type TemplateWhereInput = {
   relatedTemplateIds?: Prisma.StringNullableListFilter<"Template">
   authorId?: Prisma.StringFilter<"Template"> | string
   techStack?: Prisma.StringNullableListFilter<"Template">
+  styleId?: Prisma.StringNullableFilter<"Template"> | string | null
   includedFiles?: Prisma.JsonNullableFilter<"Template">
   features?: Prisma.StringNullableListFilter<"Template">
   installationSteps?: Prisma.StringNullableListFilter<"Template">
@@ -465,6 +473,7 @@ export type TemplateWhereInput = {
   createdAt?: Prisma.DateTimeFilter<"Template"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Template"> | Date | string
   author?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  style?: Prisma.XOR<Prisma.TemplateStyleNullableScalarRelationFilter, Prisma.TemplateStyleWhereInput> | null
 }
 
 export type TemplateOrderByWithRelationInput = {
@@ -481,6 +490,7 @@ export type TemplateOrderByWithRelationInput = {
   relatedTemplateIds?: Prisma.SortOrder
   authorId?: Prisma.SortOrder
   techStack?: Prisma.SortOrder
+  styleId?: Prisma.SortOrderInput | Prisma.SortOrder
   includedFiles?: Prisma.SortOrderInput | Prisma.SortOrder
   features?: Prisma.SortOrder
   installationSteps?: Prisma.SortOrder
@@ -506,6 +516,7 @@ export type TemplateOrderByWithRelationInput = {
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   author?: Prisma.UserOrderByWithRelationInput
+  style?: Prisma.TemplateStyleOrderByWithRelationInput
 }
 
 export type TemplateWhereUniqueInput = Prisma.AtLeast<{
@@ -525,6 +536,7 @@ export type TemplateWhereUniqueInput = Prisma.AtLeast<{
   relatedTemplateIds?: Prisma.StringNullableListFilter<"Template">
   authorId?: Prisma.StringFilter<"Template"> | string
   techStack?: Prisma.StringNullableListFilter<"Template">
+  styleId?: Prisma.StringNullableFilter<"Template"> | string | null
   includedFiles?: Prisma.JsonNullableFilter<"Template">
   features?: Prisma.StringNullableListFilter<"Template">
   installationSteps?: Prisma.StringNullableListFilter<"Template">
@@ -550,6 +562,7 @@ export type TemplateWhereUniqueInput = Prisma.AtLeast<{
   createdAt?: Prisma.DateTimeFilter<"Template"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Template"> | Date | string
   author?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  style?: Prisma.XOR<Prisma.TemplateStyleNullableScalarRelationFilter, Prisma.TemplateStyleWhereInput> | null
 }, "id" | "slug">
 
 export type TemplateOrderByWithAggregationInput = {
@@ -566,6 +579,7 @@ export type TemplateOrderByWithAggregationInput = {
   relatedTemplateIds?: Prisma.SortOrder
   authorId?: Prisma.SortOrder
   techStack?: Prisma.SortOrder
+  styleId?: Prisma.SortOrderInput | Prisma.SortOrder
   includedFiles?: Prisma.SortOrderInput | Prisma.SortOrder
   features?: Prisma.SortOrder
   installationSteps?: Prisma.SortOrder
@@ -614,6 +628,7 @@ export type TemplateScalarWhereWithAggregatesInput = {
   relatedTemplateIds?: Prisma.StringNullableListFilter<"Template">
   authorId?: Prisma.StringWithAggregatesFilter<"Template"> | string
   techStack?: Prisma.StringNullableListFilter<"Template">
+  styleId?: Prisma.StringNullableWithAggregatesFilter<"Template"> | string | null
   includedFiles?: Prisma.JsonNullableWithAggregatesFilter<"Template">
   features?: Prisma.StringNullableListFilter<"Template">
   installationSteps?: Prisma.StringNullableListFilter<"Template">
@@ -678,6 +693,7 @@ export type TemplateCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   author: Prisma.UserCreateNestedOneWithoutTemplatesInput
+  style?: Prisma.TemplateStyleCreateNestedOneWithoutTemplatesInput
 }
 
 export type TemplateUncheckedCreateInput = {
@@ -694,6 +710,7 @@ export type TemplateUncheckedCreateInput = {
   relatedTemplateIds?: Prisma.TemplateCreaterelatedTemplateIdsInput | string[]
   authorId: string
   techStack?: Prisma.TemplateCreatetechStackInput | string[]
+  styleId?: string | null
   includedFiles?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   features?: Prisma.TemplateCreatefeaturesInput | string[]
   installationSteps?: Prisma.TemplateCreateinstallationStepsInput | string[]
@@ -758,6 +775,7 @@ export type TemplateUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   author?: Prisma.UserUpdateOneRequiredWithoutTemplatesNestedInput
+  style?: Prisma.TemplateStyleUpdateOneWithoutTemplatesNestedInput
 }
 
 export type TemplateUncheckedUpdateInput = {
@@ -774,6 +792,7 @@ export type TemplateUncheckedUpdateInput = {
   relatedTemplateIds?: Prisma.TemplateUpdaterelatedTemplateIdsInput | string[]
   authorId?: Prisma.StringFieldUpdateOperationsInput | string
   techStack?: Prisma.TemplateUpdatetechStackInput | string[]
+  styleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   includedFiles?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   features?: Prisma.TemplateUpdatefeaturesInput | string[]
   installationSteps?: Prisma.TemplateUpdateinstallationStepsInput | string[]
@@ -814,6 +833,7 @@ export type TemplateCreateManyInput = {
   relatedTemplateIds?: Prisma.TemplateCreaterelatedTemplateIdsInput | string[]
   authorId: string
   techStack?: Prisma.TemplateCreatetechStackInput | string[]
+  styleId?: string | null
   includedFiles?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   features?: Prisma.TemplateCreatefeaturesInput | string[]
   installationSteps?: Prisma.TemplateCreateinstallationStepsInput | string[]
@@ -893,6 +913,7 @@ export type TemplateUncheckedUpdateManyInput = {
   relatedTemplateIds?: Prisma.TemplateUpdaterelatedTemplateIdsInput | string[]
   authorId?: Prisma.StringFieldUpdateOperationsInput | string
   techStack?: Prisma.TemplateUpdatetechStackInput | string[]
+  styleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   includedFiles?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   features?: Prisma.TemplateUpdatefeaturesInput | string[]
   installationSteps?: Prisma.TemplateUpdateinstallationStepsInput | string[]
@@ -951,6 +972,7 @@ export type TemplateCountOrderByAggregateInput = {
   relatedTemplateIds?: Prisma.SortOrder
   authorId?: Prisma.SortOrder
   techStack?: Prisma.SortOrder
+  styleId?: Prisma.SortOrder
   includedFiles?: Prisma.SortOrder
   features?: Prisma.SortOrder
   installationSteps?: Prisma.SortOrder
@@ -998,6 +1020,7 @@ export type TemplateMaxOrderByAggregateInput = {
   coverImage?: Prisma.SortOrder
   category?: Prisma.SortOrder
   authorId?: Prisma.SortOrder
+  styleId?: Prisma.SortOrder
   rating?: Prisma.SortOrder
   reviews?: Prisma.SortOrder
   downloads?: Prisma.SortOrder
@@ -1028,6 +1051,7 @@ export type TemplateMinOrderByAggregateInput = {
   coverImage?: Prisma.SortOrder
   category?: Prisma.SortOrder
   authorId?: Prisma.SortOrder
+  styleId?: Prisma.SortOrder
   rating?: Prisma.SortOrder
   reviews?: Prisma.SortOrder
   downloads?: Prisma.SortOrder
@@ -1100,6 +1124,48 @@ export type TemplateUncheckedUpdateManyWithoutAuthorNestedInput = {
   connect?: Prisma.TemplateWhereUniqueInput | Prisma.TemplateWhereUniqueInput[]
   update?: Prisma.TemplateUpdateWithWhereUniqueWithoutAuthorInput | Prisma.TemplateUpdateWithWhereUniqueWithoutAuthorInput[]
   updateMany?: Prisma.TemplateUpdateManyWithWhereWithoutAuthorInput | Prisma.TemplateUpdateManyWithWhereWithoutAuthorInput[]
+  deleteMany?: Prisma.TemplateScalarWhereInput | Prisma.TemplateScalarWhereInput[]
+}
+
+export type TemplateCreateNestedManyWithoutStyleInput = {
+  create?: Prisma.XOR<Prisma.TemplateCreateWithoutStyleInput, Prisma.TemplateUncheckedCreateWithoutStyleInput> | Prisma.TemplateCreateWithoutStyleInput[] | Prisma.TemplateUncheckedCreateWithoutStyleInput[]
+  connectOrCreate?: Prisma.TemplateCreateOrConnectWithoutStyleInput | Prisma.TemplateCreateOrConnectWithoutStyleInput[]
+  createMany?: Prisma.TemplateCreateManyStyleInputEnvelope
+  connect?: Prisma.TemplateWhereUniqueInput | Prisma.TemplateWhereUniqueInput[]
+}
+
+export type TemplateUncheckedCreateNestedManyWithoutStyleInput = {
+  create?: Prisma.XOR<Prisma.TemplateCreateWithoutStyleInput, Prisma.TemplateUncheckedCreateWithoutStyleInput> | Prisma.TemplateCreateWithoutStyleInput[] | Prisma.TemplateUncheckedCreateWithoutStyleInput[]
+  connectOrCreate?: Prisma.TemplateCreateOrConnectWithoutStyleInput | Prisma.TemplateCreateOrConnectWithoutStyleInput[]
+  createMany?: Prisma.TemplateCreateManyStyleInputEnvelope
+  connect?: Prisma.TemplateWhereUniqueInput | Prisma.TemplateWhereUniqueInput[]
+}
+
+export type TemplateUpdateManyWithoutStyleNestedInput = {
+  create?: Prisma.XOR<Prisma.TemplateCreateWithoutStyleInput, Prisma.TemplateUncheckedCreateWithoutStyleInput> | Prisma.TemplateCreateWithoutStyleInput[] | Prisma.TemplateUncheckedCreateWithoutStyleInput[]
+  connectOrCreate?: Prisma.TemplateCreateOrConnectWithoutStyleInput | Prisma.TemplateCreateOrConnectWithoutStyleInput[]
+  upsert?: Prisma.TemplateUpsertWithWhereUniqueWithoutStyleInput | Prisma.TemplateUpsertWithWhereUniqueWithoutStyleInput[]
+  createMany?: Prisma.TemplateCreateManyStyleInputEnvelope
+  set?: Prisma.TemplateWhereUniqueInput | Prisma.TemplateWhereUniqueInput[]
+  disconnect?: Prisma.TemplateWhereUniqueInput | Prisma.TemplateWhereUniqueInput[]
+  delete?: Prisma.TemplateWhereUniqueInput | Prisma.TemplateWhereUniqueInput[]
+  connect?: Prisma.TemplateWhereUniqueInput | Prisma.TemplateWhereUniqueInput[]
+  update?: Prisma.TemplateUpdateWithWhereUniqueWithoutStyleInput | Prisma.TemplateUpdateWithWhereUniqueWithoutStyleInput[]
+  updateMany?: Prisma.TemplateUpdateManyWithWhereWithoutStyleInput | Prisma.TemplateUpdateManyWithWhereWithoutStyleInput[]
+  deleteMany?: Prisma.TemplateScalarWhereInput | Prisma.TemplateScalarWhereInput[]
+}
+
+export type TemplateUncheckedUpdateManyWithoutStyleNestedInput = {
+  create?: Prisma.XOR<Prisma.TemplateCreateWithoutStyleInput, Prisma.TemplateUncheckedCreateWithoutStyleInput> | Prisma.TemplateCreateWithoutStyleInput[] | Prisma.TemplateUncheckedCreateWithoutStyleInput[]
+  connectOrCreate?: Prisma.TemplateCreateOrConnectWithoutStyleInput | Prisma.TemplateCreateOrConnectWithoutStyleInput[]
+  upsert?: Prisma.TemplateUpsertWithWhereUniqueWithoutStyleInput | Prisma.TemplateUpsertWithWhereUniqueWithoutStyleInput[]
+  createMany?: Prisma.TemplateCreateManyStyleInputEnvelope
+  set?: Prisma.TemplateWhereUniqueInput | Prisma.TemplateWhereUniqueInput[]
+  disconnect?: Prisma.TemplateWhereUniqueInput | Prisma.TemplateWhereUniqueInput[]
+  delete?: Prisma.TemplateWhereUniqueInput | Prisma.TemplateWhereUniqueInput[]
+  connect?: Prisma.TemplateWhereUniqueInput | Prisma.TemplateWhereUniqueInput[]
+  update?: Prisma.TemplateUpdateWithWhereUniqueWithoutStyleInput | Prisma.TemplateUpdateWithWhereUniqueWithoutStyleInput[]
+  updateMany?: Prisma.TemplateUpdateManyWithWhereWithoutStyleInput | Prisma.TemplateUpdateManyWithWhereWithoutStyleInput[]
   deleteMany?: Prisma.TemplateScalarWhereInput | Prisma.TemplateScalarWhereInput[]
 }
 
@@ -1199,10 +1265,6 @@ export type NullableFloatFieldUpdateOperationsInput = {
   divide?: number
 }
 
-export type BoolFieldUpdateOperationsInput = {
-  set?: boolean
-}
-
 export type NullableIntFieldUpdateOperationsInput = {
   set?: number | null
   increment?: number
@@ -1248,6 +1310,7 @@ export type TemplateCreateWithoutAuthorInput = {
   version?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  style?: Prisma.TemplateStyleCreateNestedOneWithoutTemplatesInput
 }
 
 export type TemplateUncheckedCreateWithoutAuthorInput = {
@@ -1263,6 +1326,7 @@ export type TemplateUncheckedCreateWithoutAuthorInput = {
   tags?: Prisma.TemplateCreatetagsInput | string[]
   relatedTemplateIds?: Prisma.TemplateCreaterelatedTemplateIdsInput | string[]
   techStack?: Prisma.TemplateCreatetechStackInput | string[]
+  styleId?: string | null
   includedFiles?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   features?: Prisma.TemplateCreatefeaturesInput | string[]
   installationSteps?: Prisma.TemplateCreateinstallationStepsInput | string[]
@@ -1332,6 +1396,7 @@ export type TemplateScalarWhereInput = {
   relatedTemplateIds?: Prisma.StringNullableListFilter<"Template">
   authorId?: Prisma.StringFilter<"Template"> | string
   techStack?: Prisma.StringNullableListFilter<"Template">
+  styleId?: Prisma.StringNullableFilter<"Template"> | string | null
   includedFiles?: Prisma.JsonNullableFilter<"Template">
   features?: Prisma.StringNullableListFilter<"Template">
   installationSteps?: Prisma.StringNullableListFilter<"Template">
@@ -1358,6 +1423,112 @@ export type TemplateScalarWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Template"> | Date | string
 }
 
+export type TemplateCreateWithoutStyleInput = {
+  id: string
+  slug: string
+  title: string
+  description: string
+  thumbnail: string
+  coverImage?: string | null
+  images?: Prisma.TemplateCreateimagesInput | string[]
+  gallery?: Prisma.TemplateCreategalleryInput | string[]
+  category: string
+  tags?: Prisma.TemplateCreatetagsInput | string[]
+  relatedTemplateIds?: Prisma.TemplateCreaterelatedTemplateIdsInput | string[]
+  techStack?: Prisma.TemplateCreatetechStackInput | string[]
+  includedFiles?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  features?: Prisma.TemplateCreatefeaturesInput | string[]
+  installationSteps?: Prisma.TemplateCreateinstallationStepsInput | string[]
+  requirements?: Prisma.TemplateCreaterequirementsInput | string[]
+  changelog?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rating?: number
+  reviews?: number
+  downloads?: number
+  favorites?: number
+  views?: number
+  price: number
+  originalPrice?: number | null
+  discountPrice?: number | null
+  featured?: boolean
+  newest?: boolean
+  isFeatured?: boolean
+  isPremium?: boolean
+  status?: string
+  stock?: number | null
+  license?: string | null
+  demoUrl?: string | null
+  version?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  author: Prisma.UserCreateNestedOneWithoutTemplatesInput
+}
+
+export type TemplateUncheckedCreateWithoutStyleInput = {
+  id: string
+  slug: string
+  title: string
+  description: string
+  thumbnail: string
+  coverImage?: string | null
+  images?: Prisma.TemplateCreateimagesInput | string[]
+  gallery?: Prisma.TemplateCreategalleryInput | string[]
+  category: string
+  tags?: Prisma.TemplateCreatetagsInput | string[]
+  relatedTemplateIds?: Prisma.TemplateCreaterelatedTemplateIdsInput | string[]
+  authorId: string
+  techStack?: Prisma.TemplateCreatetechStackInput | string[]
+  includedFiles?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  features?: Prisma.TemplateCreatefeaturesInput | string[]
+  installationSteps?: Prisma.TemplateCreateinstallationStepsInput | string[]
+  requirements?: Prisma.TemplateCreaterequirementsInput | string[]
+  changelog?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rating?: number
+  reviews?: number
+  downloads?: number
+  favorites?: number
+  views?: number
+  price: number
+  originalPrice?: number | null
+  discountPrice?: number | null
+  featured?: boolean
+  newest?: boolean
+  isFeatured?: boolean
+  isPremium?: boolean
+  status?: string
+  stock?: number | null
+  license?: string | null
+  demoUrl?: string | null
+  version?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type TemplateCreateOrConnectWithoutStyleInput = {
+  where: Prisma.TemplateWhereUniqueInput
+  create: Prisma.XOR<Prisma.TemplateCreateWithoutStyleInput, Prisma.TemplateUncheckedCreateWithoutStyleInput>
+}
+
+export type TemplateCreateManyStyleInputEnvelope = {
+  data: Prisma.TemplateCreateManyStyleInput | Prisma.TemplateCreateManyStyleInput[]
+  skipDuplicates?: boolean
+}
+
+export type TemplateUpsertWithWhereUniqueWithoutStyleInput = {
+  where: Prisma.TemplateWhereUniqueInput
+  update: Prisma.XOR<Prisma.TemplateUpdateWithoutStyleInput, Prisma.TemplateUncheckedUpdateWithoutStyleInput>
+  create: Prisma.XOR<Prisma.TemplateCreateWithoutStyleInput, Prisma.TemplateUncheckedCreateWithoutStyleInput>
+}
+
+export type TemplateUpdateWithWhereUniqueWithoutStyleInput = {
+  where: Prisma.TemplateWhereUniqueInput
+  data: Prisma.XOR<Prisma.TemplateUpdateWithoutStyleInput, Prisma.TemplateUncheckedUpdateWithoutStyleInput>
+}
+
+export type TemplateUpdateManyWithWhereWithoutStyleInput = {
+  where: Prisma.TemplateScalarWhereInput
+  data: Prisma.XOR<Prisma.TemplateUpdateManyMutationInput, Prisma.TemplateUncheckedUpdateManyWithoutStyleInput>
+}
+
 export type TemplateCreateManyAuthorInput = {
   id: string
   slug: string
@@ -1371,6 +1542,7 @@ export type TemplateCreateManyAuthorInput = {
   tags?: Prisma.TemplateCreatetagsInput | string[]
   relatedTemplateIds?: Prisma.TemplateCreaterelatedTemplateIdsInput | string[]
   techStack?: Prisma.TemplateCreatetechStackInput | string[]
+  styleId?: string | null
   includedFiles?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   features?: Prisma.TemplateCreatefeaturesInput | string[]
   installationSteps?: Prisma.TemplateCreateinstallationStepsInput | string[]
@@ -1434,6 +1606,7 @@ export type TemplateUpdateWithoutAuthorInput = {
   version?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  style?: Prisma.TemplateStyleUpdateOneWithoutTemplatesNestedInput
 }
 
 export type TemplateUncheckedUpdateWithoutAuthorInput = {
@@ -1449,6 +1622,7 @@ export type TemplateUncheckedUpdateWithoutAuthorInput = {
   tags?: Prisma.TemplateUpdatetagsInput | string[]
   relatedTemplateIds?: Prisma.TemplateUpdaterelatedTemplateIdsInput | string[]
   techStack?: Prisma.TemplateUpdatetechStackInput | string[]
+  styleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   includedFiles?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   features?: Prisma.TemplateUpdatefeaturesInput | string[]
   installationSteps?: Prisma.TemplateUpdateinstallationStepsInput | string[]
@@ -1487,6 +1661,167 @@ export type TemplateUncheckedUpdateManyWithoutAuthorInput = {
   category?: Prisma.StringFieldUpdateOperationsInput | string
   tags?: Prisma.TemplateUpdatetagsInput | string[]
   relatedTemplateIds?: Prisma.TemplateUpdaterelatedTemplateIdsInput | string[]
+  techStack?: Prisma.TemplateUpdatetechStackInput | string[]
+  styleId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  includedFiles?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  features?: Prisma.TemplateUpdatefeaturesInput | string[]
+  installationSteps?: Prisma.TemplateUpdateinstallationStepsInput | string[]
+  requirements?: Prisma.TemplateUpdaterequirementsInput | string[]
+  changelog?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rating?: Prisma.FloatFieldUpdateOperationsInput | number
+  reviews?: Prisma.IntFieldUpdateOperationsInput | number
+  downloads?: Prisma.IntFieldUpdateOperationsInput | number
+  favorites?: Prisma.IntFieldUpdateOperationsInput | number
+  views?: Prisma.IntFieldUpdateOperationsInput | number
+  price?: Prisma.FloatFieldUpdateOperationsInput | number
+  originalPrice?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  discountPrice?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  featured?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  newest?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isPremium?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  stock?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  license?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  demoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type TemplateCreateManyStyleInput = {
+  id: string
+  slug: string
+  title: string
+  description: string
+  thumbnail: string
+  coverImage?: string | null
+  images?: Prisma.TemplateCreateimagesInput | string[]
+  gallery?: Prisma.TemplateCreategalleryInput | string[]
+  category: string
+  tags?: Prisma.TemplateCreatetagsInput | string[]
+  relatedTemplateIds?: Prisma.TemplateCreaterelatedTemplateIdsInput | string[]
+  authorId: string
+  techStack?: Prisma.TemplateCreatetechStackInput | string[]
+  includedFiles?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  features?: Prisma.TemplateCreatefeaturesInput | string[]
+  installationSteps?: Prisma.TemplateCreateinstallationStepsInput | string[]
+  requirements?: Prisma.TemplateCreaterequirementsInput | string[]
+  changelog?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rating?: number
+  reviews?: number
+  downloads?: number
+  favorites?: number
+  views?: number
+  price: number
+  originalPrice?: number | null
+  discountPrice?: number | null
+  featured?: boolean
+  newest?: boolean
+  isFeatured?: boolean
+  isPremium?: boolean
+  status?: string
+  stock?: number | null
+  license?: string | null
+  demoUrl?: string | null
+  version?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type TemplateUpdateWithoutStyleInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  thumbnail?: Prisma.StringFieldUpdateOperationsInput | string
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  images?: Prisma.TemplateUpdateimagesInput | string[]
+  gallery?: Prisma.TemplateUpdategalleryInput | string[]
+  category?: Prisma.StringFieldUpdateOperationsInput | string
+  tags?: Prisma.TemplateUpdatetagsInput | string[]
+  relatedTemplateIds?: Prisma.TemplateUpdaterelatedTemplateIdsInput | string[]
+  techStack?: Prisma.TemplateUpdatetechStackInput | string[]
+  includedFiles?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  features?: Prisma.TemplateUpdatefeaturesInput | string[]
+  installationSteps?: Prisma.TemplateUpdateinstallationStepsInput | string[]
+  requirements?: Prisma.TemplateUpdaterequirementsInput | string[]
+  changelog?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rating?: Prisma.FloatFieldUpdateOperationsInput | number
+  reviews?: Prisma.IntFieldUpdateOperationsInput | number
+  downloads?: Prisma.IntFieldUpdateOperationsInput | number
+  favorites?: Prisma.IntFieldUpdateOperationsInput | number
+  views?: Prisma.IntFieldUpdateOperationsInput | number
+  price?: Prisma.FloatFieldUpdateOperationsInput | number
+  originalPrice?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  discountPrice?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  featured?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  newest?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isPremium?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  stock?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  license?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  demoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  author?: Prisma.UserUpdateOneRequiredWithoutTemplatesNestedInput
+}
+
+export type TemplateUncheckedUpdateWithoutStyleInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  thumbnail?: Prisma.StringFieldUpdateOperationsInput | string
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  images?: Prisma.TemplateUpdateimagesInput | string[]
+  gallery?: Prisma.TemplateUpdategalleryInput | string[]
+  category?: Prisma.StringFieldUpdateOperationsInput | string
+  tags?: Prisma.TemplateUpdatetagsInput | string[]
+  relatedTemplateIds?: Prisma.TemplateUpdaterelatedTemplateIdsInput | string[]
+  authorId?: Prisma.StringFieldUpdateOperationsInput | string
+  techStack?: Prisma.TemplateUpdatetechStackInput | string[]
+  includedFiles?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  features?: Prisma.TemplateUpdatefeaturesInput | string[]
+  installationSteps?: Prisma.TemplateUpdateinstallationStepsInput | string[]
+  requirements?: Prisma.TemplateUpdaterequirementsInput | string[]
+  changelog?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
+  rating?: Prisma.FloatFieldUpdateOperationsInput | number
+  reviews?: Prisma.IntFieldUpdateOperationsInput | number
+  downloads?: Prisma.IntFieldUpdateOperationsInput | number
+  favorites?: Prisma.IntFieldUpdateOperationsInput | number
+  views?: Prisma.IntFieldUpdateOperationsInput | number
+  price?: Prisma.FloatFieldUpdateOperationsInput | number
+  originalPrice?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  discountPrice?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  featured?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  newest?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isPremium?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  stock?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  license?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  demoUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  version?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type TemplateUncheckedUpdateManyWithoutStyleInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  slug?: Prisma.StringFieldUpdateOperationsInput | string
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  thumbnail?: Prisma.StringFieldUpdateOperationsInput | string
+  coverImage?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  images?: Prisma.TemplateUpdateimagesInput | string[]
+  gallery?: Prisma.TemplateUpdategalleryInput | string[]
+  category?: Prisma.StringFieldUpdateOperationsInput | string
+  tags?: Prisma.TemplateUpdatetagsInput | string[]
+  relatedTemplateIds?: Prisma.TemplateUpdaterelatedTemplateIdsInput | string[]
+  authorId?: Prisma.StringFieldUpdateOperationsInput | string
   techStack?: Prisma.TemplateUpdatetechStackInput | string[]
   includedFiles?: Prisma.NullableJsonNullValueInput | runtime.InputJsonValue
   features?: Prisma.TemplateUpdatefeaturesInput | string[]
@@ -1530,6 +1865,7 @@ export type TemplateSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   relatedTemplateIds?: boolean
   authorId?: boolean
   techStack?: boolean
+  styleId?: boolean
   includedFiles?: boolean
   features?: boolean
   installationSteps?: boolean
@@ -1555,6 +1891,7 @@ export type TemplateSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   createdAt?: boolean
   updatedAt?: boolean
   author?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  style?: boolean | Prisma.Template$styleArgs<ExtArgs>
 }, ExtArgs["result"]["template"]>
 
 export type TemplateSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1571,6 +1908,7 @@ export type TemplateSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   relatedTemplateIds?: boolean
   authorId?: boolean
   techStack?: boolean
+  styleId?: boolean
   includedFiles?: boolean
   features?: boolean
   installationSteps?: boolean
@@ -1596,6 +1934,7 @@ export type TemplateSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   createdAt?: boolean
   updatedAt?: boolean
   author?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  style?: boolean | Prisma.Template$styleArgs<ExtArgs>
 }, ExtArgs["result"]["template"]>
 
 export type TemplateSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1612,6 +1951,7 @@ export type TemplateSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   relatedTemplateIds?: boolean
   authorId?: boolean
   techStack?: boolean
+  styleId?: boolean
   includedFiles?: boolean
   features?: boolean
   installationSteps?: boolean
@@ -1637,6 +1977,7 @@ export type TemplateSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   createdAt?: boolean
   updatedAt?: boolean
   author?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  style?: boolean | Prisma.Template$styleArgs<ExtArgs>
 }, ExtArgs["result"]["template"]>
 
 export type TemplateSelectScalar = {
@@ -1653,6 +1994,7 @@ export type TemplateSelectScalar = {
   relatedTemplateIds?: boolean
   authorId?: boolean
   techStack?: boolean
+  styleId?: boolean
   includedFiles?: boolean
   features?: boolean
   installationSteps?: boolean
@@ -1679,21 +2021,25 @@ export type TemplateSelectScalar = {
   updatedAt?: boolean
 }
 
-export type TemplateOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "slug" | "title" | "description" | "thumbnail" | "coverImage" | "images" | "gallery" | "category" | "tags" | "relatedTemplateIds" | "authorId" | "techStack" | "includedFiles" | "features" | "installationSteps" | "requirements" | "changelog" | "rating" | "reviews" | "downloads" | "favorites" | "views" | "price" | "originalPrice" | "discountPrice" | "featured" | "newest" | "isFeatured" | "isPremium" | "status" | "stock" | "license" | "demoUrl" | "version" | "createdAt" | "updatedAt", ExtArgs["result"]["template"]>
+export type TemplateOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "slug" | "title" | "description" | "thumbnail" | "coverImage" | "images" | "gallery" | "category" | "tags" | "relatedTemplateIds" | "authorId" | "techStack" | "styleId" | "includedFiles" | "features" | "installationSteps" | "requirements" | "changelog" | "rating" | "reviews" | "downloads" | "favorites" | "views" | "price" | "originalPrice" | "discountPrice" | "featured" | "newest" | "isFeatured" | "isPremium" | "status" | "stock" | "license" | "demoUrl" | "version" | "createdAt" | "updatedAt", ExtArgs["result"]["template"]>
 export type TemplateInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   author?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  style?: boolean | Prisma.Template$styleArgs<ExtArgs>
 }
 export type TemplateIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   author?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  style?: boolean | Prisma.Template$styleArgs<ExtArgs>
 }
 export type TemplateIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   author?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  style?: boolean | Prisma.Template$styleArgs<ExtArgs>
 }
 
 export type $TemplatePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Template"
   objects: {
     author: Prisma.$UserPayload<ExtArgs>
+    style: Prisma.$TemplateStylePayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1709,6 +2055,7 @@ export type $TemplatePayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     relatedTemplateIds: string[]
     authorId: string
     techStack: string[]
+    styleId: string | null
     includedFiles: runtime.JsonValue | null
     features: string[]
     installationSteps: string[]
@@ -2128,6 +2475,7 @@ readonly fields: TemplateFieldRefs;
 export interface Prisma__TemplateClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   author<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  style<T extends Prisma.Template$styleArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Template$styleArgs<ExtArgs>>): Prisma.Prisma__TemplateStyleClient<runtime.Types.Result.GetResult<Prisma.$TemplateStylePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2170,6 +2518,7 @@ export interface TemplateFieldRefs {
   readonly relatedTemplateIds: Prisma.FieldRef<"Template", 'String[]'>
   readonly authorId: Prisma.FieldRef<"Template", 'String'>
   readonly techStack: Prisma.FieldRef<"Template", 'String[]'>
+  readonly styleId: Prisma.FieldRef<"Template", 'String'>
   readonly includedFiles: Prisma.FieldRef<"Template", 'Json'>
   readonly features: Prisma.FieldRef<"Template", 'String[]'>
   readonly installationSteps: Prisma.FieldRef<"Template", 'String[]'>
@@ -2592,6 +2941,25 @@ export type TemplateDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Inte
    * Limit how many Templates to delete.
    */
   limit?: number
+}
+
+/**
+ * Template.style
+ */
+export type Template$styleArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the TemplateStyle
+   */
+  select?: Prisma.TemplateStyleSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the TemplateStyle
+   */
+  omit?: Prisma.TemplateStyleOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TemplateStyleInclude<ExtArgs> | null
+  where?: Prisma.TemplateStyleWhereInput
 }
 
 /**

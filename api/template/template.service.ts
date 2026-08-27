@@ -16,6 +16,8 @@ import { CurrentUserPayload } from "../auth/interfaces/current-user.interface";
 
 import { TEMPLATE_REPOSITORY } from "../common/constants/repository.tokens";
 
+import { ITemplateStyleRepository } from "../template-style/interfaces/template-style.repository.interface";
+
 @Injectable()
 export class TemplateService
   implements TemplateServiceInterface
@@ -23,6 +25,9 @@ export class TemplateService
   constructor(
     @Inject(TEMPLATE_REPOSITORY)
     private readonly templateRepository: TemplateRepositoryInterface,
+
+    @Inject("TEMPLATE_STYLE_REPOSITORY")
+    private readonly templateStyleRepository: ITemplateStyleRepository,
   ) {}
 
   // =========================================================
@@ -92,6 +97,58 @@ export class TemplateService
   }
 
   // =========================================================
+  // Validate Template Style
+  // =========================================================
+
+  private async validateStyle(
+    styleId?: string | null,
+  ) {
+    /*
+     * Không truyền styleId:
+     * Không cần kiểm tra.
+     */
+
+    if (styleId === undefined) {
+      return;
+    }
+
+    /*
+     * styleId = null:
+     * Cho phép template không sử dụng style.
+     */
+
+    if (styleId === null) {
+      return;
+    }
+
+    /*
+     * styleId có giá trị:
+     * Kiểm tra TemplateStyle tồn tại.
+     */
+
+    const style =
+      await this.templateStyleRepository.findById(
+        styleId,
+      );
+
+    if (!style) {
+      throw new NotFoundException(
+        `Template style with id ${styleId} not found.`,
+      );
+    }
+
+    /*
+     * Không cho gán style đã bị inactive.
+     */
+
+    if (!style.isActive) {
+      throw new ForbiddenException(
+        `Template style with id ${styleId} is inactive.`,
+      );
+    }
+  }
+
+  // =========================================================
   // Create
   // =========================================================
 
@@ -107,6 +164,12 @@ export class TemplateService
      * Không lấy authorId từ request body.
      * Template luôn được gắn với user hiện tại.
      */
+
+    /*
+     * Kiểm tra style trước khi tạo template.
+     */
+
+    await this.validateStyle(dto.styleId);
 
     const data = {
       ...dto,
@@ -141,6 +204,18 @@ export class TemplateService
       throw new NotFoundException(
         `Template with id ${id} not found.`,
       );
+    }
+
+    /*
+     * Nếu request muốn thay đổi style,
+     * kiểm tra style mới trước.
+     *
+     * Nếu styleId không xuất hiện trong request,
+     * giữ nguyên style hiện tại.
+     */
+
+    if (dto.styleId !== undefined) {
+      await this.validateStyle(dto.styleId);
     }
 
     /*

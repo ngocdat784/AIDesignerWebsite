@@ -52,6 +52,7 @@ export const AnyNull = runtime.AnyNull
 
 export const ModelName = {
   User: 'User',
+  TemplateStyle: 'TemplateStyle',
   Template: 'Template',
   Order: 'Order',
   OrderBilling: 'OrderBilling',
@@ -88,6 +89,24 @@ export const UserScalarFieldEnum = {
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
 
 
+export const TemplateStyleScalarFieldEnum = {
+  id: 'id',
+  slug: 'slug',
+  name: 'name',
+  description: 'description',
+  colors: 'colors',
+  gradients: 'gradients',
+  typography: 'typography',
+  layout: 'layout',
+  previewImage: 'previewImage',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type TemplateStyleScalarFieldEnum = (typeof TemplateStyleScalarFieldEnum)[keyof typeof TemplateStyleScalarFieldEnum]
+
+
 export const TemplateScalarFieldEnum = {
   id: 'id',
   slug: 'slug',
@@ -102,6 +121,7 @@ export const TemplateScalarFieldEnum = {
   relatedTemplateIds: 'relatedTemplateIds',
   authorId: 'authorId',
   techStack: 'techStack',
+  styleId: 'styleId',
   includedFiles: 'includedFiles',
   features: 'features',
   installationSteps: 'installationSteps',
@@ -167,6 +187,9 @@ export const OrderItemScalarFieldEnum = {
   orderId: 'orderId',
   productId: 'productId',
   productName: 'productName',
+  styleId: 'styleId',
+  styleSlug: 'styleSlug',
+  styleName: 'styleName',
   unitPrice: 'unitPrice',
   quantity: 'quantity',
   subtotal: 'subtotal',

@@ -47,6 +47,11 @@ export { Prisma }
  */
 export type User = Prisma.UserModel
 /**
+ * Model TemplateStyle
+ * 
+ */
+export type TemplateStyle = Prisma.TemplateStyleModel
+/**
  * Model Template
  * 
  */

@@ -6,6 +6,7 @@ import { UserModule } from "./user/user.module";
 import { TemplateModule } from "./template/template.module";
 import { OrderModule } from "./order/order.module";
 import { AuthModule } from "./auth/auth.module";
+import { TemplateStyleModule } from "./template-style/template-style.module";
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { AuthModule } from "./auth/auth.module";
     TemplateModule,
     OrderModule,
     AuthModule,
+    TemplateStyleModule,
   ],
 })
 export class AppModule {}

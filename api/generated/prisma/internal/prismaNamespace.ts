@@ -398,6 +398,7 @@ type FieldRefInputType<Model, FieldType> = Model extends never ? never : FieldRe
 
 export const ModelName = {
   User: 'User',
+  TemplateStyle: 'TemplateStyle',
   Template: 'Template',
   Order: 'Order',
   OrderBilling: 'OrderBilling',
@@ -417,7 +418,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "template" | "order" | "orderBilling" | "orderItem"
+    modelProps: "user" | "templateStyle" | "template" | "order" | "orderBilling" | "orderItem"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -492,6 +493,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.UserCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.UserCountAggregateOutputType> | number
+        }
+      }
+    }
+    TemplateStyle: {
+      payload: Prisma.$TemplateStylePayload<ExtArgs>
+      fields: Prisma.TemplateStyleFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.TemplateStyleFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TemplateStylePayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.TemplateStyleFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TemplateStylePayload>
+        }
+        findFirst: {
+          args: Prisma.TemplateStyleFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TemplateStylePayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.TemplateStyleFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TemplateStylePayload>
+        }
+        findMany: {
+          args: Prisma.TemplateStyleFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TemplateStylePayload>[]
+        }
+        create: {
+          args: Prisma.TemplateStyleCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TemplateStylePayload>
+        }
+        createMany: {
+          args: Prisma.TemplateStyleCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.TemplateStyleCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TemplateStylePayload>[]
+        }
+        delete: {
+          args: Prisma.TemplateStyleDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TemplateStylePayload>
+        }
+        update: {
+          args: Prisma.TemplateStyleUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TemplateStylePayload>
+        }
+        deleteMany: {
+          args: Prisma.TemplateStyleDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.TemplateStyleUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.TemplateStyleUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TemplateStylePayload>[]
+        }
+        upsert: {
+          args: Prisma.TemplateStyleUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TemplateStylePayload>
+        }
+        aggregate: {
+          args: Prisma.TemplateStyleAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateTemplateStyle>
+        }
+        groupBy: {
+          args: Prisma.TemplateStyleGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TemplateStyleGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.TemplateStyleCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TemplateStyleCountAggregateOutputType> | number
         }
       }
     }
@@ -844,6 +919,24 @@ export const UserScalarFieldEnum = {
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
 
 
+export const TemplateStyleScalarFieldEnum = {
+  id: 'id',
+  slug: 'slug',
+  name: 'name',
+  description: 'description',
+  colors: 'colors',
+  gradients: 'gradients',
+  typography: 'typography',
+  layout: 'layout',
+  previewImage: 'previewImage',
+  isActive: 'isActive',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type TemplateStyleScalarFieldEnum = (typeof TemplateStyleScalarFieldEnum)[keyof typeof TemplateStyleScalarFieldEnum]
+
+
 export const TemplateScalarFieldEnum = {
   id: 'id',
   slug: 'slug',
@@ -858,6 +951,7 @@ export const TemplateScalarFieldEnum = {
   relatedTemplateIds: 'relatedTemplateIds',
   authorId: 'authorId',
   techStack: 'techStack',
+  styleId: 'styleId',
   includedFiles: 'includedFiles',
   features: 'features',
   installationSteps: 'installationSteps',
@@ -923,6 +1017,9 @@ export const OrderItemScalarFieldEnum = {
   orderId: 'orderId',
   productId: 'productId',
   productName: 'productName',
+  styleId: 'styleId',
+  styleSlug: 'styleSlug',
+  styleName: 'styleName',
   unitPrice: 'unitPrice',
   quantity: 'quantity',
   subtotal: 'subtotal',
@@ -1036,6 +1133,13 @@ export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$Prisma
 
 
 /**
+ * Reference to a field of type 'Boolean'
+ */
+export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+/**
  * Reference to a field of type 'Float'
  */
 export type FloatFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Float'>
@@ -1060,13 +1164,6 @@ export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'In
  * Reference to a field of type 'Int[]'
  */
 export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
-    
-
-
-/**
- * Reference to a field of type 'Boolean'
- */
-export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
     
 
 
@@ -1249,6 +1346,7 @@ export interface PrismaClientOptionsWithAdapter extends PrismaClientBaseOptions 
 export type PrismaClientOptions = PrismaClientOptionsWithAccelerateUrl | PrismaClientOptionsWithAdapter
 export type GlobalOmitConfig = {
   user?: Prisma.UserOmit
+  templateStyle?: Prisma.TemplateStyleOmit
   template?: Prisma.TemplateOmit
   order?: Prisma.OrderOmit
   orderBilling?: Prisma.OrderBillingOmit

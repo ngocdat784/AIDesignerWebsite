@@ -80,6 +80,14 @@ export class UpdateTemplateDto {
   techStack?: string[];
 
   // =========================
+  // Template Style
+  // =========================
+
+  @IsOptional()
+  @IsString()
+  styleId?: string | null;
+
+  // =========================
   // Detail information
   // =========================
 

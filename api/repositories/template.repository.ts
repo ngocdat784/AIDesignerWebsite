@@ -34,6 +34,7 @@ export class TemplateRepository
 
         include: {
           author: true,
+          style: true,
         },
       });
     } catch (error) {
@@ -54,6 +55,7 @@ export class TemplateRepository
 
         include: {
           author: true,
+          style: true,
         },
       });
     } catch (error) {
@@ -74,6 +76,7 @@ export class TemplateRepository
 
         include: {
           author: true,
+          style: true,
         },
       });
     } catch (error) {
@@ -98,6 +101,7 @@ export class TemplateRepository
 
         include: {
           author: true,
+          style: true,
         },
       });
     } catch (error) {
@@ -122,8 +126,34 @@ export class TemplateRepository
 
         include: {
           author: true,
+          style: true,
         },
       });
+    } catch (error) {
+      handlePrismaException(error);
+    }
+  }
+
+  // =========================
+  // GET style by Template
+  // =========================
+
+  async getStyleByTemplateId(
+    templateId: string,
+  ) {
+    try {
+      const template =
+        await this.database.template.findUnique({
+          where: {
+            id: templateId,
+          },
+
+          select: {
+            style: true,
+          },
+        });
+
+      return template?.style ?? null;
     } catch (error) {
       handlePrismaException(error);
     }
@@ -168,7 +198,8 @@ export class TemplateRepository
           // Category / Tags
           // =========================
 
-          category: data.category,
+          category:
+            data.category,
 
           tags:
             data.tags ?? [],
@@ -180,7 +211,8 @@ export class TemplateRepository
           // Author
           // =========================
 
-          authorId: data.authorId,
+          authorId:
+            data.authorId,
 
           // =========================
           // Technology
@@ -188,6 +220,13 @@ export class TemplateRepository
 
           techStack:
             data.techStack ?? [],
+
+          // =========================
+          // Template Style
+          // =========================
+
+          styleId:
+            data.styleId ?? null,
 
           // =========================
           // Detail
@@ -235,7 +274,8 @@ export class TemplateRepository
           // Pricing
           // =========================
 
-          price: data.price,
+          price:
+            data.price,
 
           originalPrice:
             data.originalPrice ?? null,
@@ -287,6 +327,7 @@ export class TemplateRepository
 
         include: {
           author: true,
+          style: true,
         },
       });
     } catch (error) {
@@ -313,16 +354,24 @@ export class TemplateRepository
           // Basic
           // =========================
 
+          ...(data.slug !== undefined && {
+            slug:
+              data.slug,
+          }),
+
           ...(data.title !== undefined && {
-            title: data.title,
+            title:
+              data.title,
           }),
 
           ...(data.description !== undefined && {
-            description: data.description,
+            description:
+              data.description,
           }),
 
           ...(data.thumbnail !== undefined && {
-            thumbnail: data.thumbnail,
+            thumbnail:
+              data.thumbnail,
           }),
 
           // =========================
@@ -330,15 +379,18 @@ export class TemplateRepository
           // =========================
 
           ...(data.coverImage !== undefined && {
-            coverImage: data.coverImage,
+            coverImage:
+              data.coverImage,
           }),
 
           ...(data.images !== undefined && {
-            images: data.images,
+            images:
+              data.images,
           }),
 
           ...(data.gallery !== undefined && {
-            gallery: data.gallery,
+            gallery:
+              data.gallery,
           }),
 
           // =========================
@@ -346,11 +398,13 @@ export class TemplateRepository
           // =========================
 
           ...(data.category !== undefined && {
-            category: data.category,
+            category:
+              data.category,
           }),
 
           ...(data.tags !== undefined && {
-            tags: data.tags,
+            tags:
+              data.tags,
           }),
 
           ...(data.relatedTemplateIds !== undefined && {
@@ -363,7 +417,17 @@ export class TemplateRepository
           // =========================
 
           ...(data.techStack !== undefined && {
-            techStack: data.techStack,
+            techStack:
+              data.techStack,
+          }),
+
+          // =========================
+          // Template Style
+          // =========================
+
+          ...(data.styleId !== undefined && {
+            styleId:
+              data.styleId,
           }),
 
           // =========================
@@ -378,7 +442,8 @@ export class TemplateRepository
           }),
 
           ...(data.features !== undefined && {
-            features: data.features,
+            features:
+              data.features,
           }),
 
           ...(data.installationSteps !== undefined && {
@@ -403,23 +468,28 @@ export class TemplateRepository
           // =========================
 
           ...(data.rating !== undefined && {
-            rating: data.rating,
+            rating:
+              data.rating,
           }),
 
           ...(data.reviews !== undefined && {
-            reviews: data.reviews,
+            reviews:
+              data.reviews,
           }),
 
           ...(data.downloads !== undefined && {
-            downloads: data.downloads,
+            downloads:
+              data.downloads,
           }),
 
           ...(data.favorites !== undefined && {
-            favorites: data.favorites,
+            favorites:
+              data.favorites,
           }),
 
           ...(data.views !== undefined && {
-            views: data.views,
+            views:
+              data.views,
           }),
 
           // =========================
@@ -427,7 +497,8 @@ export class TemplateRepository
           // =========================
 
           ...(data.price !== undefined && {
-            price: data.price,
+            price:
+              data.price,
           }),
 
           ...(data.originalPrice !== undefined && {
@@ -445,11 +516,13 @@ export class TemplateRepository
           // =========================
 
           ...(data.featured !== undefined && {
-            featured: data.featured,
+            featured:
+              data.featured,
           }),
 
           ...(data.newest !== undefined && {
-            newest: data.newest,
+            newest:
+              data.newest,
           }),
 
           ...(data.isFeatured !== undefined && {
@@ -463,15 +536,18 @@ export class TemplateRepository
           }),
 
           ...(data.status !== undefined && {
-            status: data.status,
+            status:
+              data.status,
           }),
 
           ...(data.stock !== undefined && {
-            stock: data.stock,
+            stock:
+              data.stock,
           }),
 
           ...(data.license !== undefined && {
-            license: data.license,
+            license:
+              data.license,
           }),
 
           // =========================
@@ -479,24 +555,29 @@ export class TemplateRepository
           // =========================
 
           ...(data.demoUrl !== undefined && {
-            demoUrl: data.demoUrl,
+            demoUrl:
+              data.demoUrl,
           }),
 
           ...(data.version !== undefined && {
-            version: data.version,
+            version:
+              data.version,
           }),
 
           ...(data.createdAt !== undefined && {
-            createdAt: data.createdAt,
+            createdAt:
+              data.createdAt,
           }),
 
           ...(data.updatedAt !== undefined && {
-            updatedAt: data.updatedAt,
+            updatedAt:
+              data.updatedAt,
           }),
         },
 
         include: {
           author: true,
+          style: true,
         },
       });
     } catch (error) {
@@ -517,6 +598,7 @@ export class TemplateRepository
 
         include: {
           author: true,
+          style: true,
         },
       });
     } catch (error) {

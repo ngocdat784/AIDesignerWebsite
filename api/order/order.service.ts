@@ -1,3 +1,4 @@
+
 import {
   ForbiddenException,
   Injectable,
@@ -17,13 +18,21 @@ import { UpdateOrderDto } from "./dto/update-order.dto";
 
 import { CurrentUserPayload } from "../auth/interfaces/current-user.interface";
 
-import { ORDER_REPOSITORY } from "../common/constants/repository.tokens";
+import {
+  ORDER_REPOSITORY,
+  TEMPLATE_REPOSITORY,
+} from "../common/constants/repository.tokens";
+
+import { TemplateRepositoryInterface } from "../template/interfaces/template.repository.interface";
 
 @Injectable()
 export class OrderService implements OrderServiceInterface {
   constructor(
     @Inject(ORDER_REPOSITORY)
     private readonly orderRepository: OrderRepositoryInterface,
+
+    @Inject(TEMPLATE_REPOSITORY)
+    private readonly templateRepository: TemplateRepositoryInterface,
   ) {}
 
   // =========================
@@ -144,6 +153,9 @@ export class OrderService implements OrderServiceInterface {
    * - total
    * - item.id
    * - item.subtotal
+   * - styleId
+   * - styleSlug
+   * - styleName
    */
   async create(
     dto: CreateOrderDto,
@@ -173,32 +185,118 @@ export class OrderService implements OrderServiceInterface {
     // Create Order Items
     // =========================
 
-    const items = dto.items.map(
-      (item) => {
-        const subtotal =
-          item.unitPrice *
-          item.quantity;
+    const items = await Promise.all(
+      dto.items.map(
+        async (item) => {
+          // =====================================
+          // Get Template
+          // =====================================
 
-        return {
-          id: crypto.randomUUID(),
+          const template =
+            await this.templateRepository.getById(
+              item.productId,
+            );
 
-          orderId,
+          if (!template) {
+            throw new NotFoundException(
+              `Template with id ${item.productId} not found.`,
+            );
+          }
 
-          productId:
-            item.productId,
+          // =====================================
+          // Calculate item subtotal
+          // =====================================
 
-          productName:
-            item.productName,
+          const subtotal =
+            item.unitPrice *
+            item.quantity;
 
-          unitPrice:
-            item.unitPrice,
+          // =====================================
+          // Snapshot Style
+          // =====================================
 
-          quantity:
-            item.quantity,
+          /*
+           * Không lấy styleSlug/styleName
+           * từ frontend.
+           *
+           * Backend lấy style hiện tại
+           * của Template từ database.
+           */
 
-          subtotal,
-        };
-      },
+          let styleId: string | null =
+            null;
+
+          let styleSlug: string | null =
+            null;
+
+          let styleName: string | null =
+            null;
+
+          if (template.styleId) {
+            styleId =
+              template.styleId;
+
+            /*
+             * TemplateRepository cần trả về
+             * style relation để có thể snapshot
+             * slug và name.
+             *
+             * Nếu repository hiện tại chưa
+             * include style, phần repository
+             * cần được cập nhật.
+             */
+
+            const style =
+              await this.templateRepository.getStyleByTemplateId(
+                template.id,
+              );
+
+            if (style) {
+              styleId = style.id;
+              styleSlug = style.slug;
+              styleName = style.name;
+            }
+          }
+
+          // =====================================
+          // Return OrderItem
+          // =====================================
+
+          return {
+            id: crypto.randomUUID(),
+
+            orderId,
+
+            productId:
+              item.productId,
+
+            productName:
+              template.title,
+
+            // =========================
+            // Style Snapshot
+            // =========================
+
+            styleId,
+
+            styleSlug,
+
+            styleName,
+
+            // =========================
+            // Pricing
+            // =========================
+
+            unitPrice:
+              item.unitPrice,
+
+            quantity:
+              item.quantity,
+
+            subtotal,
+          };
+        },
+      ),
     );
 
     // =========================
@@ -230,6 +328,7 @@ export class OrderService implements OrderServiceInterface {
      * discount nên được tính lại
      * hoàn toàn ở backend.
      */
+
     const discount = 0;
 
     // =========================
@@ -250,19 +349,20 @@ export class OrderService implements OrderServiceInterface {
       id: orderId,
 
       /*
-       * QUAN TRỌNG:
-       *
        * Không lấy userId từ request body.
        *
        * userId phải lấy từ JWT.
        */
+
       userId: user.id,
 
       /*
        * Order mới luôn bắt đầu
        * ở trạng thái PENDING.
        */
-      status: OrderStatus.PENDING,
+
+      status:
+        OrderStatus.PENDING,
 
       paymentMethod:
         dto.paymentMethod,
@@ -335,7 +435,9 @@ export class OrderService implements OrderServiceInterface {
     id: string,
   ) {
     const order =
-      await this.orderRepository.getById(id);
+      await this.orderRepository.getById(
+        id,
+      );
 
     if (!order) {
       throw new NotFoundException(
@@ -346,3 +448,4 @@ export class OrderService implements OrderServiceInterface {
     return order;
   }
 }
+

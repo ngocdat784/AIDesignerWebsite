@@ -1,4 +1,4 @@
-import type { Template } from "../../generated/prisma/client";
+import type { Template, TemplateStyle } from "../../generated/prisma/client";
 
 // =========================
 // Create Template
@@ -25,6 +25,12 @@ export interface CreateTemplateData {
   authorId: string;
 
   techStack?: string[];
+
+  // =========================
+  // Template Style
+  // =========================
+
+  styleId?: string | null;
 
   includedFiles?: unknown;
   features?: string[];
@@ -54,6 +60,7 @@ export interface CreateTemplateData {
 
   demoUrl?: string;
   version?: string;
+
   createdAt?: Date | string;
   updatedAt?: Date | string;
 }
@@ -63,6 +70,8 @@ export interface CreateTemplateData {
 // =========================
 
 export interface UpdateTemplateData {
+  slug?: string;
+
   title?: string;
   description?: string;
 
@@ -78,6 +87,12 @@ export interface UpdateTemplateData {
   relatedTemplateIds?: string[];
 
   techStack?: string[];
+
+  // =========================
+  // Template Style
+  // =========================
+
+  styleId?: string | null;
 
   includedFiles?: unknown;
   features?: string[];
@@ -107,6 +122,7 @@ export interface UpdateTemplateData {
 
   demoUrl?: string;
   version?: string;
+
   createdAt?: Date | string;
   updatedAt?: Date | string;
 }
@@ -137,6 +153,10 @@ export interface TemplateRepositoryInterface {
   getByCategory(
     category: string,
   ): Promise<Template[]>;
+
+  getStyleByTemplateId(
+    templateId: string,
+  ): Promise<TemplateStyle | null>;
 
   // =========================
   // Commands
