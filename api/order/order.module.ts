@@ -1,6 +1,7 @@
 import { Module } from "@nestjs/common";
 
 import { DatabaseModule } from "../database/database.module";
+import { TemplateModule } from "../template/template.module";
 import { OrderRepository } from "../repositories/order.repository";
 
 import { ORDER_REPOSITORY } from "../common/constants/repository.tokens";
@@ -11,6 +12,7 @@ import { OrderController } from "./order.controller";
 @Module({
   imports: [
     DatabaseModule,
+    TemplateModule,
   ],
 
   controllers: [

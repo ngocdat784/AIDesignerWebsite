@@ -5,12 +5,15 @@ import { TemplateRepository } from "../repositories/template.repository";
 
 import { TEMPLATE_REPOSITORY } from "../common/constants/repository.tokens";
 
+import { TemplateStyleModule } from "../template-style/template-style.module";
+
 import { TemplateService } from "./template.service";
 import { TemplateController } from "./template.controller";
 
 @Module({
   imports: [
     DatabaseModule,
+    TemplateStyleModule,
   ],
 
   controllers: [
@@ -28,6 +31,7 @@ import { TemplateController } from "./template.controller";
 
   exports: [
     TemplateService,
+    TEMPLATE_REPOSITORY,
   ],
 })
 export class TemplateModule {}
