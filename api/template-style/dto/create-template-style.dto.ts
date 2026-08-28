@@ -7,6 +7,10 @@ import {
 } from "class-validator";
 
 export class CreateTemplateStyleDto {
+  // =========================
+  // Basic information
+  // =========================
+
   @IsString()
   @IsNotEmpty()
   slug!: string;
@@ -18,6 +22,10 @@ export class CreateTemplateStyleDto {
   @IsOptional()
   @IsString()
   description?: string;
+
+  // =========================
+  // Style
+  // =========================
 
   @IsOptional()
   @IsObject()
@@ -35,9 +43,17 @@ export class CreateTemplateStyleDto {
   @IsObject()
   layout?: Record<string, string>;
 
+  // =========================
+  // Preview
+  // =========================
+
   @IsOptional()
   @IsString()
   previewImage?: string;
+
+  // =========================
+  // Status
+  // =========================
 
   @IsOptional()
   @IsBoolean()

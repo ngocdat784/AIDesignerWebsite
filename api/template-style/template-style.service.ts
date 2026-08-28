@@ -2,19 +2,26 @@ import {
   ConflictException,
   Injectable,
   NotFoundException,
+  Inject,
 } from "@nestjs/common";
 
-import { TemplateStyleRepository } from "../repositories/template-style.repository";
+import { randomUUID } from "crypto";
 
 import { CreateTemplateStyleDto } from "./dto/create-template-style.dto";
 import { UpdateTemplateStyleDto } from "./dto/update-template-style.dto";
 
 import { ITemplateStyleService } from "./interfaces/template-style.service.interface";
+import { ITemplateStyleRepository } from "./interfaces/template-style.repository.interface";
+
+import { TEMPLATE_STYLE_REPOSITORY } from "../common/constants/repository.tokens";
 
 @Injectable()
-export class TemplateStyleService implements ITemplateStyleService {
+export class TemplateStyleService
+  implements ITemplateStyleService
+{
   constructor(
-    private readonly templateStyleRepository: TemplateStyleRepository,
+    @Inject(TEMPLATE_STYLE_REPOSITORY)
+    private readonly templateStyleRepository: ITemplateStyleRepository,
   ) {}
 
   // =========================
@@ -24,6 +31,10 @@ export class TemplateStyleService implements ITemplateStyleService {
   async create(
     createTemplateStyleDto: CreateTemplateStyleDto,
   ): Promise<any> {
+    // =========================
+    // Check duplicate slug
+    // =========================
+
     const existingStyle =
       await this.templateStyleRepository.findBySlug(
         createTemplateStyleDto.slug,
@@ -35,9 +46,40 @@ export class TemplateStyleService implements ITemplateStyleService {
       );
     }
 
-    return this.templateStyleRepository.create(
-      createTemplateStyleDto,
-    );
+    // =========================
+    // Create
+    // =========================
+
+    return this.templateStyleRepository.create({
+      id: randomUUID(),
+
+      slug:
+        createTemplateStyleDto.slug,
+
+      name:
+        createTemplateStyleDto.name,
+
+      description:
+        createTemplateStyleDto.description ?? null,
+
+      colors:
+        createTemplateStyleDto.colors ?? null,
+
+      gradients:
+        createTemplateStyleDto.gradients ?? null,
+
+      typography:
+        createTemplateStyleDto.typography ?? null,
+
+      layout:
+        createTemplateStyleDto.layout ?? null,
+
+      previewImage:
+        createTemplateStyleDto.previewImage ?? null,
+
+      isActive:
+        createTemplateStyleDto.isActive ?? true,
+    });
   }
 
   // =========================
@@ -60,9 +102,13 @@ export class TemplateStyleService implements ITemplateStyleService {
   // Find one
   // =========================
 
-  async findOne(id: string): Promise<any> {
+  async findOne(
+    id: string,
+  ): Promise<any> {
     const style =
-      await this.templateStyleRepository.findById(id);
+      await this.templateStyleRepository.findById(
+        id,
+      );
 
     if (!style) {
       throw new NotFoundException(
@@ -77,9 +123,13 @@ export class TemplateStyleService implements ITemplateStyleService {
   // Find by slug
   // =========================
 
-  async findBySlug(slug: string): Promise<any> {
+  async findBySlug(
+    slug: string,
+  ): Promise<any> {
     const style =
-      await this.templateStyleRepository.findBySlug(slug);
+      await this.templateStyleRepository.findBySlug(
+        slug,
+      );
 
     if (!style) {
       throw new NotFoundException(
@@ -98,8 +148,14 @@ export class TemplateStyleService implements ITemplateStyleService {
     id: string,
     updateTemplateStyleDto: UpdateTemplateStyleDto,
   ): Promise<any> {
+    // =========================
+    // Check existing style
+    // =========================
+
     const existingStyle =
-      await this.templateStyleRepository.findById(id);
+      await this.templateStyleRepository.findById(
+        id,
+      );
 
     if (!existingStyle) {
       throw new NotFoundException(
@@ -107,9 +163,14 @@ export class TemplateStyleService implements ITemplateStyleService {
       );
     }
 
+    // =========================
+    // Check duplicate slug
+    // =========================
+
     if (
       updateTemplateStyleDto.slug &&
-      updateTemplateStyleDto.slug !== existingStyle.slug
+      updateTemplateStyleDto.slug !==
+        existingStyle.slug
     ) {
       const slugExists =
         await this.templateStyleRepository.findBySlug(
@@ -123,6 +184,10 @@ export class TemplateStyleService implements ITemplateStyleService {
       }
     }
 
+    // =========================
+    // Update
+    // =========================
+
     return this.templateStyleRepository.update(
       id,
       updateTemplateStyleDto,
@@ -133,9 +198,17 @@ export class TemplateStyleService implements ITemplateStyleService {
   // Remove
   // =========================
 
-  async remove(id: string): Promise<any> {
+  async remove(
+    id: string,
+  ): Promise<any> {
+    // =========================
+    // Check existing style
+    // =========================
+
     const existingStyle =
-      await this.templateStyleRepository.findById(id);
+      await this.templateStyleRepository.findById(
+        id,
+      );
 
     if (!existingStyle) {
       throw new NotFoundException(
@@ -143,6 +216,12 @@ export class TemplateStyleService implements ITemplateStyleService {
       );
     }
 
-    return this.templateStyleRepository.delete(id);
+    // =========================
+    // Delete
+    // =========================
+
+    return this.templateStyleRepository.delete(
+      id,
+    );
   }
 }

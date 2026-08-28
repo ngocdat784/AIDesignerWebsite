@@ -158,7 +158,23 @@ export class TemplateRepository
       handlePrismaException(error);
     }
   }
+  // =========================
+  // GET style by ID
+  // =========================
 
+  async getStyleById(
+    styleId: string,
+  ) {
+    try {
+      return await this.database.templateStyle.findUnique({
+        where: {
+          id: styleId,
+        },
+      });
+    } catch (error) {
+      handlePrismaException(error);
+    }
+  }
   // =========================
   // Create
   // =========================

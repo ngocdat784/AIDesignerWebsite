@@ -1,4 +1,7 @@
-import type { Template, TemplateStyle } from "../../generated/prisma/client";
+import type {
+  Template,
+  TemplateStyle,
+} from "../../generated/prisma/client";
 
 // =========================
 // Create Template
@@ -154,8 +157,16 @@ export interface TemplateRepositoryInterface {
     category: string,
   ): Promise<Template[]>;
 
+  // =========================
+  // Template Style
+  // =========================
+
   getStyleByTemplateId(
     templateId: string,
+  ): Promise<TemplateStyle | null>;
+
+  getStyleById(
+    styleId: string,
   ): Promise<TemplateStyle | null>;
 
   // =========================

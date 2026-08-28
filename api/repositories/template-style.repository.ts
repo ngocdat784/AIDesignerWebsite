@@ -1,4 +1,7 @@
-import { Injectable } from "@nestjs/common";
+import {
+  Injectable,
+  Inject,
+} from "@nestjs/common";
 
 import { DatabaseService } from "../database/database.service";
 
@@ -15,6 +18,7 @@ export class TemplateStyleRepository
   implements ITemplateStyleRepository
 {
   constructor(
+    @Inject(DatabaseService)
     private readonly database: DatabaseService,
   ) {}
 
@@ -30,13 +34,27 @@ export class TemplateStyleRepository
         id: data.id,
         slug: data.slug,
         name: data.name,
-        description: data.description,
-        colors: data.colors ?? undefined,
-        gradients: data.gradients ?? undefined,
-        typography: data.typography ?? undefined,
-        layout: data.layout ?? undefined,
-        previewImage: data.previewImage,
-        isActive: data.isActive ?? true,
+
+        description:
+          data.description ?? null,
+
+        colors:
+          data.colors ?? undefined,
+
+        gradients:
+          data.gradients ?? undefined,
+
+        typography:
+          data.typography ?? undefined,
+
+        layout:
+          data.layout ?? undefined,
+
+        previewImage:
+          data.previewImage ?? null,
+
+        isActive:
+          data.isActive ?? true,
       },
     });
   }
@@ -108,16 +126,43 @@ export class TemplateStyleRepository
       where: {
         id,
       },
+
       data: {
-        slug: data.slug,
-        name: data.name,
-        description: data.description,
-        colors: data.colors ?? undefined,
-        gradients: data.gradients ?? undefined,
-        typography: data.typography ?? undefined,
-        layout: data.layout ?? undefined,
-        previewImage: data.previewImage,
-        isActive: data.isActive,
+        ...(data.slug !== undefined && {
+          slug: data.slug,
+        }),
+
+        ...(data.name !== undefined && {
+          name: data.name,
+        }),
+
+        ...(data.description !== undefined && {
+          description: data.description,
+        }),
+
+        ...(data.colors !== undefined && {
+          colors: data.colors ?? undefined,
+        }),
+
+        ...(data.gradients !== undefined && {
+          gradients: data.gradients ?? undefined,
+        }),
+
+        ...(data.typography !== undefined && {
+          typography: data.typography ?? undefined,
+        }),
+
+        ...(data.layout !== undefined && {
+          layout: data.layout ?? undefined,
+        }),
+
+        ...(data.previewImage !== undefined && {
+          previewImage: data.previewImage,
+        }),
+
+        ...(data.isActive !== undefined && {
+          isActive: data.isActive,
+        }),
       },
     });
   }
@@ -148,6 +193,7 @@ export class TemplateStyleRepository
         where: {
           id,
         },
+
         select: {
           id: true,
         },
@@ -168,6 +214,7 @@ export class TemplateStyleRepository
         where: {
           slug,
         },
+
         select: {
           id: true,
         },

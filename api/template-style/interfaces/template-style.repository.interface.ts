@@ -1,9 +1,15 @@
 import { Prisma } from "../../generated/prisma/client";
 
+// =========================
+// Create Template Style
+// =========================
+
 export type CreateTemplateStyleData = {
   id: string;
+
   slug: string;
   name: string;
+
   description?: string | null;
 
   colors?: Prisma.InputJsonValue | null;
@@ -12,12 +18,18 @@ export type CreateTemplateStyleData = {
   layout?: Prisma.InputJsonValue | null;
 
   previewImage?: string | null;
+
   isActive?: boolean;
 };
+
+// =========================
+// Update Template Style
+// =========================
 
 export type UpdateTemplateStyleData = {
   slug?: string;
   name?: string;
+
   description?: string | null;
 
   colors?: Prisma.InputJsonValue | null;
@@ -26,17 +38,26 @@ export type UpdateTemplateStyleData = {
   layout?: Prisma.InputJsonValue | null;
 
   previewImage?: string | null;
+
   isActive?: boolean;
 };
+
+// =========================
+// Repository Interface
+// =========================
 
 export interface ITemplateStyleRepository {
   findAll(): Promise<any[]>;
 
   findActive(): Promise<any[]>;
 
-  findById(id: string): Promise<any | null>;
+  findById(
+    id: string,
+  ): Promise<any | null>;
 
-  findBySlug(slug: string): Promise<any | null>;
+  findBySlug(
+    slug: string,
+  ): Promise<any | null>;
 
   create(
     data: CreateTemplateStyleData,
@@ -47,9 +68,15 @@ export interface ITemplateStyleRepository {
     data: UpdateTemplateStyleData,
   ): Promise<any>;
 
-  delete(id: string): Promise<any>;
+  delete(
+    id: string,
+  ): Promise<any>;
 
-  existsById(id: string): Promise<boolean>;
+  existsById(
+    id: string,
+  ): Promise<boolean>;
 
-  existsBySlug(slug: string): Promise<boolean>;
+  existsBySlug(
+    slug: string,
+  ): Promise<boolean>;
 }

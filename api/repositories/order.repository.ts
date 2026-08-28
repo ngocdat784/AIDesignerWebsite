@@ -166,10 +166,29 @@ export class OrderRepository
 
     items: {
       id: string;
+
       productId: string;
+
       productName: string;
+
+      // =========================
+      // Style Snapshot
+      // =========================
+
+      styleId?: string | null;
+
+      styleSlug?: string | null;
+
+      styleName?: string | null;
+
+      // =========================
+      // Pricing
+      // =========================
+
       unitPrice: number;
+
       quantity: number;
+
       subtotal: number;
     }[];
   }) {
@@ -227,18 +246,6 @@ export class OrderRepository
           // =========================
           // Order Items
           // =========================
-          //
-          // KHÔNG truyền orderId ở đây.
-          //
-          // Prisma tự tạo quan hệ:
-          //
-          // Order
-          //   ↓
-          // items.create
-          //   ↓
-          // OrderItem.orderId
-          //
-          // =========================
 
           items: {
             create: data.items.map(
@@ -250,6 +257,23 @@ export class OrderRepository
 
                 productName:
                   item.productName,
+
+                // =========================
+                // Style Snapshot
+                // =========================
+
+                styleId:
+                  item.styleId ?? null,
+
+                styleSlug:
+                  item.styleSlug ?? null,
+
+                styleName:
+                  item.styleName ?? null,
+
+                // =========================
+                // Pricing
+                // =========================
 
                 unitPrice:
                   item.unitPrice,

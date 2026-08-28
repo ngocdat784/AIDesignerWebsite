@@ -1,4 +1,3 @@
-
 import {
   ForbiddenException,
   Injectable,
@@ -139,20 +138,25 @@ export class OrderService implements OrderServiceInterface {
   /**
    * USER tạo Order cho chính mình.
    *
-   * Frontend chỉ được gửi:
+   * Frontend chỉ gửi:
+   *
    * - paymentMethod
    * - billing
-   * - items
+   * - items.productId
+   * - items.quantity
+   * - items.styleId
    *
    * Backend tự quyết định:
+   *
    * - id
    * - userId
    * - status
+   * - productName
+   * - unitPrice
    * - subtotal
    * - discount
    * - total
    * - item.id
-   * - item.subtotal
    * - styleId
    * - styleSlug
    * - styleName
@@ -204,24 +208,48 @@ export class OrderService implements OrderServiceInterface {
           }
 
           // =====================================
-          // Calculate item subtotal
+          // Get Price From Database
+          // =====================================
+
+          /*
+           * KHÔNG lấy unitPrice từ frontend.
+           *
+           * Frontend chỉ gửi productId + quantity.
+           *
+           * Backend lấy giá hiện tại
+           * của Template từ database.
+           */
+
+          const unitPrice =
+            template.discountPrice ??
+            template.price;
+
+          // =====================================
+          // Validate Price
+          // =====================================
+
+          if (
+            unitPrice === null ||
+            unitPrice === undefined ||
+            !Number.isFinite(unitPrice) ||
+            unitPrice < 0
+          ) {
+            throw new ForbiddenException(
+              `Template ${item.productId} has an invalid price.`,
+            );
+          }
+
+          // =====================================
+          // Calculate Item Subtotal
           // =====================================
 
           const subtotal =
-            item.unitPrice *
+            unitPrice *
             item.quantity;
 
           // =====================================
           // Snapshot Style
           // =====================================
-
-          /*
-           * Không lấy styleSlug/styleName
-           * từ frontend.
-           *
-           * Backend lấy style hiện tại
-           * của Template từ database.
-           */
 
           let styleId: string | null =
             null;
@@ -232,29 +260,52 @@ export class OrderService implements OrderServiceInterface {
           let styleName: string | null =
             null;
 
-          if (template.styleId) {
-            styleId =
-              template.styleId;
+          // -------------------------------------
+          // 1. Frontend có chọn style
+          // -------------------------------------
 
-            /*
-             * TemplateRepository cần trả về
-             * style relation để có thể snapshot
-             * slug và name.
-             *
-             * Nếu repository hiện tại chưa
-             * include style, phần repository
-             * cần được cập nhật.
-             */
-
+          if (item.styleId) {
             const style =
-              await this.templateRepository.getStyleByTemplateId(
-                template.id,
+              await this.templateRepository.getStyleById(
+                item.styleId,
+              );
+
+            if (!style) {
+              throw new NotFoundException(
+                `Template style with id ${item.styleId} not found.`,
+              );
+            }
+
+            styleId =
+              style.id;
+
+            styleSlug =
+              style.slug;
+
+            styleName =
+              style.name;
+          }
+
+          // -------------------------------------
+          // 2. Không chọn style
+          //    → dùng style mặc định của Template
+          // -------------------------------------
+
+          else if (template.styleId) {
+            const style =
+              await this.templateRepository.getStyleById(
+                template.styleId,
               );
 
             if (style) {
-              styleId = style.id;
-              styleSlug = style.slug;
-              styleName = style.name;
+              styleId =
+                style.id;
+
+              styleSlug =
+                style.slug;
+
+              styleName =
+                style.name;
             }
           }
 
@@ -287,8 +338,7 @@ export class OrderService implements OrderServiceInterface {
             // Pricing
             // =========================
 
-            unitPrice:
-              item.unitPrice,
+            unitPrice,
 
             quantity:
               item.quantity,
@@ -300,7 +350,7 @@ export class OrderService implements OrderServiceInterface {
     );
 
     // =========================
-    // Calculate subtotal
+    // Calculate Subtotal
     // =========================
 
     const subtotal =
@@ -311,28 +361,29 @@ export class OrderService implements OrderServiceInterface {
       );
 
     // =========================
-    // Calculate discount
+    // Calculate Discount
     // =========================
 
     /*
-     * originalPrice hiện tại chỉ
-     * tồn tại ở frontend DTO.
+     * Giá đã sử dụng:
      *
-     * Backend CreateOrderItemDto
-     * hiện không có originalPrice.
+     * discountPrice ?? price
      *
-     * Vì vậy tạm thời discount = 0.
+     * nên hiện tại không cần
+     * tính thêm discount.
      *
-     * Sau này nếu backend lấy được
-     * product/template từ database,
-     * discount nên được tính lại
-     * hoàn toàn ở backend.
+     * Nếu sau này muốn lưu số tiền
+     * discount riêng thì có thể:
+     *
+     * originalPrice - discountPrice
+     *
+     * và lấy hoàn toàn từ database.
      */
 
     const discount = 0;
 
     // =========================
-    // Calculate total
+    // Calculate Total
     // =========================
 
     const total =
@@ -348,24 +399,30 @@ export class OrderService implements OrderServiceInterface {
     const data = {
       id: orderId,
 
-      /*
-       * Không lấy userId từ request body.
-       *
-       * userId phải lấy từ JWT.
-       */
+      // =========================
+      // User
+      // =========================
 
-      userId: user.id,
+      userId:
+        user.id,
 
-      /*
-       * Order mới luôn bắt đầu
-       * ở trạng thái PENDING.
-       */
+      // =========================
+      // Status
+      // =========================
 
       status:
         OrderStatus.PENDING,
 
+      // =========================
+      // Payment
+      // =========================
+
       paymentMethod:
         dto.paymentMethod,
+
+      // =========================
+      // Pricing
+      // =========================
 
       subtotal,
 
@@ -373,9 +430,17 @@ export class OrderService implements OrderServiceInterface {
 
       total,
 
+      // =========================
+      // Billing
+      // =========================
+
       billing: {
         ...dto.billing,
       },
+
+      // =========================
+      // Items
+      // =========================
 
       items,
     };
@@ -448,4 +513,3 @@ export class OrderService implements OrderServiceInterface {
     return order;
   }
 }
-

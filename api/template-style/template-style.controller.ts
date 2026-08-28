@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  Inject,
   Param,
   Patch,
   Post,
@@ -10,12 +11,12 @@ import {
 
 import { CreateTemplateStyleDto } from "./dto/create-template-style.dto";
 import { UpdateTemplateStyleDto } from "./dto/update-template-style.dto";
-
 import { TemplateStyleService } from "./template-style.service";
 
 @Controller("template-styles")
 export class TemplateStyleController {
   constructor(
+    @Inject(TemplateStyleService)
     private readonly templateStyleService: TemplateStyleService,
   ) {}
 
