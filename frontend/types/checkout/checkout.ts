@@ -1,5 +1,4 @@
 import type { MarketplaceTemplate } from "@/components/sections/marketplace/types";
-
 import type { Order } from "@/types/order/order";
 
 // =========================
@@ -8,7 +7,11 @@ import type { Order } from "@/types/order/order";
 
 export interface CheckoutItem {
   template: MarketplaceTemplate;
+
   quantity: number;
+
+  // Style được user chọn
+  styleId?: string | null;
 }
 
 // =========================
@@ -40,6 +43,7 @@ export interface CheckoutPaymentInfo {
 
 export interface CheckoutOrder {
   items: CheckoutItem[];
+
   subtotal: number;
   discount: number;
   total: number;

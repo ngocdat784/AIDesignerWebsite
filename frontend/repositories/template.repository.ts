@@ -45,6 +45,19 @@ export interface CreateTemplateData {
   techStack?: string[];
 
   // =========================
+  // Template Style
+  // =========================
+  //
+  // Frontend gửi styleId khi muốn
+  // gán một TemplateStyle cho Template.
+  //
+  // Backend sẽ kiểm tra styleId
+  // và lưu quan hệ Template -> TemplateStyle.
+  // =========================
+
+  styleId?: string | null;
+
+  // =========================
   // Detail information
   // =========================
 
@@ -154,6 +167,19 @@ export interface UpdateTemplateData {
   // =========================
 
   techStack?: string[];
+
+  // =========================
+  // Template Style
+  // =========================
+  //
+  // Có thể:
+  //
+  // styleId = "..."  → gán style
+  // styleId = null   → bỏ style
+  // không truyền     → giữ nguyên style hiện tại
+  // =========================
+
+  styleId?: string | null;
 
   // =========================
   // Detail information
@@ -443,9 +469,10 @@ export const templateRepository = {
   // CREATOR / ADMIN
   //
   // authorId KHÔNG gửi từ frontend.
-  // Backend tự lấy:
   //
-  // authorId = CurrentUser.id
+  // styleId:
+  // - có giá trị → gán style cho Template
+  // - null → không gán style
   // =========================================================
 
   async create(
@@ -469,6 +496,11 @@ export const templateRepository = {
   //
   // ADMIN:
   //   sửa mọi template
+  //
+  // styleId:
+  // - truyền ID → đổi/gán style
+  // - truyền null → bỏ style
+  // - không truyền → giữ nguyên
   //
   // Quyền được kiểm tra ở backend.
   // =========================================================

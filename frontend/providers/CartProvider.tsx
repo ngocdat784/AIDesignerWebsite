@@ -27,9 +27,19 @@ export default function CartProvider({
   const [items, setItems] =
     useState<CartItem[]>([]);
 
+  // =========================
+  // Refresh
+  // =========================
+
   function refresh() {
-    setItems(cartService.getAll());
+    setItems(
+      cartService.getAll()
+    );
   }
+
+  // =========================
+  // Initial Load
+  // =========================
 
   useEffect(() => {
     refresh();
@@ -51,10 +61,25 @@ export default function CartProvider({
     };
   }, []);
 
+  // =========================
+  // Add
+  // =========================
+
   function add(
-    template: MarketplaceTemplate
+    template: MarketplaceTemplate,
+    styleId?: string | null
   ) {
-    cartService.addTemplate(template);
+    // Nếu UI truyền styleId
+    // → sử dụng style user đã chọn.
+    //
+    // Nếu không truyền
+    // → cartService sẽ fallback
+    // về template.styleId.
+
+    cartService.addTemplate(
+      template,
+      styleId
+    );
 
     toast.success(
       `${template.title} added to cart.`
@@ -62,6 +87,10 @@ export default function CartProvider({
 
     refresh();
   }
+
+  // =========================
+  // Remove
+  // =========================
 
   function remove(
     templateId: string
@@ -77,6 +106,10 @@ export default function CartProvider({
     refresh();
   }
 
+  // =========================
+  // Clear
+  // =========================
+
   function clear() {
     cartService.clear();
 
@@ -87,6 +120,10 @@ export default function CartProvider({
     refresh();
   }
 
+  // =========================
+  // Increase
+  // =========================
+
   function increase(
     templateId: string
   ) {
@@ -95,7 +132,9 @@ export default function CartProvider({
         templateId
       );
 
-    if (!item) return;
+    if (!item) {
+      return;
+    }
 
     cartService.updateQuantity(
       templateId,
@@ -105,6 +144,10 @@ export default function CartProvider({
     refresh();
   }
 
+  // =========================
+  // Decrease
+  // =========================
+
   function decrease(
     templateId: string
   ) {
@@ -113,10 +156,13 @@ export default function CartProvider({
         templateId
       );
 
-    if (!item) return;
+    if (!item) {
+      return;
+    }
 
     if (item.quantity <= 1) {
       remove(templateId);
+
       return;
     }
 
@@ -127,6 +173,10 @@ export default function CartProvider({
 
     refresh();
   }
+
+  // =========================
+  // Context Value
+  // =========================
 
   const value: CartContextType =
     useMemo(

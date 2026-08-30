@@ -13,6 +13,10 @@ export interface Cart {
 }
 
 export interface CartContextType {
+  // =========================
+  // State
+  // =========================
+
   items: CartItem[];
 
   itemCount: number;
@@ -23,15 +27,41 @@ export interface CartContextType {
 
   total: number;
 
-  add(template: MarketplaceTemplate): void;
+  // =========================
+  // Commands
+  // =========================
 
-  remove(templateId: string): void;
+  /**
+   * Thêm Template vào Cart.
+   *
+   * styleId:
+   * - ID style user chọn
+   * - null/undefined = dùng style mặc định
+   */
+  add(
+    template: MarketplaceTemplate,
+    styleId?: string | null,
+  ): void;
+
+  remove(
+    templateId: string,
+  ): void;
 
   clear(): void;
 
-  increase(templateId: string): void;
+  increase(
+    templateId: string,
+  ): void;
 
-  decrease(templateId: string): void;
+  decrease(
+    templateId: string,
+  ): void;
 
-  isInCart(templateId: string): boolean;
+  // =========================
+  // Query
+  // =========================
+
+  isInCart(
+    templateId: string,
+  ): boolean;
 }

@@ -38,7 +38,17 @@ export interface TemplateChangelog {
   date: string;
   changes: string[];
 }
+// =========================
+// Template Style
+// =========================
 
+export interface TemplateStyle {
+  id: string;
+
+  slug: string;
+
+  name: string;
+}
 // =========================
 // Template
 // =========================
@@ -77,7 +87,23 @@ export interface Template {
   tags: string[];
 
   relatedTemplateIds: string[];
+  // =========================
+  // Template Style
+  // =========================
 
+  /**
+   * ID của style được gán cho Template.
+   *
+   * null = Template không có style.
+   */
+  styleId?: string | null;
+
+  /**
+   * Thông tin style được backend include từ relation.
+   *
+   * null = Template không có style.
+   */
+  style?: TemplateStyle | null;
   // =========================
   // Author
   // =========================

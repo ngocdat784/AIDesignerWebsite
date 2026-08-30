@@ -18,19 +18,22 @@ export const checkoutService = {
   },
 
   getItems(): CheckoutItem[] {
-    const checkout = checkoutRepository.getCheckout();
+    const checkout =
+      checkoutRepository.getCheckout();
 
     return checkout?.order.items ?? [];
   },
 
   getBilling(): CheckoutBillingInfo | null {
-    const checkout = checkoutRepository.getCheckout();
+    const checkout =
+      checkoutRepository.getCheckout();
 
     return checkout?.billing ?? null;
   },
 
   getPayment(): CheckoutPaymentInfo | null {
-    const checkout = checkoutRepository.getCheckout();
+    const checkout =
+      checkoutRepository.getCheckout();
 
     return checkout?.payment ?? null;
   },
@@ -38,13 +41,15 @@ export const checkoutService = {
   // =========================
   // Initialization
   // =========================
-  // Cart chỉ được đọc DUY NHẤT tại đây.
   //
   // Cart
   //   ↓
   // CheckoutData snapshot
   //
   // Sau bước này Checkout không phụ thuộc Cart nữa.
+  //
+  // Style cũng được snapshot từ Cart.
+  // =========================
 
   initializeFromCart(): CheckoutData | null {
     const cartItems = cartService.getAll();
@@ -56,44 +61,87 @@ export const checkoutService = {
     const existingCheckout =
       checkoutRepository.getCheckout();
 
-    const items: CheckoutItem[] = cartItems.map(
-      (item) => ({
+    const items: CheckoutItem[] =
+      cartItems.map((item) => ({
         template: item.template,
         quantity: item.quantity,
-      })
-    );
+
+        // =========================
+        // Style
+        // =========================
+        //
+        // Cart phải giữ styleId nếu
+        // user đã chọn style.
+        //
+        // Nếu chưa chọn style thì lấy
+        // style mặc định của template.
+        // =========================
+
+        styleId:
+          item.styleId ??
+          item.template.styleId ??
+          null,
+      }));
+
+    // =========================
+    // Subtotal
+    // =========================
 
     const subtotal = items.reduce(
       (sum, item) =>
         sum +
         item.template.price *
           item.quantity,
-      0
+      0,
     );
+
+    // =========================
+    // Discount
+    // =========================
 
     const discount = items.reduce(
       (sum, item) => {
         const originalPrice =
           item.template.originalPrice;
 
-        if (!originalPrice) {
+        if (
+          originalPrice === null ||
+          originalPrice === undefined
+        ) {
           return sum;
         }
 
         return (
           sum +
-          (originalPrice -
-            item.template.price) *
+          Math.max(
+            0,
+            originalPrice -
+              item.template.price,
+          ) *
             item.quantity
         );
       },
-      0
+      0,
     );
 
-    const total =
-      subtotal - discount;
+    // =========================
+    // Total
+    // =========================
+
+    const total = Math.max(
+      0,
+      subtotal - discount,
+    );
+
+    // =========================
+    // Checkout
+    // =========================
 
     const checkout: CheckoutData = {
+      // =========================
+      // Billing
+      // =========================
+
       billing:
         existingCheckout?.billing ?? {
           firstName: "",
@@ -106,10 +154,18 @@ export const checkoutService = {
           postalCode: "",
         },
 
+      // =========================
+      // Payment
+      // =========================
+
       payment:
         existingCheckout?.payment ?? {
           method: "card",
         },
+
+      // =========================
+      // Order
+      // =========================
 
       order: {
         items,
@@ -120,7 +176,7 @@ export const checkoutService = {
     };
 
     checkoutRepository.saveCheckout(
-      checkout
+      checkout,
     );
 
     return checkout;
@@ -131,7 +187,7 @@ export const checkoutService = {
   // =========================
 
   updateBilling(
-    billing: CheckoutBillingInfo
+    billing: CheckoutBillingInfo,
   ): CheckoutData | null {
     const checkout =
       checkoutRepository.getCheckout();
@@ -146,7 +202,7 @@ export const checkoutService = {
     };
 
     checkoutRepository.saveCheckout(
-      updated
+      updated,
     );
 
     return updated;
@@ -157,7 +213,7 @@ export const checkoutService = {
   // =========================
 
   updatePayment(
-    payment: CheckoutPaymentInfo
+    payment: CheckoutPaymentInfo,
   ): CheckoutData | null {
     const checkout =
       checkoutRepository.getCheckout();
@@ -172,7 +228,7 @@ export const checkoutService = {
     };
 
     checkoutRepository.saveCheckout(
-      updated
+      updated,
     );
 
     return updated;
@@ -195,7 +251,7 @@ export const checkoutService = {
         sum +
         item.template.price *
           item.quantity,
-      0
+      0,
     );
   },
 
@@ -212,18 +268,24 @@ export const checkoutService = {
         const originalPrice =
           item.template.originalPrice;
 
-        if (!originalPrice) {
+        if (
+          originalPrice === null ||
+          originalPrice === undefined
+        ) {
           return sum;
         }
 
         return (
           sum +
-          (originalPrice -
-            item.template.price) *
+          Math.max(
+            0,
+            originalPrice -
+              item.template.price,
+          ) *
             item.quantity
         );
       },
-      0
+      0,
     );
   },
 
@@ -234,7 +296,10 @@ export const checkoutService = {
     const discount =
       this.getDiscount();
 
-    return subtotal - discount;
+    return Math.max(
+      0,
+      subtotal - discount,
+    );
   },
 
   // =========================
@@ -283,7 +348,7 @@ export const checkoutService = {
         billing.address.trim() &&
         billing.city.trim() &&
         billing.country.trim() &&
-        billing.postalCode.trim()
+        billing.postalCode.trim(),
     );
   },
 
@@ -296,7 +361,7 @@ export const checkoutService = {
     }
 
     return Boolean(
-      payment.method
+      payment.method,
     );
   },
 

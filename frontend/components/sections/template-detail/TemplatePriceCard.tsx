@@ -352,6 +352,22 @@ function toMarketplaceTemplate(
         false,
     },
 
+    // =========================
+    // Style
+    // =========================
+
+    styleId:
+      template.styleId ?? null,
+
+    style:
+      template.style
+        ? {
+            id: template.style.id,
+            slug: template.style.slug,
+            name: template.style.name,
+          }
+        : null,
+
     rating:
       template.rating ?? 0,
 
@@ -364,9 +380,6 @@ function toMarketplaceTemplate(
     price:
       template.price,
 
-    // Quan trọng:
-    // discountPrice phải lấy từ discountPrice
-    // chứ không phải originalPrice.
     discountPrice:
       template.discountPrice ??
       undefined,
@@ -388,6 +401,10 @@ function toMarketplaceTemplate(
     license:
       template.license ??
       undefined,
+
+    isPremium:
+      template.isPremium ??
+      false,
   };
 }
 
@@ -398,8 +415,10 @@ function toMarketplaceTemplate(
 export default function TemplatePriceCard({
   template,
   variant = "modern",
+  selectedStyleId,
 }: TemplateDetailProps & {
   variant?: TemplatePriceCardVariant;
+  selectedStyleId?: string | null;
 }) {
   const {
     add,
@@ -409,6 +428,10 @@ export default function TemplatePriceCard({
   } = useCart();
 
   const styles = variantStyles[variant];
+  const activeStyleId =
+  selectedStyleId ??
+  template.styleId ??
+  null;
 
   const added =
     isInCart(template.id);
@@ -784,8 +807,11 @@ export default function TemplatePriceCard({
           ${styles.secondaryButton}
         `}
         onClick={() =>
-          add(marketplaceTemplate)
-        }
+  add(
+    marketplaceTemplate,
+    activeStyleId
+  )
+}
       >
         <ShoppingCart className="mr-2 h-4 w-4" />
 

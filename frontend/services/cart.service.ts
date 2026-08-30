@@ -43,10 +43,27 @@ export const cartService = {
   // Commands
   // =========================
 
+  /**
+   * Thêm Template vào Cart
+   *
+   * styleId là style mà user đã chọn.
+   *
+   * Nếu không truyền styleId:
+   * → sử dụng styleId mặc định của Template
+   */
   addTemplate(
-    template: MarketplaceTemplate
+    template: MarketplaceTemplate,
+    styleId?: string | null
   ) {
-    cartRepository.add(template);
+    const selectedStyleId =
+      styleId ??
+      template.styleId ??
+      null;
+
+    cartRepository.add(
+      template,
+      selectedStyleId
+    );
   },
 
   removeTemplate(
@@ -91,22 +108,33 @@ export const cartService = {
     return cartRepository
       .findAll()
       .reduce((sum, item) => {
+        const originalPrice =
+          item.template.originalPrice;
+
         if (
-          !item.template.originalPrice
+          originalPrice === null ||
+          originalPrice === undefined
         ) {
           return sum;
         }
 
         return (
           sum +
-          (item.template.originalPrice -
-            item.template.price) *
+          Math.max(
+            0,
+            originalPrice -
+              item.template.price
+          ) *
             item.quantity
         );
       }, 0);
   },
 
   getTotal() {
-    return this.getSubtotal();
+    return Math.max(
+      0,
+      this.getSubtotal() -
+        this.getDiscount()
+    );
   },
 };

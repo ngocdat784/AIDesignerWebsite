@@ -1,7 +1,12 @@
 import type { ComponentType } from "react";
 
+/* =========================================================
+ * Badge
+ * ========================================================= */
+
 export interface MarketplaceBadge {
   text: string;
+
   variant?:
     | "default"
     | "secondary"
@@ -9,19 +14,60 @@ export interface MarketplaceBadge {
     | "destructive";
 }
 
+/* =========================================================
+ * Author
+ * ========================================================= */
+
 export interface MarketplaceAuthor {
   id?: string;
+
   name: string;
+
   avatar?: string | null;
+
   verified?: boolean;
 }
 
+/* =========================================================
+ * Template Style
+ * ========================================================= */
+
+export interface MarketplaceTemplateStyle {
+  /**
+   * ID của style
+   */
+  id: string;
+
+  /**
+   * Slug dùng cho URL / nhận diện style
+   */
+  slug: string;
+
+  /**
+   * Tên hiển thị của style
+   */
+  name: string;
+}
+
+/* =========================================================
+ * Category
+ * ========================================================= */
+
 export interface MarketplaceCategory {
   id: string;
+
   label: string;
 }
 
+/* =========================================================
+ * Template
+ * ========================================================= */
+
 export interface MarketplaceTemplate {
+  // =========================
+  // Basic information
+  // =========================
+
   id: string;
 
   slug: string;
@@ -32,17 +78,55 @@ export interface MarketplaceTemplate {
 
   thumbnail: string;
 
+  // =========================
+  // Images
+  // =========================
+
   images?: string[];
+
+  // =========================
+  // Category / Tags
+  // =========================
 
   category: string;
 
   tags: string[];
 
+  // =========================
+  // Author
+  // =========================
+
   authorId: string;
 
   author: MarketplaceAuthor;
 
+  // =========================
+  // Style
+  // =========================
+
+  /**
+   * ID của style được gán cho Template.
+   *
+   * null = Template không có style.
+   */
+  styleId?: string | null;
+
+  /**
+   * Thông tin style được backend trả về.
+   *
+   * null = Template không có style.
+   */
+  style?: MarketplaceTemplateStyle | null;
+
+  // =========================
+  // Badge
+  // =========================
+
   badge?: MarketplaceBadge;
+
+  // =========================
+  // Statistics
+  // =========================
 
   rating: number;
 
@@ -52,12 +136,21 @@ export interface MarketplaceTemplate {
 
   downloads: number;
 
+  // =========================
+  // Pricing
+  // =========================
+
   price: number;
+
   discountPrice?: number;
 
-  isPremium?: boolean;
-
   originalPrice?: number;
+
+  // =========================
+  // Status
+  // =========================
+
+  isPremium?: boolean;
 
   featured?: boolean;
 
@@ -67,6 +160,10 @@ export interface MarketplaceTemplate {
 
   license?: string;
 }
+
+/* =========================================================
+ * Marketplace
+ * ========================================================= */
 
 export interface MarketplaceTab {
   id: string;
@@ -118,6 +215,10 @@ export interface MarketplaceData {
   templates: MarketplaceTemplate[];
 }
 
+/* =========================================================
+ * Props
+ * ========================================================= */
+
 export interface MarketplaceSearchProps {
   value: string;
 
@@ -154,11 +255,16 @@ export interface TemplateListCardProps {
   template: MarketplaceTemplate;
 }
 
+/* =========================================================
+ * Icon
+ * ========================================================= */
+
 export type MarketplaceIcon = ComponentType<{
   className?: string;
 }>;
+
 /* =========================================================
- * Primitive Types
+ * View / Sort / Category
  * ========================================================= */
 
 export type MarketplaceView =

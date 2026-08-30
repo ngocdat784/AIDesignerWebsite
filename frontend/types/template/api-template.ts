@@ -6,10 +6,26 @@
 
 export interface ApiTemplateAuthor {
   id: string;
+
   name: string;
+
   avatar?: string | null;
+
   email?: string;
+
   role?: "USER" | "CREATOR" | "ADMIN";
+}
+
+// =========================
+// Template Style
+// =========================
+
+export interface ApiTemplateStyle {
+  id: string;
+
+  slug: string;
+
+  name: string;
 }
 
 // =========================
@@ -18,6 +34,7 @@ export interface ApiTemplateAuthor {
 
 export interface ApiTemplateIncludedFile {
   name: string;
+
   type: "file" | "folder";
 }
 
@@ -27,7 +44,9 @@ export interface ApiTemplateIncludedFile {
 
 export interface ApiTemplateChangelog {
   version: string;
+
   date: string;
+
   changes: string[];
 }
 
@@ -83,6 +102,24 @@ export interface ApiTemplate {
   // =========================
 
   techStack: string[];
+
+  // =========================
+  // Template Style
+  // =========================
+
+  /**
+   * ID của style đang được gán cho Template.
+   *
+   * null = Template không có style.
+   */
+  styleId?: string | null;
+
+  /**
+   * Style được backend include từ relation.
+   *
+   * null = Template không có style.
+   */
+  style?: ApiTemplateStyle | null;
 
   // =========================
   // Detail information
