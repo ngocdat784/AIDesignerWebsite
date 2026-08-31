@@ -27,9 +27,9 @@ export default function CartProvider({
   const [items, setItems] =
     useState<CartItem[]>([]);
 
-  // =========================
-  // Refresh
-  // =========================
+  // =========================================================
+  // REFRESH
+  // =========================================================
 
   function refresh() {
     setItems(
@@ -37,9 +37,9 @@ export default function CartProvider({
     );
   }
 
-  // =========================
-  // Initial Load
-  // =========================
+  // =========================================================
+  // INITIAL LOAD
+  // =========================================================
 
   useEffect(() => {
     refresh();
@@ -61,21 +61,14 @@ export default function CartProvider({
     };
   }, []);
 
-  // =========================
-  // Add
-  // =========================
+  // =========================================================
+  // ADD
+  // =========================================================
 
   function add(
     template: MarketplaceTemplate,
     styleId?: string | null
   ) {
-    // Nếu UI truyền styleId
-    // → sử dụng style user đã chọn.
-    //
-    // Nếu không truyền
-    // → cartService sẽ fallback
-    // về template.styleId.
-
     cartService.addTemplate(
       template,
       styleId
@@ -88,15 +81,27 @@ export default function CartProvider({
     refresh();
   }
 
-  // =========================
-  // Remove
-  // =========================
+  // =========================================================
+  // REMOVE
+  // =========================================================
 
+  /**
+   * Xóa một CartItem cụ thể.
+   *
+   * Ưu tiên CartItem.id vì:
+   *
+   * Template A + Modern
+   * Template A + Dark
+   *
+   * là 2 item khác nhau.
+   */
   function remove(
-    templateId: string
+    templateId: string,
+    styleId?: string | null
   ) {
     cartService.removeTemplate(
-      templateId
+      templateId,
+      styleId
     );
 
     toast.success(
@@ -106,9 +111,9 @@ export default function CartProvider({
     refresh();
   }
 
-  // =========================
-  // Clear
-  // =========================
+  // =========================================================
+  // CLEAR
+  // =========================================================
 
   function clear() {
     cartService.clear();
@@ -120,16 +125,18 @@ export default function CartProvider({
     refresh();
   }
 
-  // =========================
-  // Increase
-  // =========================
+  // =========================================================
+  // INCREASE
+  // =========================================================
 
   function increase(
-    templateId: string
+    templateId: string,
+    styleId?: string | null
   ) {
     const item =
       cartService.getItem(
-        templateId
+        templateId,
+        styleId
       );
 
     if (!item) {
@@ -138,45 +145,54 @@ export default function CartProvider({
 
     cartService.updateQuantity(
       templateId,
-      item.quantity + 1
+      item.quantity + 1,
+      styleId
     );
 
     refresh();
   }
 
-  // =========================
-  // Decrease
-  // =========================
+  // =========================================================
+  // DECREASE
+  // =========================================================
 
   function decrease(
-    templateId: string
+    templateId: string,
+    styleId?: string | null
   ) {
     const item =
       cartService.getItem(
-        templateId
+        templateId,
+        styleId
       );
 
     if (!item) {
       return;
     }
 
+    // Quantity = 1
+    // → xóa item hiện tại.
     if (item.quantity <= 1) {
-      remove(templateId);
+      remove(
+        templateId,
+        styleId
+      );
 
       return;
     }
 
     cartService.updateQuantity(
       templateId,
-      item.quantity - 1
+      item.quantity - 1,
+      styleId
     );
 
     refresh();
   }
 
-  // =========================
-  // Context Value
-  // =========================
+  // =========================================================
+  // CONTEXT VALUE
+  // =========================================================
 
   const value: CartContextType =
     useMemo(
@@ -210,6 +226,10 @@ export default function CartProvider({
       }),
       [items]
     );
+
+  // =========================================================
+  // PROVIDER
+  // =========================================================
 
   return (
     <CartContext.Provider

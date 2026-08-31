@@ -1,4 +1,5 @@
 import type { CartItem } from "@/types/cart";
+
 import type {
   MarketplaceTemplate,
   MarketplaceTemplateStyle,
@@ -6,9 +7,9 @@ import type {
 
 const STORAGE_KEY = "cart";
 
-// =========================
-// Load Cart
-// =========================
+// =========================================================
+// LOAD CART
+// =========================================================
 
 function loadCart(): CartItem[] {
   if (typeof window === "undefined") {
@@ -34,9 +35,9 @@ function loadCart(): CartItem[] {
   }
 }
 
-// =========================
-// Save Cart
-// =========================
+// =========================================================
+// SAVE CART
+// =========================================================
 
 function saveCart(
   items: CartItem[]
@@ -58,9 +59,9 @@ function saveCart(
   }
 }
 
-// =========================
-// Find Style
-// =========================
+// =========================================================
+// FIND STYLE
+// =========================================================
 
 function resolveSelectedStyle(
   template: MarketplaceTemplate,
@@ -75,8 +76,6 @@ function resolveSelectedStyle(
     return null;
   }
 
-  // Nếu template có object style và
-  // đúng với styleId được chọn
   if (
     template.style &&
     template.style.id ===
@@ -85,42 +84,75 @@ function resolveSelectedStyle(
     return template.style;
   }
 
-  // Không tìm được object style
-  // thì vẫn giữ styleId.
   return null;
 }
 
-// =========================
-// Repository
-// =========================
+// =========================================================
+// STYLE MATCH
+// =========================================================
+
+function isSameStyle(
+  item: CartItem,
+  styleId?: string | null
+): boolean {
+  return (
+    (item.styleId ?? null) ===
+    (styleId ?? null)
+  );
+}
+
+// =========================================================
+// REPOSITORY
+// =========================================================
 
 export const cartRepository = {
-  // =========================
-  // Query
-  // =========================
+  // =======================================================
+  // QUERY
+  // =======================================================
 
   findAll(): CartItem[] {
     return loadCart();
   },
 
+  /**
+   * Kiểm tra Template + Style đã tồn tại trong Cart chưa.
+   */
   isInCart(
     templateId: string,
     styleId?: string | null
   ): boolean {
-    const items = loadCart();
-
-    const selectedStyleId =
-      styleId ?? null;
-
-    return items.some(
+    return loadCart().some(
       (item) =>
         item.template.id ===
           templateId &&
-        (item.styleId ?? null) ===
-          selectedStyleId
+        isSameStyle(
+          item,
+          styleId
+        )
     );
   },
 
+  /**
+   * Lấy CartItem cụ thể theo Template + Style.
+   */
+  getItem(
+    templateId: string,
+    styleId?: string | null
+  ): CartItem | undefined {
+    return loadCart().find(
+      (item) =>
+        item.template.id ===
+          templateId &&
+        isSameStyle(
+          item,
+          styleId
+        )
+    );
+  },
+
+  /**
+   * Tổng số lượng sản phẩm trong Cart.
+   */
   getItemCount(): number {
     return loadCart().reduce(
       (count, item) =>
@@ -129,30 +161,25 @@ export const cartRepository = {
     );
   },
 
-  // =========================
-  // Commands
-  // =========================
+  // =======================================================
+  // ADD
+  // =======================================================
 
   /**
-   * Thêm Template vào Cart.
+   * Thêm Template + Style vào Cart.
    *
-   * Một Template có thể xuất hiện
-   * nhiều lần nếu khác style.
+   * Cùng Template:
    *
-   * Template A + Style 1
-   * Template A + Style 2
+   * Template A + Modern
+   * Template A + Dark
    *
-   * = 2 CartItem khác nhau.
+   * được xem là 2 CartItem khác nhau.
    */
   add(
     template: MarketplaceTemplate,
     styleId?: string | null
   ): void {
     const items = loadCart();
-
-    // =========================
-    // Resolve Style
-    // =========================
 
     const selectedStyleId =
       styleId ??
@@ -165,22 +192,20 @@ export const cartRepository = {
         selectedStyleId
       );
 
-    // =========================
-    // Find existing item
-    // =========================
-
     const existing =
       items.find(
         (item) =>
           item.template.id ===
             template.id &&
-          (item.styleId ?? null) ===
+          isSameStyle(
+            item,
             selectedStyleId
+          )
       );
 
-    // =========================
-    // Existing
-    // =========================
+    // =====================================================
+    // EXISTING
+    // =====================================================
 
     if (existing) {
       existing.quantity += 1;
@@ -190,9 +215,9 @@ export const cartRepository = {
       return;
     }
 
-    // =========================
-    // New CartItem
-    // =========================
+    // =====================================================
+    // NEW
+    // =====================================================
 
     const cartItem: CartItem = {
       id: crypto.randomUUID(),
@@ -216,67 +241,127 @@ export const cartRepository = {
     saveCart(items);
   },
 
-  // =========================
-  // Remove
-  // =========================
+  // =======================================================
+  // REMOVE
+  // =======================================================
 
   /**
-   * Xóa toàn bộ item của Template.
+   * Xóa một Template + Style cụ thể.
    *
-   * Nếu Template có nhiều style,
-   * tất cả style của Template sẽ bị xóa.
+   * Nếu không truyền styleId:
+   * → xóa tất cả style của Template.
+   *
+   * Nếu truyền styleId:
+   * → chỉ xóa đúng style đó.
    */
   remove(
-    templateId: string
+    templateId: string,
+    styleId?: string | null
   ): void {
+    const items =
+      loadCart();
+
+    // Không truyền style
+    // → giữ nguyên behavior cũ:
+    // xóa toàn bộ Template.
+    if (
+      styleId === undefined
+    ) {
+      saveCart(
+        items.filter(
+          (item) =>
+            item.template.id !==
+            templateId
+        )
+      );
+
+      return;
+    }
+
+    // Có style
+    // → chỉ xóa Template + Style đó.
     saveCart(
-      loadCart().filter(
+      items.filter(
         (item) =>
-          item.template.id !==
-          templateId
+          !(
+            item.template.id ===
+              templateId &&
+            isSameStyle(
+              item,
+              styleId
+            )
+          )
       )
     );
   },
 
-  // =========================
-  // Clear
-  // =========================
+  // =======================================================
+  // CLEAR
+  // =======================================================
 
   clear(): void {
     saveCart([]);
   },
 
-  // =========================
-  // Update Quantity
-  // =========================
+  // =======================================================
+  // UPDATE QUANTITY
+  // =======================================================
 
   /**
-   * Cập nhật quantity của Template.
+   * Cập nhật quantity của Template + Style.
    *
-   * Lưu ý:
-   * Nếu cùng Template có nhiều style,
-   * method này sẽ cập nhật tất cả.
+   * Nếu không truyền styleId:
+   * → cập nhật tất cả style của Template.
    *
-   * Nếu UI cần chỉnh riêng từng style,
-   * nên chuyển sang update bằng CartItem.id
-   * hoặc Template + styleId.
+   * Nếu truyền styleId:
+   * → chỉ cập nhật đúng CartItem đó.
    */
   updateQuantity(
     templateId: string,
-    quantity: number
+    quantity: number,
+    styleId?: string | null
   ): void {
     const items =
-      loadCart().map(
+      loadCart();
+
+    // Không truyền style
+    // → behavior cũ
+    if (
+      styleId === undefined
+    ) {
+      saveCart(
+        items.map(
+          (item) =>
+            item.template.id ===
+            templateId
+              ? {
+                  ...item,
+                  quantity,
+                }
+              : item
+        )
+      );
+
+      return;
+    }
+
+    // Có style
+    // → chỉ update đúng style.
+    saveCart(
+      items.map(
         (item) =>
           item.template.id ===
-          templateId
+            templateId &&
+          isSameStyle(
+            item,
+            styleId
+          )
             ? {
                 ...item,
                 quantity,
               }
             : item
-      );
-
-    saveCart(items);
+      )
+    );
   },
 };

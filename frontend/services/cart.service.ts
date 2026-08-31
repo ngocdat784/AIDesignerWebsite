@@ -3,20 +3,34 @@ import { cartRepository } from "@/repositories/cart.repository";
 import type { MarketplaceTemplate } from "@/components/sections/marketplace/types";
 
 export const cartService = {
-  // =========================
-  // Query
-  // =========================
+  // =========================================================
+  // QUERY
+  // =========================================================
 
   getAll() {
     return cartRepository.findAll();
   },
 
-  getItem(templateId: string) {
+  /**
+   * Tìm một CartItem theo Template + Style.
+   *
+   * Template giống nhau nhưng Style khác nhau
+   * được xem là 2 CartItem khác nhau.
+   */
+  getItem(
+    templateId: string,
+    styleId?: string | null
+  ) {
+    const selectedStyleId =
+      styleId ?? null;
+
     return cartRepository
       .findAll()
       .find(
         (item) =>
-          item.template.id === templateId
+          item.template.id === templateId &&
+          (item.styleId ?? null) ===
+            selectedStyleId
       );
   },
 
@@ -30,27 +44,30 @@ export const cartService = {
       );
   },
 
-  isInCart(templateId: string) {
+  /**
+   * Kiểm tra Template + Style đã có trong Cart chưa.
+   */
+  isInCart(
+    templateId: string,
+    styleId?: string | null
+  ) {
+    const selectedStyleId =
+      styleId ?? null;
+
     return cartRepository
       .findAll()
       .some(
         (item) =>
-          item.template.id === templateId
+          item.template.id === templateId &&
+          (item.styleId ?? null) ===
+            selectedStyleId
       );
   },
 
-  // =========================
-  // Commands
-  // =========================
+  // =========================================================
+  // COMMANDS
+  // =========================================================
 
-  /**
-   * Thêm Template vào Cart
-   *
-   * styleId là style mà user đã chọn.
-   *
-   * Nếu không truyền styleId:
-   * → sử dụng styleId mặc định của Template
-   */
   addTemplate(
     template: MarketplaceTemplate,
     styleId?: string | null
@@ -67,10 +84,12 @@ export const cartService = {
   },
 
   removeTemplate(
-    templateId: string
+    templateId: string,
+    styleId?: string | null
   ) {
     cartRepository.remove(
-      templateId
+      templateId,
+      styleId
     );
   },
 
@@ -80,17 +99,19 @@ export const cartService = {
 
   updateQuantity(
     templateId: string,
-    quantity: number
+    quantity: number,
+    styleId?: string | null
   ) {
     cartRepository.updateQuantity(
       templateId,
-      quantity
+      quantity,
+      styleId
     );
   },
 
-  // =========================
-  // Calculations
-  // =========================
+  // =========================================================
+  // CALCULATIONS
+  // =========================================================
 
   getSubtotal() {
     return cartRepository

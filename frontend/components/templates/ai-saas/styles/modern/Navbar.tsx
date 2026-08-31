@@ -1,6 +1,6 @@
 "use client";
 
-import { AiSaasTheme } from "./AiSaasTheme";
+import { AiSaasTheme } from "../../AiSaasTheme";
 
 export default function AiSaasNavbar() {
   return (

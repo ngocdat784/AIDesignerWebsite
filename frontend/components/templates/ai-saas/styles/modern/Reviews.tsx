@@ -1,6 +1,6 @@
 "use client";
 
-import { AiSaasTheme } from "./AiSaasTheme";
+import { AiSaasTheme } from "../../AiSaasTheme";
 
 const reviews = [
   {

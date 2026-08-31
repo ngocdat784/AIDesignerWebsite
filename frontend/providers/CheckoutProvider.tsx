@@ -7,12 +7,15 @@ import {
   useState,
 } from "react";
 
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 import { useAuth } from "@/contexts/AuthContext";
 import { CheckoutContext } from "@/contexts/CheckoutContext";
+
 import { checkoutService } from "@/services/checkout.service";
 import { orderService } from "@/services/order.service";
+import { cartService } from "@/services/cart.service";
 
 import type {
   CheckoutBillingInfo,
@@ -23,6 +26,8 @@ import type {
 
 import type { Order } from "@/types/order/order";
 
+import type { MarketplaceTemplate } from "@/components/sections/marketplace/types";
+
 interface Props {
   children: ReactNode;
 }
@@ -31,13 +36,14 @@ export default function CheckoutProvider({
   children,
 }: Props) {
   const auth = useAuth();
+  const router = useRouter();
 
   const [checkout, setCheckout] =
     useState<CheckoutData | null>(null);
 
-  // =========================
+  // =========================================================
   // Refresh
-  // =========================
+  // =========================================================
 
   function refresh() {
     const data =
@@ -46,9 +52,9 @@ export default function CheckoutProvider({
     setCheckout(data);
   }
 
-  // =========================
+  // =========================================================
   // Initialize
-  // =========================
+  // =========================================================
 
   function initialize() {
     const data =
@@ -56,15 +62,81 @@ export default function CheckoutProvider({
 
     if (!data) {
       setCheckout(null);
-      return;
+      return null;
     }
 
     setCheckout(data);
+
+    return data;
   }
 
-  // =========================
+  // =========================================================
+  // BUY NOW
+  // =========================================================
+
+  /**
+   * Buy Now flow:
+   *
+   * 1. Add template vào cart
+   * 2. Giữ lại style user đã chọn
+   * 3. Initialize checkout từ cart
+   * 4. Chuyển thẳng tới /checkout
+   */
+  function buyNow(
+    template: MarketplaceTemplate,
+    styleId?: string | null,
+  ) {
+    try {
+      // =====================================================
+      // Add template to cart
+      // =====================================================
+
+      cartService.addTemplate(
+        template,
+        styleId,
+      );
+
+      // =====================================================
+      // Initialize checkout
+      // =====================================================
+
+      const data =
+        checkoutService.initializeFromCart();
+
+      if (!data) {
+        toast.error(
+          "Unable to initialize checkout.",
+        );
+
+        return;
+      }
+
+      setCheckout(data);
+
+      // =====================================================
+      // Success
+      // =====================================================
+
+      toast.success(
+        "Product added. Redirecting to checkout...",
+      );
+
+      router.push("/checkout");
+    } catch (error) {
+      console.error(
+        "BUY NOW ERROR:",
+        error,
+      );
+
+      toast.error(
+        "Unable to proceed to checkout.",
+      );
+    }
+  }
+
+  // =========================================================
   // Initial Load
-  // =========================
+  // =========================================================
 
   useEffect(() => {
     initialize();
@@ -86,9 +158,9 @@ export default function CheckoutProvider({
     };
   }, []);
 
-  // =========================
+  // =========================================================
   // Billing
-  // =========================
+  // =========================================================
 
   function updateBilling(
     billing: CheckoutBillingInfo,
@@ -107,9 +179,9 @@ export default function CheckoutProvider({
     }
   }
 
-  // =========================
+  // =========================================================
   // Payment
-  // =========================
+  // =========================================================
 
   function updatePayment(
     payment: CheckoutPaymentInfo,
@@ -128,9 +200,9 @@ export default function CheckoutProvider({
     }
   }
 
-  // =========================
+  // =========================================================
   // Validation
-  // =========================
+  // =========================================================
 
   function validateBilling() {
     return checkoutService.validateBilling();
@@ -144,15 +216,11 @@ export default function CheckoutProvider({
     return checkoutService.validateCheckout();
   }
 
-  // =========================
-  // Order
-  // =========================
+  // =========================================================
+  // Create Order
+  // =========================================================
 
   async function createOrder(): Promise<Order | null> {
-    // =========================
-    // Debug
-    // =========================
-
     console.log(
       "========== CHECKOUT AUTH DEBUG ==========",
     );
@@ -205,9 +273,9 @@ export default function CheckoutProvider({
       "=========================================",
     );
 
-    // =========================
-    // Validate Checkout
-    // =========================
+    // =====================================================
+    // Validate
+    // =====================================================
 
     const valid =
       checkoutService.validateCheckout();
@@ -220,9 +288,9 @@ export default function CheckoutProvider({
       return null;
     }
 
-    // =========================
-    // Check Checkout
-    // =========================
+    // =====================================================
+    // Check checkout
+    // =====================================================
 
     if (!checkout) {
       toast.error(
@@ -232,21 +300,9 @@ export default function CheckoutProvider({
       return null;
     }
 
-    // =========================
+    // =====================================================
     // Authentication
-    // =========================
-
-    /*
-     * AuthProvider restore session
-     * là một quá trình async.
-     *
-     * Vì vậy có thể xảy ra trường hợp:
-     *
-     * accessToken có tồn tại
-     * nhưng auth.user vẫn đang null.
-     *
-     * Khi đó thử restore session lại.
-     */
+    // =====================================================
 
     let currentUser = auth.user;
 
@@ -273,9 +329,9 @@ export default function CheckoutProvider({
       }
     }
 
-    // =========================
+    // =====================================================
     // Authentication Failed
-    // =========================
+    // =====================================================
 
     if (!currentUser?.id) {
       console.error(
@@ -289,9 +345,9 @@ export default function CheckoutProvider({
       return null;
     }
 
-    // =========================
+    // =====================================================
     // Create Order
-    // =========================
+    // =====================================================
 
     try {
       console.log(
@@ -314,9 +370,9 @@ export default function CheckoutProvider({
         "Order created successfully.",
       );
 
-      // =========================
+      // ===================================================
       // Clear Checkout
-      // =========================
+      // ===================================================
 
       clear();
 
@@ -338,9 +394,9 @@ export default function CheckoutProvider({
     }
   }
 
-  // =========================
-  // Clear
-  // =========================
+  // =========================================================
+  // Clear Checkout
+  // =========================================================
 
   function clear() {
     checkoutService.clear();
@@ -352,9 +408,9 @@ export default function CheckoutProvider({
     );
   }
 
-  // =========================
+  // =========================================================
   // Derived Data
-  // =========================
+  // =========================================================
 
   const items =
     checkout?.order.items ?? [];
@@ -368,9 +424,9 @@ export default function CheckoutProvider({
   const total =
     checkout?.order.total ?? 0;
 
-  // =========================
+  // =========================================================
   // Context Value
-  // =========================
+  // =========================================================
 
   const value: CheckoutContextType =
     useMemo(
@@ -401,6 +457,9 @@ export default function CheckoutProvider({
 
         createOrder,
         clear,
+
+        // BUY NOW
+        buyNow,
       }),
       [
         checkout,

@@ -99,4 +99,13 @@ export interface CheckoutContextType {
   createOrder: () => Promise<Order | null>;
 
   clear: () => void;
+
+  // =========================================================
+  // BUY NOW
+  // =========================================================
+
+  buyNow: (
+    template: MarketplaceTemplate,
+    styleId?: string | null
+  ) => void;
 }
