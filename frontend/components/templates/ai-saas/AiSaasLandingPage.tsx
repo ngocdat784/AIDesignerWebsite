@@ -1,57 +1,229 @@
 "use client";
 
-import AiSaasNavbar from "./AiSaasNavbar";
-import AiSaasHero from "./AiSaasHero";
-import AiSaasProductPreview from "./AiSaasProductPreview";
-import AiSaasTrustedBy from "./AiSaasTrustedBy";
-import AiSaasFeatures from "./AiSaasFeatures";
-import AiSaasWorkflow from "./AiSaasWorkflow";
-import AiSaasTechnology from "./AiSaasTechnology";
-import AiSaasPricing from "./AiSaasPricing";
-import AiSaasReviews from "./AiSaasReviews";
-import AiSaasCTA from "./AiSaasCTA";
-import AiSaasFooter from "./AiSaasFooter";
+import type { ComponentType } from "react";
 
-export default function AiSaasLandingPage() {
+// =========================================================
+// STYLE INDEXES
+// =========================================================
+
+import * as ModernStyle from "./styles/modern";
+
+// Khi tạo xong các style khác, chỉ cần mở comment:
+//
+// import * as MinimalStyle from "./styles/minimal";
+// import * as DarkStyle from "./styles/dark";
+// import * as GlassStyle from "./styles/glass";
+
+// =========================================================
+// STYLE ID
+// =========================================================
+
+export type AiSaasStyleId =
+  | "modern"
+  | "minimal"
+  | "dark"
+  | "glass";
+
+// =========================================================
+// COMPONENT SET
+// =========================================================
+
+export interface AiSaasComponentSet {
+  Navbar: ComponentType<any>;
+  Hero: ComponentType<any>;
+  ProductPreview: ComponentType<any>;
+  TrustedBy: ComponentType<any>;
+  Features: ComponentType<any>;
+  Workflow: ComponentType<any>;
+  Technology: ComponentType<any>;
+  Pricing: ComponentType<any>;
+  Reviews: ComponentType<any>;
+  CTA: ComponentType<any>;
+  Footer: ComponentType<any>;
+}
+
+// =========================================================
+// MODERN STYLE
+// =========================================================
+
+const modernStyle: AiSaasComponentSet = {
+  Navbar: ModernStyle.Navbar,
+  Hero: ModernStyle.Hero,
+  ProductPreview: ModernStyle.ProductPreview,
+  TrustedBy: ModernStyle.TrustedBy,
+  Features: ModernStyle.Features,
+  Workflow: ModernStyle.Workflow,
+  Technology: ModernStyle.Technology,
+  Pricing: ModernStyle.Pricing,
+  Reviews: ModernStyle.Reviews,
+  CTA: ModernStyle.CTA,
+  Footer: ModernStyle.Footer,
+};
+
+// =========================================================
+// STYLE REGISTRY
+// =========================================================
+
+const styleRegistry: Record<
+  AiSaasStyleId,
+  AiSaasComponentSet
+> = {
+  modern: modernStyle,
+
+  // Hiện tại chưa có component riêng
+  // nên tạm fallback về modern.
+  minimal: modernStyle,
+  dark: modernStyle,
+  glass: modernStyle,
+};
+
+// =========================================================
+// PROPS
+// =========================================================
+
+export interface AiSaasLandingPageProps {
+  /**
+   * Style được chọn từ Template Detail / Style Selector.
+   *
+   * Ví dụ:
+   * "modern"
+   * "minimal"
+   * "dark"
+   * "glass"
+   */
+  styleId?: AiSaasStyleId;
+
+  /**
+   * ClassName bên ngoài.
+   */
+  className?: string;
+}
+
+// =========================================================
+// COMPONENT
+// =========================================================
+
+export default function AiSaasLandingPage({
+  styleId = "modern",
+  className = "",
+}: AiSaasLandingPageProps) {
+  // -------------------------------------------------------
+  // Resolve style
+  // -------------------------------------------------------
+
+  const style =
+    styleRegistry[styleId] ??
+    styleRegistry.modern;
+
+  // -------------------------------------------------------
+  // Components
+  // -------------------------------------------------------
+
+  const {
+    Navbar,
+    Hero,
+    ProductPreview,
+    TrustedBy,
+    Features,
+    Workflow,
+    Technology,
+    Pricing,
+    Reviews,
+    CTA,
+    Footer,
+  } = style;
+
+  // -------------------------------------------------------
+  // Render
+  // -------------------------------------------------------
+
   return (
     <main
-      className="min-h-screen bg-white text-slate-950"
-      style={{
-        margin: "0 auto",
-        padding: "0 24px",
-        width: "100%",
-        boxSizing: "border-box",
-      }}
+      className={`
+        min-h-screen
+        bg-white
+        text-slate-950
+        ${className}
+      `}
     >
-      <AiSaasNavbar />
+      {/* =====================================================
+          NAVBAR
+         ===================================================== */}
+
+      <Navbar />
+
+      {/* =====================================================
+          CONTENT
+         ===================================================== */}
 
       <div
-        style={{
-          width: "100%",
-          maxWidth: "1400px",
-          margin: "0 auto",
-        }}
+        className="
+          mx-auto
+          w-full
+          max-w-[1400px]
+          px-6
+        "
       >
-        <AiSaasHero />
+        {/* ===================================================
+            HERO
+           =================================================== */}
 
-        <AiSaasProductPreview />
+        <Hero />
 
-        <AiSaasTrustedBy />
+        {/* ===================================================
+            PRODUCT PREVIEW
+           =================================================== */}
 
-        <AiSaasFeatures />
+        <ProductPreview />
 
-        <AiSaasWorkflow />
+        {/* ===================================================
+            TRUSTED BY
+           =================================================== */}
 
-        <AiSaasTechnology />
+        <TrustedBy />
 
-        <AiSaasPricing />
+        {/* ===================================================
+            FEATURES
+           =================================================== */}
 
-        <AiSaasReviews />
+        <Features />
 
-        <AiSaasCTA />
+        {/* ===================================================
+            WORKFLOW
+           =================================================== */}
+
+        <Workflow />
+
+        {/* ===================================================
+            TECHNOLOGY
+           =================================================== */}
+
+        <Technology />
+
+        {/* ===================================================
+            PRICING
+           =================================================== */}
+
+        <Pricing />
+
+        {/* ===================================================
+            REVIEWS
+           =================================================== */}
+
+        <Reviews />
+
+        {/* ===================================================
+            CTA
+           =================================================== */}
+
+        <CTA />
       </div>
 
-      <AiSaasFooter />
+      {/* =====================================================
+          FOOTER
+         ===================================================== */}
+
+      <Footer />
     </main>
   );
 }
