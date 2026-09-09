@@ -1,12 +1,12 @@
 {
-  "scripts": {
-    "start": "tsx main.ts",
-    "start:dev": "tsx watch main.ts",
-   "build": "node node_modules/prisma/build/index.js generate && node node_modules/typescript/bin/tsc",
-    "start:prod": "node dist/main.js",
-    "prisma:generate": "prisma generate",
-    "prisma:migrate:deploy": "prisma migrate deploy"
-  },
+ "scripts": {
+  "start": "node dist/main.js",
+  "start:dev": "tsx watch main.ts",
+  "build": "node node_modules/prisma/build/index.js generate && node node_modules/typescript/bin/tsc",
+  "start:prod": "node dist/main.js",
+  "prisma:generate": "node node_modules/prisma/build/index.js generate",
+  "prisma:migrate:deploy": "node node_modules/prisma/build/index.js migrate deploy"
+},
   "dependencies": {
     "@nestjs/common": "^11.1.29",
     "@nestjs/config": "^4.0.4",
