@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
-\restrict YhJD5fRtb1d0GKrjgZfybxYy5AK7kdDAD6eDOM7FJtc0CxXXYcGcdnZNPLGgRlC
+\restrict mhA5kOK14qNGRWtWKchcGPYbKzFPD5jAu69hoGmHTEWekP4EN5eRsgf8H8ROyjy
 
 -- Dumped from database version 18.4
 -- Dumped by pg_dump version 18.4
@@ -97,20 +97,8 @@ tpl-ai-saas-landing-002	ai-saas-landing-page	AI SaaS Landing Page	A premium AI S
 
 
 --
--- Data for Name: _prisma_migrations; Type: TABLE DATA; Schema: public; Owner: postgres
---
-
-COPY public._prisma_migrations (id, checksum, finished_at, migration_name, logs, rolled_back_at, started_at, applied_steps_count) FROM stdin;
-cb622ff0-bf27-48f2-b173-e21721dab0b2	8b9a623bb7475b3f1e587d1e8d88e3ddcc98d0b87551d21fdc408526dc34d28c	2026-08-11 09:25:37.177296+07	20260811022537_init	\N	\N	2026-08-11 09:25:37.061889+07	1
-931da8ae-881a-45b7-965d-7ab2b622d548	3b0dbf7ae4aec58e93d53280e0d6eb0b8b26f7328bff8d935a60d741f7e0c6ce	2026-08-13 21:53:59.786025+07	20260813145359_add_password_hash_to_user	\N	\N	2026-08-13 21:53:59.725719+07	1
-31cf5340-7d69-45bd-aba3-c371046282da	4735fd96f27287ae6a7cd5e56107b0083af7c65482998f8d01ecfa7fea6123ca	2026-08-16 22:53:37.600044+07	20260816155337_expand_template_fields	\N	\N	2026-08-16 22:53:37.474386+07	1
-d37ba106-b114-4a6f-9afc-05bac8777e1b	e254ec74c0a94c89e44404b86d67cc77cdc7d357779abe1891a7c281139804c7	2026-08-26 10:19:17.592491+07	20260826031917_add_template_style	\N	\N	2026-08-26 10:19:17.320061+07	1
-\.
-
-
---
 -- PostgreSQL database dump complete
 --
 
-\unrestrict YhJD5fRtb1d0GKrjgZfybxYy5AK7kdDAD6eDOM7FJtc0CxXXYcGcdnZNPLGgRlC
+\unrestrict mhA5kOK14qNGRWtWKchcGPYbKzFPD5jAu69hoGmHTEWekP4EN5eRsgf8H8ROyjy
 
