@@ -1,0 +1,7 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.TEMPLATE_STYLE_REPOSITORY = exports.ORDER_REPOSITORY = exports.TEMPLATE_REPOSITORY = exports.USER_REPOSITORY = void 0;
+exports.USER_REPOSITORY = "USER_REPOSITORY";
+exports.TEMPLATE_REPOSITORY = "TEMPLATE_REPOSITORY";
+exports.ORDER_REPOSITORY = "ORDER_REPOSITORY";
+exports.TEMPLATE_STYLE_REPOSITORY = "TEMPLATE_STYLE_REPOSITORY";

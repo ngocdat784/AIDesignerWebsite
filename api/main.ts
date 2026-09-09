@@ -14,18 +14,21 @@ import { ResponseInterceptor } from "./common/interceptors/response.interceptor"
 
 
 async function bootstrap() {
-  const app =
-    await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule);
 
 
   // =========================
   // CORS
   // =========================
 
+  const frontendUrl =
+    process.env.FRONTEND_URL || "http://localhost:3001";
+
   app.enableCors({
     origin: [
-      "http://localhost:3001",
+      frontendUrl,
       "http://localhost:3000",
+      "http://localhost:3001",
     ],
     credentials: true,
   });
@@ -68,11 +71,11 @@ async function bootstrap() {
   const port =
     Number(process.env.PORT) || 3000;
 
-  await app.listen(port);
+  await app.listen(port, "0.0.0.0");
 
 
   console.log(
-    `NestJS API running at http://localhost:${port}`,
+    `NestJS API running on port ${port}`,
   );
 }
 
