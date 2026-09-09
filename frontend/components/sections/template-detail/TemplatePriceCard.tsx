@@ -427,17 +427,64 @@ export default function TemplatePriceCard({
     subtotal,
   } = useCart();
 
-  const styles = variantStyles[variant];
-  const activeStyleId =
-  selectedStyleId ??
-  template.styleId ??
-  null;
+  const styles =
+    variantStyles[variant];
 
-  const added =
-    isInCart(template.id);
+  // =======================================================
+  // ACTIVE STYLE
+  // =======================================================
+
+  /**
+   * Style thực tế mà user đang chọn.
+   *
+   * Priority:
+   *
+   * 1. selectedStyleId
+   *    -> style được chọn trực tiếp trên UI
+   *
+   * 2. template.styleId
+   *    -> style mặc định của template
+   *
+   * 3. null
+   *    -> template không có style
+   */
+  const activeStyleId =
+    selectedStyleId ??
+    template.styleId ??
+    null;
+
+  // =======================================================
+  // MARKETPLACE TEMPLATE
+  // =======================================================
 
   const marketplaceTemplate =
-    toMarketplaceTemplate(template);
+    toMarketplaceTemplate(
+      template,
+    );
+
+  // =======================================================
+  // CART STATE
+  // =======================================================
+
+  /**
+   * Quan trọng:
+   *
+   * Cart phải phân biệt:
+   *
+   * Template A + Style 1
+   * Template A + Style 2
+   *
+   * Vì vậy KHÔNG được chỉ kiểm tra template.id.
+   */
+  const added =
+    isInCart(
+      template.id,
+      activeStyleId,
+    );
+
+  // =======================================================
+  // DISCOUNT
+  // =======================================================
 
   const hasDiscount =
     template.discountPrice != null &&
@@ -457,7 +504,9 @@ export default function TemplatePriceCard({
         duration-500
         ${styles.card}
       `}
-      data-preview-variant={variant}
+      data-preview-variant={
+        variant
+      }
     >
       {/* =====================================================
           TOP ACCENT
@@ -473,211 +522,193 @@ export default function TemplatePriceCard({
         `}
       />
 
-     <div className="pt-2">
-  {/* ===================================================
-      PREMIUM BADGE
-     =================================================== */}
+      <div className="pt-2">
+        {/* ===================================================
+            PREMIUM BADGE
+           =================================================== */}
 
-  {template.isPremium && (
-    <div
-      className={`
-        mb-5
-        inline-flex
-        items-center
-        gap-2
-        rounded-full
-        border
-        px-3
-        py-1.5
-        text-xs
-        font-semibold
-        ${styles.premium}
-        ${styles.badge}
-      `}
-    >
-      <Crown className="h-3.5 w-3.5" />
+        {template.isPremium && (
+          <div
+            className={`
+              mb-5
+              inline-flex
+              items-center
+              gap-2
+              rounded-full
+              border
+              px-3
+              py-1.5
+              text-xs
+              font-semibold
+              ${styles.premium}
+              ${styles.badge}
+            `}
+          >
+            <Crown className="h-3.5 w-3.5" />
 
-      Premium Template
-    </div>
-  )}
+            Premium Template
+          </div>
+        )}
 
-  {/* ===================================================
-      PRICE
-     =================================================== */}
+        {/* ===================================================
+            PRICE
+           =================================================== */}
 
-  <div
-    className={`
-      mb-6
-      rounded-2xl
-      border
-      p-5
-      ${styles.priceArea}
-    `}
-  >
-    <p
-      className={`
-        text-xs
-        font-semibold
-        uppercase
-        tracking-wider
-        ${styles.priceLabel}
-      `}
-    >
-      Template Price
-    </p>
-
-    <div className="mt-3 flex flex-wrap items-end gap-3">
-      <PriceTag
-        price={template.price}
-        discountPrice={
-          template.discountPrice ??
-          undefined
-        }
-      />
-
-      {hasDiscount && (
-        <span
+        <div
           className={`
-            pb-1
-            text-sm
-            line-through
-            ${styles.muted}
+            mb-6
+            rounded-2xl
+            border
+            p-5
+            ${styles.priceArea}
           `}
         >
-          ${template.originalPrice}
-        </span>
-      )}
-    </div>
+          <p
+            className={`
+              text-xs
+              font-semibold
+              uppercase
+              tracking-wider
+              ${styles.priceLabel}
+            `}
+          >
+            Template Price
+          </p>
 
-    {hasDiscount && (
-      <div
-        className={`
-          mt-3
-          inline-flex
-          rounded-full
-          bg-emerald-500/10
-          px-2.5
-          py-1
-          text-xs
-          font-semibold
-          text-emerald-600
-        `}
-      >
-        Save{" "}
-        {Math.round(
-          (1 -
-            template.discountPrice! /
-              template.originalPrice!) *
-            100,
-        )}
-        %
-      </div>
-    )}
-  </div>
+          <div className="mt-3 flex flex-wrap items-end gap-3">
+            <PriceTag
+              price={
+                template.price
+              }
+              discountPrice={
+                template.discountPrice ??
+                undefined
+              }
+            />
 
-  {/* ===================================================
-      BENEFITS
-     =================================================== */}
+            {hasDiscount && (
+              <span
+                className={`
+                  pb-1
+                  text-sm
+                  line-through
+                  ${styles.muted}
+                `}
+              >
+                $
+                {
+                  template.originalPrice
+                }
+              </span>
+            )}
+          </div>
 
-  <div className="mb-6">
-    <p
-      className={`
-        mb-4
-        text-xs
-        font-semibold
-        uppercase
-        tracking-wider
-        ${styles.muted}
-      `}
-    >
-      What's included
-    </p>
+          {hasDiscount && (
+            <div
+              className="
+                mt-3
+                inline-flex
+                rounded-full
+                bg-emerald-500/10
+                px-2.5
+                py-1
+                text-xs
+                font-semibold
+                text-emerald-600
+              "
+            >
+              Save{" "}
+              {Math.round(
+                (1 -
+                  template.discountPrice! /
+                    template.originalPrice!) *
+                  100,
+              )}
+              %
+            </div>
+          )}
+        </div>
 
-    <div>
-      <Benefit
-        icon={
-          <RefreshCw className="h-4 w-4" />
-        }
-        text="Lifetime updates"
-        styles={styles}
-      />
+        {/* ===================================================
+            BENEFITS
+           =================================================== */}
 
-      <Benefit
-        icon={
-          <Headphones className="h-4 w-4" />
-        }
-        text="Premium support"
-        styles={styles}
-      />
+        <div className="mb-6">
+          <p
+            className={`
+              mb-4
+              text-xs
+              font-semibold
+              uppercase
+              tracking-wider
+              ${styles.muted}
+            `}
+          >
+            What's included
+          </p>
 
-      <Benefit
-        icon={
-          <Download className="h-4 w-4" />
-        }
-        text="Instant download"
-        styles={styles}
-      />
+          <div>
+            <Benefit
+              icon={
+                <RefreshCw className="h-4 w-4" />
+              }
+              text="Lifetime updates"
+              styles={styles}
+            />
 
-      <Benefit
-        icon={
-          <ShieldCheck className="h-4 w-4" />
-        }
-        text={
-          template.license ??
-          "Standard License"
-        }
-        styles={styles}
-      />
-    </div>
-  </div>
+            <Benefit
+              icon={
+                <Headphones className="h-4 w-4" />
+              }
+              text="Premium support"
+              styles={styles}
+            />
 
-  {/* ===================================================
-      DIVIDER
-     =================================================== */}
+            <Benefit
+              icon={
+                <Download className="h-4 w-4" />
+              }
+              text="Instant download"
+              styles={styles}
+            />
 
-  <div
-    className={`
-      mb-6
-      border-t
-      ${styles.divider}
-    `}
-  />
+            <Benefit
+              icon={
+                <ShieldCheck className="h-4 w-4" />
+              }
+              text={
+                template.license ??
+                "Standard License"
+              }
+              styles={styles}
+            />
+          </div>
+        </div>
 
-  {/* ===================================================
-      ACTIONS
-     =================================================== */}
+        {/* ===================================================
+            DIVIDER
+           =================================================== */}
 
-  <div>
-    {/* Buy Now */}
+        <div
+          className={`
+            mb-6
+            border-t
+            ${styles.divider}
+          `}
+        />
 
-    <AppButton
-      className={`
-        mb-3
-        w-full
-        min-h-12
-        rounded-xl
-        transition-all
-        duration-300
-        hover:scale-[1.02]
-        active:scale-[0.98]
-        ${styles.primaryButton}
-      `}
-    >
-      <CreditCard className="mr-2 h-4 w-4" />
+        {/* ===================================================
+            ACTIONS
+           =================================================== */}
 
-      Buy Now
-    </AppButton>
+        <div>
+          {/* =================================================
+              BUY NOW
+             ================================================= */}
 
-    {/* Cart */}
-
-    {added ? (
-      <>
-        <Link
-          href="/cart"
-          className="mb-3 block"
-        >
           <AppButton
             className={`
+              mb-3
               w-full
               min-h-12
               rounded-xl
@@ -685,221 +716,282 @@ export default function TemplatePriceCard({
               duration-300
               hover:scale-[1.02]
               active:scale-[0.98]
-              ${styles.secondaryButton}
+              ${styles.primaryButton}
             `}
           >
-            <Check className="mr-2 h-4 w-4" />
+            <CreditCard className="mr-2 h-4 w-4" />
 
-            View Cart
+            Buy Now
           </AppButton>
-        </Link>
 
-        {/* Cart summary */}
+          {/* =================================================
+              CART
+             ================================================= */}
+
+          {added ? (
+            <>
+              {/* =============================================
+                  VIEW CART
+                 ============================================= */}
+
+              <Link
+                href="/cart"
+                className="mb-3 block"
+              >
+                <AppButton
+                  className={`
+                    w-full
+                    min-h-12
+                    rounded-xl
+                    transition-all
+                    duration-300
+                    hover:scale-[1.02]
+                    active:scale-[0.98]
+                    ${styles.secondaryButton}
+                  `}
+                >
+                  <Check className="mr-2 h-4 w-4" />
+
+                  View Cart
+                </AppButton>
+              </Link>
+
+              {/* =============================================
+                  CART SUMMARY
+                 ============================================= */}
+
+              <div
+                className={`
+                  mb-3
+                  space-y-4
+                  rounded-2xl
+                  border
+                  p-4
+                  animate-in
+                  fade-in
+                  slide-in-from-top-2
+                  duration-300
+                  ${styles.cartSummary}
+                `}
+              >
+                <div
+                  className={`
+                    flex
+                    items-center
+                    gap-2
+                    text-sm
+                    font-semibold
+                    ${styles.success}
+                  `}
+                >
+                  <Check className="h-4 w-4" />
+
+                  Added to your cart
+                </div>
+
+                {/* =========================================
+                    CART INFORMATION
+                   ========================================= */}
+
+                <div className="space-y-2 text-sm">
+                  <div
+                    className={`
+                      flex
+                      justify-between
+                      ${styles.summaryText}
+                    `}
+                  >
+                    <span>
+                      Items
+                    </span>
+
+                    <span>
+                      {itemCount}
+                    </span>
+                  </div>
+
+                  <div
+                    className={`
+                      flex
+                      justify-between
+                      font-semibold
+                      ${styles.text}
+                    `}
+                  >
+                    <span>
+                      Subtotal
+                    </span>
+
+                    <span>
+                      ${subtotal}
+                    </span>
+                  </div>
+                </div>
+
+                {/* =========================================
+                    CART ACTIONS
+                   ========================================= */}
+
+                <div className="grid grid-cols-2 gap-3">
+                  <Link href="/cart">
+                    <AppButton
+                      variant="outline"
+                      className={`
+                        w-full
+                        ${styles.secondaryButton}
+                      `}
+                    >
+                      View Cart
+                    </AppButton>
+                  </Link>
+
+                  <Link href="/checkout">
+                    <AppButton
+                      className={`
+                        w-full
+                        ${styles.primaryButton}
+                      `}
+                    >
+                      Checkout
+                    </AppButton>
+                  </Link>
+                </div>
+
+                {/* =========================================
+                    CONTINUE SHOPPING
+                   ========================================= */}
+
+                <Link
+                  href="/marketplace"
+                  className={`
+                    block
+                    text-center
+                    text-xs
+                    transition-colors
+                    hover:text-primary
+                    ${styles.muted}
+                  `}
+                >
+                  Continue Shopping
+                </Link>
+              </div>
+            </>
+          ) : (
+            /* =================================================
+               ADD TO CART
+               ================================================= */
+
+            <AppButton
+              variant="outline"
+              className={`
+                mb-3
+                w-full
+                min-h-12
+                rounded-xl
+                transition-all
+                duration-300
+                hover:scale-[1.02]
+                active:scale-[0.98]
+                ${styles.secondaryButton}
+              `}
+              onClick={() => {
+                add(
+                  marketplaceTemplate,
+                  activeStyleId,
+                );
+              }}
+            >
+              <ShoppingCart className="mr-2 h-4 w-4" />
+
+              Add to Cart
+            </AppButton>
+          )}
+
+          {/* =================================================
+              LIVE DEMO
+             ================================================= */}
+
+          {template.demoUrl && (
+            <a
+              href={
+                template.demoUrl
+              }
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block"
+            >
+              <AppButton
+                variant="secondary"
+                className={`
+                  w-full
+                  min-h-11
+                  rounded-xl
+                  transition-all
+                  duration-300
+                  hover:scale-[1.02]
+                  active:scale-[0.98]
+                  ${styles.demoButton}
+                `}
+              >
+                <ExternalLink className="mr-2 h-4 w-4" />
+
+                Live Demo
+              </AppButton>
+            </a>
+          )}
+        </div>
+
+        {/* ===================================================
+            SECURITY
+           =================================================== */}
 
         <div
           className={`
-            mb-3
-            space-y-4
-            rounded-2xl
+            mt-6
+            flex
+            items-start
+            gap-3
+            rounded-xl
             border
-            p-4
-            animate-in
-            fade-in
-            slide-in-from-top-2
-            duration-300
-            ${styles.cartSummary}
+            p-3.5
+            ${styles.security}
           `}
         >
-          <div
+          <ShieldCheck
             className={`
-              flex
-              items-center
-              gap-2
-              text-sm
-              font-semibold
-              ${styles.success}
+              mt-0.5
+              h-4
+              w-4
+              shrink-0
+              ${styles.securityIcon}
             `}
-          >
-            <Check className="h-4 w-4" />
+          />
 
-            Added to your cart
-          </div>
-
-          <div className="space-y-2 text-sm">
-            <div
+          <div>
+            <p
               className={`
-                flex
-                justify-between
-                ${styles.summaryText}
-              `}
-            >
-              <span>Items</span>
-
-              <span>{itemCount}</span>
-            </div>
-
-            <div
-              className={`
-                flex
-                justify-between
+                text-xs
                 font-semibold
                 ${styles.text}
               `}
             >
-              <span>Subtotal</span>
+              Secure purchase
+            </p>
 
-              <span>${subtotal}</span>
-            </div>
+            <p
+              className={`
+                mt-0.5
+                text-xs
+                leading-5
+                ${styles.muted}
+              `}
+            >
+              Secure payment and instant
+              access after purchase.
+            </p>
           </div>
-
-          <div className="grid grid-cols-2 gap-3">
-            <Link href="/cart">
-              <AppButton
-                variant="outline"
-                className={`
-                  w-full
-                  ${styles.secondaryButton}
-                `}
-              >
-                View Cart
-              </AppButton>
-            </Link>
-
-            <Link href="/checkout">
-              <AppButton
-                className={`
-                  w-full
-                  ${styles.primaryButton}
-                `}
-              >
-                Checkout
-              </AppButton>
-            </Link>
-          </div>
-
-          <Link
-            href="/marketplace"
-            className={`
-              block
-              text-center
-              text-xs
-              transition-colors
-              hover:text-primary
-              ${styles.muted}
-            `}
-          >
-            Continue Shopping
-          </Link>
         </div>
-      </>
-    ) : (
-      <AppButton
-        variant="outline"
-        className={`
-          mb-3
-          w-full
-          min-h-12
-          rounded-xl
-          transition-all
-          duration-300
-          hover:scale-[1.02]
-          active:scale-[0.98]
-          ${styles.secondaryButton}
-        `}
-        onClick={() =>
-  add(
-    marketplaceTemplate,
-    activeStyleId
-  )
-}
-      >
-        <ShoppingCart className="mr-2 h-4 w-4" />
-
-        Add to Cart
-      </AppButton>
-    )}
-
-    {/* Live Demo */}
-
-    {template.demoUrl && (
-      <a
-        href={template.demoUrl}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="block"
-      >
-        <AppButton
-          variant="secondary"
-          className={`
-            w-full
-            min-h-11
-            rounded-xl
-            transition-all
-            duration-300
-            hover:scale-[1.02]
-            active:scale-[0.98]
-            ${styles.demoButton}
-          `}
-        >
-          <ExternalLink className="mr-2 h-4 w-4" />
-
-          Live Demo
-        </AppButton>
-      </a>
-    )}
-  </div>
-
-  {/* ===================================================
-      SECURITY
-     =================================================== */}
-
-  <div
-    className={`
-      mt-6
-      flex
-      items-start
-      gap-3
-      rounded-xl
-      border
-      p-3.5
-      ${styles.security}
-    `}
-  >
-    <ShieldCheck
-      className={`
-        mt-0.5
-        h-4
-        w-4
-        shrink-0
-        ${styles.securityIcon}
-      `}
-    />
-
-    <div>
-      <p
-        className={`
-          text-xs
-          font-semibold
-          ${styles.text}
-        `}
-      >
-        Secure purchase
-      </p>
-
-      <p
-        className={`
-          mt-0.5
-          text-xs
-          leading-5
-          ${styles.muted}
-        `}
-      >
-        Secure payment and instant
-        access after purchase.
-      </p>
-    </div>
-  </div>
-</div>
+      </div>
     </aside>
   );
 }
