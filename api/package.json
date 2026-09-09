@@ -2,7 +2,7 @@
   "scripts": {
     "start": "tsx main.ts",
     "start:dev": "tsx watch main.ts",
-    "build": "prisma generate && tsc",
+    "build": "node node_modules/prisma/build/index.js generate && tsc",
     "start:prod": "node dist/main.js",
     "prisma:generate": "prisma generate",
     "prisma:migrate:deploy": "prisma migrate deploy"
