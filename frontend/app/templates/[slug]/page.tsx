@@ -248,7 +248,6 @@ export default async function TemplateDetailPage({
 
       <RelatedTemplates
         template={template}
-        templates={relatedTemplates}
       />
     </main>
   );
